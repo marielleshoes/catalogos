@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marielle - Catálogos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #f7f7f7;
+      color: #333;
+    }
+    header {
+      background-color: #fff;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    header h1 {
+      font-size: 1.8rem;
+      color: #444;
+    }
+    .marcas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 2rem;
+      justify-content: center;
+    }
+    .marca {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 2rem;
+      width: 220px;
+      text-align: center;
+      transition: transform 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      cursor: pointer;
+    }
+    .marca:hover {
+      transform: translateY(-5px);
+    }
+    .marca h2 {
+      margin-bottom: 1rem;
+      color: #555;
+    }
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25D366;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Catálogos Marielle</h1>
+  </header>
+
+  <main class="marcas">
+    <div class="marca" onclick="location.href='andrea.html'">
+      <h2>Andrea</h2>
+    </div>
+    <div class="marca" onclick="location.href='cklass.html'">
+      <h2>Cklass</h2>
+    </div>
+    <div class="marca" onclick="location.href='impuls.html'">
+      <h2>Impuls</h2>
+    </div>
+    <div class="marca" onclick="location.href='shoespackar.html'">
+      <h2>Shoes Packar</h2>
+    </div>
+  </main>
+
+  <a class="whatsapp-btn" href="https://wa.me/5211234567890" target="_blank">
+    ☎
+  </a>
+</body>
+</html>
