@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Impuls - Catálogos</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="flipbook/style.css" />
   <style>
     * {
       box-sizing: border-box;
@@ -93,9 +94,10 @@
   </header>
 
   <main class="categorias">
-    <div class="categoria" onclick="cargarCatalogo('pdfs/MC_Impuls Dama.pdf')">
+    <div class="categoria" id="flipbook" style="width: 90%; height: 600px; margin: 2rem auto;">
       <h2>Dama</h2>
     </div>
+    
     <div class="categoria" onclick="cargarCatalogo('pdfs/MC_Impuls Caballero.pdf')">
       <h2>Caballero</h2>
     </div>
@@ -109,10 +111,21 @@
 
   <iframe id="visor" src="" allowfullscreen></iframe>
 
+  <script src="flipbook/pdf-flipbook.min.js"></script>
+  <script>
+    FlipBook("#flipbook", {
+      pdf: "pdfs/pdfs/MC_Impuls Dama.pdf",
+      propertiesCallback: (props) => {
+        props.pageSize = "stretch";
+        return props;
+      },
+    });
+  </script>
+  
   <div class="back">
     <a href="index.html">&larr; Volver al inicio</a>
   </div>
-
+  
   <a class="whatsapp-btn" href="https://wa.me/5211234567890" target="_blank">
     ☎
   </a>
