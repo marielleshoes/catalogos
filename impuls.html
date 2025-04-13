@@ -5,16 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Impuls - Catálogos</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
   <!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- FlipBook jQuery plugin -->
-<script src="https://cdn.jsdelivr.net/npm/3dflipbook@1.10.6/js/libs/jquery.flipbook.min.js"></script>
-
-<!-- FlipBook core y estilos -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/3dflipbook@1.10.6/css/flipbook.style.css">
-<script src="https://cdn.jsdelivr.net/npm/3dflipbook@1.10.6/js/flipbook.min.js"></script>
-
+  <!-- FlipBook core y estilos -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/3dflipbook@1.10.6/css/flipbook.style.css">
+  <script src="https://cdn.jsdelivr.net/npm/3dflipbook@1.10.6/js/flipbook.min.js"></script>
 
   <style>
     * {
@@ -93,28 +90,28 @@
 
   <script>
     function cargarCatalogo(pdf) {
-      // Limpia el contenedor anterior
-      $("#flipbook-container").html("");
+      // Limpia el contenedor
+      document.getElementById("flipbook-container").innerHTML = "";
 
-      // Carga el nuevo flipbook
-      $("#flipbook-container").FlipBook({
+      // Crea el flipbook con la versión moderna de la librería
+      FlipBook.create({
         pdf: pdf,
-        propertiesCallback: function(props) {
-          props.cover.title = "";
-          return props;
+        webgl: true,
+        controlsProps: {
+          downloadPDF: true
         },
         template: {
           html: "https://cdn.jsdelivr.net/npm/3dflipbook@1.10.6/templates/default-book-view.html",
           styles: ["https://cdn.jsdelivr.net/npm/3dflipbook@1.10.6/css/flipbook.style.css"],
           script: "https://cdn.jsdelivr.net/npm/3dflipbook@1.10.6/js/flipbook.min.js"
         }
-      });
+      }, document.getElementById('flipbook-container'));
     }
   </script>
 </head>
 <body>
   <header>
-    <h1>Catálogos Impuls prub 2</h1>
+    <h1>Catálogos Impuls prub 3</h1>
   </header>
 
   <main class="categorias">
@@ -132,7 +129,6 @@
     </div>
   </main>
 
-  <!-- Flipbook container en lugar del iframe -->
   <div id="flipbook-container"></div>
 
   <div class="back">
