@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Impuls - Catálogos</title>
-  <link rel="stylesheet" href="flipbook/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
   <style>
     * {
@@ -49,9 +48,11 @@
     .categoria h2 {
       color: #555;
     }
-    #flipbook {
+    iframe {
       width: 90%;
       height: 600px;
+      border: none;
+      display: block;
       margin: 2rem auto;
     }
     .back {
@@ -80,6 +81,11 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
   </style>
+  <script>
+    function cargarCatalogo(pdf) {
+      document.getElementById('visor').src = pdf;
+    }
+  </script>
 </head>
 <body>
   <header>
@@ -101,7 +107,7 @@
     </div>
   </main>
 
-  <div id="flipbook"></div>
+  <iframe id="visor" src="" allowfullscreen></iframe>
 
   <div class="back">
     <a href="index.html">&larr; Volver al inicio</a>
@@ -110,23 +116,5 @@
   <a class="whatsapp-btn" href="https://wa.me/5211234567890" target="_blank">
     ☎
   </a>
-
-  <script src="flipbook/pdf-flipbook.min.js"></script>
-  <script>
-    let flipbookInstance = null;
-
-    function cargarCatalogo(pdf) {
-      if (flipbookInstance) {
-        flipbookInstance.destroy(); // destruir instancia anterior si existe
-      }
-      flipbookInstance = FlipBook("#flipbook", {
-        pdf: pdf,
-        propertiesCallback: (props) => {
-          props.pageSize = "stretch";
-          return props;
-        }
-      });
-    }
-  </script>
 </body>
 </html>
