@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Impuls - Catálogos</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <!-- Estilos del Flipbook -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/3dflipbook@1.10.6/css/flipbook.style.css">
+
   <style>
     * {
       box-sizing: border-box;
@@ -48,11 +52,9 @@
     .categoria h2 {
       color: #555;
     }
-    iframe {
+    #flipbook-container {
       width: 90%;
       height: 600px;
-      border: none;
-      display: block;
       margin: 2rem auto;
     }
     .back {
@@ -81,9 +83,29 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
   </style>
+
+  <!-- Librerías necesarias de Flipbook -->
+  <script src="https://cdn.jsdelivr.net/npm/3dflipbook@1.10.6/js/libs/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/3dflipbook@1.10.6/js/flipbook.min.js"></script>
+
   <script>
     function cargarCatalogo(pdf) {
-      document.getElementById('visor').src = pdf;
+      // Limpia el contenedor anterior
+      $("#flipbook-container").html("");
+
+      // Carga el nuevo flipbook
+      $("#flipbook-container").FlipBook({
+        pdf: pdf,
+        propertiesCallback: function(props) {
+          props.cover.title = "";
+          return props;
+        },
+        template: {
+          html: "https://cdn.jsdelivr.net/npm/3dflipbook@1.10.6/templates/default-book-view.html",
+          styles: ["https://cdn.jsdelivr.net/npm/3dflipbook@1.10.6/css/flipbook.style.css"],
+          script: "https://cdn.jsdelivr.net/npm/3dflipbook@1.10.6/js/flipbook.min.js"
+        }
+      });
     }
   </script>
 </head>
@@ -107,7 +129,8 @@
     </div>
   </main>
 
-  <iframe id="visor" src="" allowfullscreen></iframe>
+  <!-- Flipbook container en lugar del iframe -->
+  <div id="flipbook-container"></div>
 
   <div class="back">
     <a href="index.html">&larr; Volver al inicio</a>
