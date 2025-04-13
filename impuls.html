@@ -5,9 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Impuls - Catálogos</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <!-- Carga jQuery primero -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- Estilos del Flipbook -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/3dflipbook@1.10.6/css/flipbook.style.css">
+<!-- Luego los estilos y scripts del FlipBook -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/3dflipbook@1.10.6/css/flipbook.style.css">
+<script src="https://cdn.jsdelivr.net/npm/3dflipbook@1.10.6/js/flipbook.min.js"></script>
 
   <style>
     * {
@@ -83,10 +86,6 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
   </style>
-
-  <!-- Librerías necesarias de Flipbook -->
-  <script src="https://cdn.jsdelivr.net/npm/3dflipbook@1.10.6/js/libs/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/3dflipbook@1.10.6/js/flipbook.min.js"></script>
 
   <script>
     function cargarCatalogo(pdf) {
