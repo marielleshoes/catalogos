@@ -94,11 +94,20 @@
       $('#flipbook-container').html('');
 
       $('#flipbook-container').FlipBook({
-        pdf: pdf,
-        controlsProps: {
-          downloadPDF: true
-        }
-      });
+  pdf: pdf,
+  template: {
+    html: 'https://cdn.jsdelivr.net/npm/3dflipbook@1.7.0/dist/templates/default-book-view.html',
+    styles: [
+      'https://cdn.jsdelivr.net/npm/3dflipbook@1.7.0/dist/css/flipbook.style.css'
+    ],
+    script: 'https://cdn.jsdelivr.net/npm/3dflipbook@1.7.0/dist/js/flipbook.min.js',
+    sounds: {
+      startFlip: 'https://cdn.jsdelivr.net/npm/3dflipbook@1.7.0/dist/sounds/start-flip.mp3',
+      endFlip: 'https://cdn.jsdelivr.net/npm/3dflipbook@1.7.0/dist/sounds/end-flip.mp3'
+    }
+  }
+});
+
     }
   </script>
 </head>
