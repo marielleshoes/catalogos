@@ -7,9 +7,9 @@
 
   <!-- DearFlip CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dearflip@2.1.2/css/dflip.min.css" />
-  
+
   <!-- DearFlip JS -->
-  <script src="https://cdn.jsdelivr.net/npm/dearflip@2.1.2/js/dflip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dearflip@2.1.2/js/dflip.min.js" defer></script>
 
   <style>
     body {
@@ -19,119 +19,57 @@
       padding: 0;
     }
 
-    header {
-      background-color: #fff;
-      padding: 1rem 2rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    header h1 {
-      font-size: 1.8rem;
-      color: #444;
-    }
-
     .categorias {
       display: flex;
-      flex-wrap: wrap;
       gap: 1rem;
+      flex-wrap: wrap;
       padding: 2rem;
       justify-content: center;
     }
 
     .categoria {
-      background-color: #ffffff;
-      border-radius: 12px;
-      padding: 1.5rem;
-      width: 200px;
-      text-align: center;
-      transition: transform 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 1rem 2rem;
+      border-radius: 10px;
       cursor: pointer;
-    }
-
-    .categoria:hover {
-      transform: translateY(-5px);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
 
     #flipbook-container {
-      width: 90%;
-      max-width: 1000px;
-      height: 600px;
+      max-width: 90%;
       margin: 2rem auto;
-    }
-
-    .back {
-      text-align: center;
-      margin-top: 1rem;
-    }
-
-    .back a {
-      color: #0077cc;
-      text-decoration: none;
-    }
-
-    .whatsapp-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #25D366;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      font-size: 24px;
       display: flex;
-      align-items: center;
       justify-content: center;
-      text-decoration: none;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>Catálogos Impuls</h1>
-  </header>
+  <h1 style="text-align: center; padding: 1rem;">Catálogos Impuls</h1>
 
-  <main class="categorias">
-    <div class="categoria" onclick="cargarCatalogo('pdfs/MC_Impuls Dama.pdf')">
-      <h2>Dama</h2>
-    </div>
-    <div class="categoria" onclick="cargarCatalogo('pdfs/MC_Impuls Caballero.pdf')">
-      <h2>Caballero</h2>
-    </div>
-    <div class="categoria" onclick="cargarCatalogo('pdfs/MC_Impuls Niñas.pdf')">
-      <h2>Niña</h2>
-    </div>
-    <div class="categoria" onclick="cargarCatalogo('pdfs/MC_Impuls Niños.pdf')">
-      <h2>Niño</h2>
-    </div>
-  </main>
+  <div class="categorias">
+    <div class="categoria" onclick="mostrarCatalogo('pdfs/MC_Impuls Dama.pdf')">Dama</div>
+    <div class="categoria" onclick="mostrarCatalogo('pdfs/MC_Impuls Caballero.pdf')">Caballero</div>
+    <div class="categoria" onclick="mostrarCatalogo('pdfs/MC_Impuls Niñas.pdf')">Niña</div>
+    <div class="categoria" onclick="mostrarCatalogo('pdfs/MC_Impuls Niños.pdf')">Niño</div>
+  </div>
 
   <div id="flipbook-container"></div>
 
-  <div class="back">
-    <a href="index.html">&larr; Volver al inicio</a>
-  </div>
-
-  <a class="whatsapp-btn" href="https://wa.me/5211234567890" target="_blank">☎</a>
-
   <script>
-    function cargarCatalogo(pdfURL) {
-      const container = document.getElementById('flipbook-container');
-      container.innerHTML = ''; // Limpia contenido anterior
-
-      const flipbook = document.createElement('div');
-      container.appendChild(flipbook);
-
-      DFLIP.createFlipBook(flipbook, {
-        source: pdfURL,
-        webgl: true,
-        backgroundColor: "#f2f2f2",
-        height: "600px"
-      });
+    function mostrarCatalogo(pdfURL) {
+      const contenedor = document.getElementById('flipbook-container');
+      contenedor.innerHTML = `
+        <div class="dflip-book" 
+             data-src="${pdfURL}" 
+             data-backgroundcolor="#f2f2f2" 
+             style="width: 90%; height: 600px;">
+        </div>`;
+      // Forzar recarga del script si no detecta automáticamente
+      if (window.DFLIP && DFLIP.parseBooks) {
+        DFLIP.parseBooks();
+      }
     }
   </script>
 
