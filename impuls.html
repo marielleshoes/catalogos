@@ -1,38 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Impuls - Catálogos</title>
+  <meta charset="UTF-8">
+  <title>Catálogos Impuls</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <!-- DearFlip (PDF Flipbook) -->
+  <!-- DearFlip CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dearflip@2.1.2/css/dflip.min.css" />
+  
+  <!-- DearFlip JS -->
   <script src="https://cdn.jsdelivr.net/npm/dearflip@2.1.2/js/dflip.min.js"></script>
 
   <style>
-    * {
-      box-sizing: border-box;
+    body {
       font-family: 'Poppins', sans-serif;
+      background-color: #fdfdfd;
       margin: 0;
       padding: 0;
     }
-    body {
-      background-color: #fdfdfd;
-      color: #333;
-    }
+
     header {
       background-color: #fff;
       padding: 1rem 2rem;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
+
     header h1 {
       font-size: 1.8rem;
       color: #444;
     }
+
     .categorias {
       display: flex;
       flex-wrap: wrap;
@@ -40,6 +37,7 @@
       padding: 2rem;
       justify-content: center;
     }
+
     .categoria {
       background-color: #ffffff;
       border-radius: 12px;
@@ -50,25 +48,28 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       cursor: pointer;
     }
+
     .categoria:hover {
       transform: translateY(-5px);
     }
-    .categoria h2 {
-      color: #555;
-    }
+
     #flipbook-container {
       width: 90%;
+      max-width: 1000px;
       height: 600px;
       margin: 2rem auto;
     }
+
     .back {
       text-align: center;
       margin-top: 1rem;
     }
+
     .back a {
       color: #0077cc;
       text-decoration: none;
     }
+
     .whatsapp-btn {
       position: fixed;
       bottom: 20px;
@@ -87,23 +88,9 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
   </style>
-
-  <script>
-    function cargarCatalogo(pdf) {
-      // Borra cualquier flipbook anterior
-      $('#flipbook-container').html('');
-
-      // Crea nuevo flipbook con DearFlip
-      $('#flipbook-container').html(
-        '<div class="dflip-book" style="width:100%;height:600px;" data-pdf-url="' + pdf + '"></div>'
-      );
-
-      // Inicializa automáticamente
-      DFLIP.parseBooks(); // Esto hace que funcione la animación
-    }
-  </script>
 </head>
 <body>
+
   <header>
     <h1>Catálogos Impuls</h1>
   </header>
@@ -129,8 +116,24 @@
     <a href="index.html">&larr; Volver al inicio</a>
   </div>
 
-  <a class="whatsapp-btn" href="https://wa.me/5211234567890" target="_blank">
-    ☎
-  </a>
+  <a class="whatsapp-btn" href="https://wa.me/5211234567890" target="_blank">☎</a>
+
+  <script>
+    function cargarCatalogo(pdfURL) {
+      const container = document.getElementById('flipbook-container');
+      container.innerHTML = ''; // Limpia contenido anterior
+
+      const flipbook = document.createElement('div');
+      container.appendChild(flipbook);
+
+      DFLIP.createFlipBook(flipbook, {
+        source: pdfURL,
+        webgl: true,
+        backgroundColor: "#f2f2f2",
+        height: "600px"
+      });
+    }
+  </script>
+
 </body>
 </html>
