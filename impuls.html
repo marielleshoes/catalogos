@@ -9,8 +9,8 @@
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- DearFlip (jQuery Flipbook Plugin) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dearflip@2.1.2/css/dflip.min.css">
+  <!-- DearFlip (PDF Flipbook) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dearflip@2.1.2/css/dflip.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/dearflip@2.1.2/js/dflip.min.js"></script>
 
   <style>
@@ -90,13 +90,16 @@
 
   <script>
     function cargarCatalogo(pdf) {
-      $('#flipbook-container').html('<div class="dflip-book" id="flipbook" style="width:100%;height:600px;" data-pdf-url="' + pdf + '"></div>');
-      new DFLIP({
-        source: pdf,
-        webgl: true,
-        height: 600,
-        backgroundColor: "#ffffff"
-      }, '#flipbook');
+      // Borra cualquier flipbook anterior
+      $('#flipbook-container').html('');
+
+      // Crea nuevo flipbook con DearFlip
+      $('#flipbook-container').html(
+        '<div class="dflip-book" style="width:100%;height:600px;" data-pdf-url="' + pdf + '"></div>'
+      );
+
+      // Inicializa automáticamente
+      DFLIP.parseBooks(); // Esto hace que funcione la animación
     }
   </script>
 </head>
