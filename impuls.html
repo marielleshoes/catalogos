@@ -11,11 +11,15 @@
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- PDF.js de Mozilla -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.min.js"></script>
+<!-- PDF.js de Mozilla -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.min.js"></script>
+<script>
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.worker.min.js';
+</script>
 
-  <!-- Turn.js (pase de página tipo libro) -->
-  <script src="https://www.turnjs.com/lib/turn.min.js"></script>
+<!-- Turn.js desde CDN segura -->
+<script src="https://cdn.jsdelivr.net/gh/blasten/turn.js@4/turn.min.js"></script>
+
 
   <style>
     body {
