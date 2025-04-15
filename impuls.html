@@ -1,77 +1,114 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Catálogos Impuls</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Catálogo Impuls</title>
+
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
-  <!-- DearFlip CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dearflip@2.1.2/css/dflip.min.css" />
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- DearFlip JS -->
-  <script src="https://cdn.jsdelivr.net/npm/dearflip@2.1.2/js/dflip.min.js" defer></script>
+  <!-- PDF.js de Mozilla -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.min.js"></script>
+
+  <!-- Turn.js (pase de página tipo libro) -->
+  <script src="https://www.turnjs.com/lib/turn.min.js"></script>
 
   <style>
     body {
       font-family: 'Poppins', sans-serif;
       background-color: #fdfdfd;
-      margin: 0;
-      padding: 0;
+      padding: 20px;
+      text-align: center;
     }
 
-    .categorias {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      padding: 2rem;
-      justify-content: center;
+    h1 {
+      margin-bottom: 30px;
     }
 
-    .categoria {
-      background-color: #fff;
-      border: 1px solid #ccc;
-      padding: 1rem 2rem;
-      border-radius: 10px;
+    .botones {
+      margin-bottom: 20px;
+    }
+
+    .botones button {
+      margin: 5px;
+      padding: 10px 20px;
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 5px;
       cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      font-weight: bold;
     }
 
-    #flipbook-container {
-      max-width: 90%;
-      margin: 2rem auto;
-      display: flex;
-      justify-content: center;
+    #flipbook {
+      width: 800px;
+      height: 500px;
+      margin: 0 auto;
+    }
+
+    #flipbook .page {
+      width: 400px;
+      height: 500px;
+      background-color: white;
+      border: 1px solid #ccc;
     }
   </style>
 </head>
 <body>
 
-  <h1 style="text-align: center; padding: 1rem;">Catálogos Impuls</h1>
+  <h1>Catálogos Impuls</h1>
 
-  <div class="categorias">
-    <div class="categoria" onclick="mostrarCatalogo('pdfs/MC_Impuls Dama.pdf')">Dama</div>
-    <div class="categoria" onclick="mostrarCatalogo('pdfs/MC_Impuls Caballero.pdf')">Caballero</div>
-    <div class="categoria" onclick="mostrarCatalogo('pdfs/MC_Impuls Niñas.pdf')">Niña</div>
-    <div class="categoria" onclick="mostrarCatalogo('pdfs/MC_Impuls Niños.pdf')">Niño</div>
+  <div class="botones">
+    <button onclick="cargarCatalogo('pdfs/MC_Impuls Dama.pdf')">Dama</button>
+    <button onclick="cargarCatalogo('pdfs/MC_Impuls Caballero.pdf')">Caballero</button>
+    <button onclick="cargarCatalogo('pdfs/MC_Impuls Niñas.pdf')">Niña</button>
+    <button onclick="cargarCatalogo('pdfs/MC_Impuls Niños.pdf')">Niño</button>
   </div>
 
-  <div id="flipbook-container"></div>
+  <div id="flipbook"></div>
 
   <script>
-    function mostrarCatalogo(pdfURL) {
-      const contenedor = document.getElementById('flipbook-container');
-      contenedor.innerHTML = `
-        <div class="dflip-book" 
-             data-src="${pdfURL}" 
-             data-backgroundcolor="#f2f2f2" 
-             style="width: 90%; height: 600px;">
-        </div>`;
-      // Forzar recarga del script si no detecta automáticamente
-      if (window.DFLIP && DFLIP.parseBooks) {
-        DFLIP.parseBooks();
-      }
+    function cargarCatalogo(rutaPDF) {
+      $("#flipbook").html(""); // Limpiar el contenido anterior
+
+      pdfjsLib.getDocument(rutaPDF).promise.then(function (pdf) {
+        const totalPages = pdf.numPages;
+        const flipbook = $("#flipbook");
+
+        for (let i = 1; i <= totalPages; i++) {
+          pdf.getPage(i).then(function (page) {
+            const canvas = document.createElement("canvas");
+            const context = canvas.getContext("2d");
+            const viewport = page.getViewport({ scale: 1.5 });
+
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            page.render({ canvasContext: context, viewport: viewport }).promise.then(() => {
+              const img = document.createElement("img");
+              img.src = canvas.toDataURL();
+              const pageDiv = $('<div class="page"></div>').append(img);
+              flipbook.append(pageDiv);
+
+              if (flipbook.children().length === totalPages) {
+                flipbook.turn({
+                  width: 800,
+                  height: 500,
+                  autoCenter: true
+                });
+              }
+            });
+          });
+        }
+      }).catch(error => {
+        alert("No se pudo cargar el catálogo. Verifica que el PDF exista en la ruta indicada.");
+        console.error(error);
+      });
     }
   </script>
-
 </body>
 </html>
