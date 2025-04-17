@@ -3,121 +3,120 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Catálogos Impuls - Marielle Shoes</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pdfflip@2.1.2/pdfflip.min.css">
+  <title>Impuls - Catálogos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
       margin: 0;
-      background-color: #f7f7f7;
+      padding: 0;
+    }
+    body {
+      background-color: #fdfdfd;
       color: #333;
     }
     header {
-      background-color: #ffffff;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      padding: 1rem;
-      text-align: center;
+      background-color: #fff;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    h1 {
-      margin: 0;
+    header h1 {
       font-size: 1.8rem;
+      color: #444;
     }
-    nav {
+    .categorias {
       display: flex;
-      justify-content: center;
-      gap: 1rem;
-      background-color: #eeeeee;
-      padding: 1rem 0;
       flex-wrap: wrap;
+      gap: 1rem;
+      padding: 2rem;
+      justify-content: center;
     }
-    nav button {
+    .categoria {
       background-color: #ffffff;
-      border: 1px solid #ccc;
-      padding: 0.5rem 1rem;
-      border-radius: 5px;
+      border-radius: 12px;
+      padding: 1.5rem;
+      width: 200px;
+      text-align: center;
+      transition: transform 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       cursor: pointer;
-      transition: all 0.3s ease;
     }
-    nav button:hover {
-      background-color: #ddd;
+    .categoria:hover {
+      transform: translateY(-5px);
     }
-    #flipbookContainer {
+    .categoria h2 {
+      color: #555;
+    }
+    iframe {
       width: 90%;
-      max-width: 1000px;
-      height: 700px;
+      height: 600px;
+      border: none;
+      display: block;
       margin: 2rem auto;
-      border-radius: 10px;
-      overflow: hidden;
-      background-color: #ffffff;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .back {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .back a {
+      color: #0077cc;
+      text-decoration: none;
     }
     .whatsapp-btn {
-      display: block;
-      width: fit-content;
-      margin: 2rem auto;
-      padding: 0.8rem 1.5rem;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
       background-color: #25D366;
       color: white;
       border: none;
-      border-radius: 50px;
-      font-size: 1rem;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       text-decoration: none;
-      text-align: center;
-      transition: background-color 0.3s;
-    }
-    .whatsapp-btn:hover {
-      background-color: #1ebe5d;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
   </style>
-</head>
-<body>
-
-  <header>
-    <h1>Catálogos Impuls</h1>
-    <p>Selecciona una categoría para ver el catálogo</p>
-  </header>
-
-  <nav>
-    <button onclick="cargarCatalogo('pdfs/MC_Impuls Dama.pdf')">Dama</button>
-    <button onclick="cargarCatalogo('pdfs/MC_Impuls Caballero.pdf')">Caballero</button>
-    <button onclick="cargarCatalogo('pdfs/MC_Impuls Niñas.pdf')">Niña</button>
-    <button onclick="cargarCatalogo('pdfs/MC_Impuls Niños.pdf')">Niño</button>
-  </nav>
-
-  <div id="flipbookContainer"></div>
-
-  <a class="whatsapp-btn" href="https://wa.me/521XXXXXXXXXX?text=Hola%20Marielle%2C%20vi%20los%20catálogos%20de%20Impuls%20y%20me%20interesa%20realizar%20un%20pedido." target="_blank">
-    Contactar por WhatsApp
-  </a>
-
-  <script src="https://cdn.jsdelivr.net/npm/pdfflip@2.1.2/pdfflip.min.js"></script>
   <script>
-    let flipbook;
-
-    window.onload = function () {
-      // Cargar la categoría "Dama" por defecto
-      cargarCatalogo('pdfs/impuls_dama.pdf');
-    }
-
-    function cargarCatalogo(pdfPath) {
-      if (flipbook) {
-        flipbook.update({ source: pdfPath });
-      } else {
-        flipbook = new PDFFlip({
-          source: pdfPath,
-          controlsProps: {
-            download: true,
-            zoomIn: true,
-            zoomOut: true,
-            fullscreen: true,
-            share: false
-          },
-          backgroundColor: "#ffffff"
-        });
-        flipbook.render(document.getElementById("flipbookContainer"));
-      }
+    function cargarCatalogo(pdf) {
+      const encodedUrl = encodeURIComponent(location.origin + '/' + pdf);
+      const googleViewerUrl = `https://docs.google.com/gview?url=${encodedUrl}&embedded=true`;
+      document.getElementById('visor').src = googleViewerUrl;
     }
   </script>
+</head>
+<body>
+  <header>
+    <h1>Catálogos Impuls Carga rápida</h1>
+  </header>
 
+  <main class="categorias">
+    <div class="categoria" onclick="cargarCatalogo('pdfs/MC_Impuls Dama.pdf')">
+      <h2>Dama</h2>
+    </div>
+    <div class="categoria" onclick="cargarCatalogo('pdfs/MC_Impuls Caballero.pdf')">
+      <h2>Caballero</h2>
+    </div>
+    <div class="categoria" onclick="cargarCatalogo('pdfs/MC_Impuls Niñas.pdf')">
+      <h2>Niña</h2>
+    </div>
+    <div class="categoria" onclick="cargarCatalogo('pdfs/MC_Impuls Niños.pdf')">
+      <h2>Niño</h2>
+    </div>
+  </main>
+
+  <iframe id="visor" src="" allowfullscreen></iframe>
+
+  <div class="back">
+    <a href="index.html">&larr; Volver al inicio</a>
+  </div>
+
+  <a class="whatsapp-btn" href="https://wa.me/5211234567890" target="_blank">
+    ☎
+  </a>
 </body>
 </html>
