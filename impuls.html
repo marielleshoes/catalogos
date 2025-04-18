@@ -48,7 +48,7 @@
     .categoria h2 {
       color: #555;
     }
-    iframe {
+    embed, iframe {
       width: 90%;
       height: 600px;
       border: none;
@@ -83,33 +83,31 @@
   </style>
   <script>
     function cargarCatalogo(pdf) {
-      const encodedUrl = encodeURIComponent(location.origin + '/' + pdf);
-      const googleViewerUrl = `https://docs.google.com/gview?url=${encodedUrl}&embedded=true`;
-      document.getElementById('visor').src = googleViewerUrl;
+      document.getElementById('visor').src = pdf;
     }
   </script>
 </head>
 <body>
   <header>
-    <h1>Catálogos Impuls Carga rápida</h1>
+    <h1>Catálogos Impuls embed</h1>
   </header>
 
   <main class="categorias">
-    <div class="categoria" onclick="cargarCatalogo('pdfs/MC_Impuls Dama.pdf')">
+    <div class="categoria" onclick="cargarCatalogo('pdfs/MC_Impuls%20Dama.pdf')">
       <h2>Dama</h2>
     </div>
-    <div class="categoria" onclick="cargarCatalogo('pdfs/MC_Impuls Caballero.pdf')">
+    <div class="categoria" onclick="cargarCatalogo('pdfs/MC_Impuls%20Caballero.pdf')">
       <h2>Caballero</h2>
     </div>
-    <div class="categoria" onclick="cargarCatalogo('pdfs/MC_Impuls Niñas.pdf')">
+    <div class="categoria" onclick="cargarCatalogo('pdfs/MC_Impuls%20Niñas.pdf')">
       <h2>Niña</h2>
     </div>
-    <div class="categoria" onclick="cargarCatalogo('pdfs/MC_Impuls Niños.pdf')">
+    <div class="categoria" onclick="cargarCatalogo('pdfs/MC_Impuls%20Niños.pdf')">
       <h2>Niño</h2>
     </div>
   </main>
 
-  <iframe id="visor" src="" allowfullscreen></iframe>
+  <embed id="visor" src="" type="application/pdf" />
 
   <div class="back">
     <a href="index.html">&larr; Volver al inicio</a>
