@@ -78,10 +78,6 @@
       text-decoration: none;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
-    .page {
-      width: 100%;
-      height: 100%;
-    }
     .page img {
       width: 100%;
       height: 100%;
@@ -101,12 +97,11 @@
       border-radius: 5px;
     }
   </style>
-  <!-- Incluir la librería StPageFlip -->
   <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
 </head>
 <body>
   <header>
-    <h1>Catálogos Impuls</h1>
+    <h1>Catálogos Impuls Resuel libro</h1>
   </header>
 
   <main class="categorias">
@@ -130,10 +125,9 @@
     <a href="index.html">&larr; Volver al inicio</a>
   </div>
 
-  <a class="whatsapp-btn" href="https://wa.me/5211234567890" target="_blank">
-    ☎
-  </a>
+  <a class="whatsapp-btn" href="https://wa.me/5211234567890" target="_blank">☎</a>
 
+  <!-- COLOCAMOS EL SCRIPT DESPUÉS DEL BODY -->
   <script>
     let pageFlip;
 
@@ -141,36 +135,39 @@
       const catalogoDiv = document.getElementById('catalogo');
       catalogoDiv.innerHTML = ''; // Limpiar contenido anterior
 
-      // Determinar la cantidad de páginas según la categoría
       let totalPaginas = 0;
       let ruta = '';
       let prefijo = '';
 
       switch (categoria) {
         case 'dama':
-          totalPaginas = 114;
+          totalPaginas = 384;
           ruta = 'pdfs/impuls_dama/';
           prefijo = 'MC_Impuls Dama_page-';
           break;
         case 'caballero':
-          // Configurar según las imágenes disponibles
+          totalPaginas = 100; // ajustar según cantidad real
+          ruta = 'pdfs/impuls_caballero/';
+          prefijo = 'MC_Impuls Caballero_page-';
           break;
         case 'niña':
-          // Configurar según las imágenes disponibles
+          totalPaginas = 80;
+          ruta = 'pdfs/impuls_niña/';
+          prefijo = 'MC_Impuls Niña_page-';
           break;
         case 'niño':
-          // Configurar según las imágenes disponibles
+          totalPaginas = 70;
+          ruta = 'pdfs/impuls_niño/';
+          prefijo = 'MC_Impuls Niño_page-';
           break;
         default:
           return;
       }
 
-      // Crear el contenedor para el libro
       const bookContainer = document.createElement('div');
       bookContainer.id = 'flipbook';
       catalogoDiv.appendChild(bookContainer);
 
-      // Crear el contenedor para los botones de navegación
       const navButtons = document.createElement('div');
       navButtons.className = 'navigation-buttons';
       navButtons.innerHTML = `
@@ -179,10 +176,27 @@
       `;
       catalogoDiv.appendChild(navButtons);
 
-      // Inicializar el libro
       pageFlip = new St.PageFlip(bookContainer, {
         width: 600,
         height: 800,
         size: 'stretch',
-        minWidth: 315
-::contentReference[oaicite:7]{index=7}
+        minWidth: 315,
+        maxWidth: 1000,
+        maxHeight: 1200,
+        showCover: false,
+        mobileScrollSupport: true,
+      });
+
+      const pages = [];
+
+      for (let i = 1; i <= totalPaginas; i++) {
+        const num = i.toString().padStart(4, '0');
+        const imgPath = `${ruta}${prefijo}${num}.jpg`;
+        pages.push({ src: imgPath });
+      }
+
+      pageFlip.loadFromImages(pages.map(p => p.src));
+    }
+  </script>
+</body>
+</html>
