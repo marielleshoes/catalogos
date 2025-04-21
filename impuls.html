@@ -49,15 +49,9 @@
       color: #555;
     }
     #catalogo {
-      width: 90%;
-      max-width: 1000px;
-      margin: 2rem auto;
-    }
-    #flipbook {
       width: 100%;
-      max-width: 1200px;
-      height: 85vh;
       margin: 2rem auto;
+      text-align: center;
     }
     .back {
       text-align: center;
@@ -84,13 +78,8 @@
       text-decoration: none;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
-    .page img {
-      width: auto;
-      height: auto;
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-      image-rendering: high-quality;
+    #flipbook {
+      margin: auto;
     }
     .navigation-buttons {
       text-align: center;
@@ -105,27 +94,28 @@
       cursor: pointer;
       border-radius: 5px;
     }
+
+    /* Ajustar imágenes para máxima calidad */
+    .page img {
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+      image-rendering: high-quality;
+      display: block;
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
 </head>
 <body>
   <header>
-    <h1>Catálogos Impuls - corrigiendo webp</h1>
+    <h1>Catálogos Impuls - ultimos webp</h1>
   </header>
 
   <main class="categorias">
-    <div class="categoria" onclick="cargarCatalogo('dama')">
-      <h2>Dama</h2>
-    </div>
-    <div class="categoria" onclick="cargarCatalogo('caballero')">
-      <h2>Caballero</h2>
-    </div>
-    <div class="categoria" onclick="cargarCatalogo('niña')">
-      <h2>Niña</h2>
-    </div>
-    <div class="categoria" onclick="cargarCatalogo('niño')">
-      <h2>Niño</h2>
-    </div>
+    <div class="categoria" onclick="cargarCatalogo('dama')"><h2>Dama</h2></div>
+    <div class="categoria" onclick="cargarCatalogo('caballero')"><h2>Caballero</h2></div>
+    <div class="categoria" onclick="cargarCatalogo('niña')"><h2>Niña</h2></div>
+    <div class="categoria" onclick="cargarCatalogo('niño')"><h2>Niño</h2></div>
   </main>
 
   <div id="catalogo"></div>
@@ -141,7 +131,7 @@
 
     function cargarCatalogo(categoria) {
       const catalogoDiv = document.getElementById('catalogo');
-      catalogoDiv.innerHTML = ''; // Limpiar contenido anterior
+      catalogoDiv.innerHTML = '';
 
       let totalPaginas = 0;
       let ruta = '';
@@ -174,13 +164,6 @@
 
       const bookContainer = document.createElement('div');
       bookContainer.id = 'flipbook';
-
-      // Estilos forzados para asegurar tamaño
-      bookContainer.style.width = '100%';
-      bookContainer.style.maxWidth = '1200px';
-      bookContainer.style.height = '85vh';
-      bookContainer.style.margin = '2rem auto';
-
       catalogoDiv.appendChild(bookContainer);
 
       const navButtons = document.createElement('div');
@@ -191,6 +174,19 @@
       `;
       catalogoDiv.appendChild(navButtons);
 
+      pageFlip = new St.PageFlip(bookContainer, {
+        width: 1199, // casi la mitad de 2398 para doble página
+        height: 1583, // mitad de 3166
+        size: 'stretch',
+        minWidth: 600,
+        maxWidth: 1400,
+        minHeight: 800,
+        maxHeight: 1800,
+        showCover: false,
+        mobileScrollSupport: true,
+        useMouseEvents: true
+      });
+
       const pages = [];
 
       for (let i = 1; i <= totalPaginas; i++) {
@@ -199,34 +195,7 @@
         pages.push({ src: imgPath });
       }
 
-      pages.forEach(p => {
-        const preloadImg = new Image();
-        preloadImg.src = p.src;
-      });
-
-      const observer = new ResizeObserver(entries => {
-        for (let entry of entries) {
-          const { width, height } = entry.contentRect;
-          if (width > 0 && height > 0) {
-            observer.disconnect();
-
-            pageFlip = new St.PageFlip(bookContainer, {
-              size: 'stretch',
-              minWidth: 600,
-              minHeight: 800,
-              maxWidth: 1200,
-              maxHeight: 1600,
-              maxShadowOpacity: 0.2,
-              showCover: false,
-              mobileScrollSupport: true,
-            });
-
-            pageFlip.loadFromImages(pages.map(p => p.src));
-          }
-        }
-      });
-
-      observer.observe(bookContainer);
+      pageFlip.loadFromImages(pages.map(p => p.src));
     }
   </script>
 </body>
