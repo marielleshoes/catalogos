@@ -83,8 +83,6 @@
       height: 100%;
       object-fit: contain;
       image-rendering: auto;
-      image-rendering: crisp-edges;
-      image-rendering: -webkit-optimize-contrast;
     }
     .navigation-buttons {
       text-align: center;
@@ -104,7 +102,7 @@
 </head>
 <body>
   <header>
-    <h1>Catálogos Impuls Resuel libro mejor cal</h1>
+    <h1>Catálogos Impuls - Libro en alta calidad webp</h1>
   </header>
 
   <main class="categorias">
@@ -130,7 +128,6 @@
 
   <a class="whatsapp-btn" href="https://wa.me/5211234567890" target="_blank">☎</a>
 
-  <!-- COLOCAMOS EL SCRIPT DESPUÉS DEL BODY -->
   <script>
     let pageFlip;
 
@@ -149,7 +146,7 @@
           prefijo = 'MC_Impuls Dama_page-';
           break;
         case 'caballero':
-          totalPaginas = 100; // ajustar según cantidad real
+          totalPaginas = 100;
           ruta = 'pdfs/impuls_caballero/';
           prefijo = 'MC_Impuls Caballero_page-';
           break;
@@ -194,9 +191,15 @@
 
       for (let i = 1; i <= totalPaginas; i++) {
         const num = i.toString().padStart(4, '0');
-        const imgPath = `${ruta}${prefijo}${num}.jpg`;
+        const imgPath = `${ruta}${prefijo}${num}.webp`;
         pages.push({ src: imgPath });
       }
+
+      // Pre-carga para que no se vean borrosas las primeras imágenes
+      pages.forEach(p => {
+        const preloadImg = new Image();
+        preloadImg.src = p.src;
+      });
 
       pageFlip.loadFromImages(pages.map(p => p.src));
     }
