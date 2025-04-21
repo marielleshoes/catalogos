@@ -28,29 +28,25 @@
     }
 .zoom-wrapper {
   width: 100vw;
-  height: calc(100vh - 200px); /* Restamos espacio para botones y título */
+  height: calc(100vh - 180px); /* ajusta si tus botones ocupan más */
   overflow: auto;
   background: white;
-  border: 1px solid #ccc;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: start;
 }
 
 .viewer {
   display: flex;
   justify-content: center;
-  align-items: center;
-  transform-origin: center center;
+  align-items: start;
   transition: transform 0.3s ease;
-  width: fit-content;
 }
 
 .viewer img {
-  max-height: 100%;
-  max-width: 49vw;
-  object-fit: contain;
-  margin: 0 2px;
+  height: 3166px; /* tamaño real de la imagen */
+  width: auto;
+  margin: 0 4px;
 }
 
     .controls {
@@ -69,7 +65,7 @@
 </head>
 <body>
 
-  <h1>Catálogo Impuls ya casi casi</h1>
+  <h1>Catálogo Impuls ya casi casi casi</h1>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
@@ -159,6 +155,21 @@
     window.onload = () => {
       actualizarImagenes();
     };
+
+      function ajustarEscalaLibro() {
+    const viewer = document.querySelector(".viewer");
+    const zoomWrapper = document.querySelector(".zoom-wrapper");
+
+    const availableHeight = zoomWrapper.clientHeight;
+    const originalPageHeight = 3166;
+    const scale = availableHeight / originalPageHeight;
+
+    viewer.style.transform = `scale(${scale})`;
+    viewer.style.transformOrigin = "top center";
+  }
+
+  window.addEventListener("resize", ajustarEscalaLibro);
+  window.addEventListener("load", ajustarEscalaLibro);
   </script>
 
 </body>
