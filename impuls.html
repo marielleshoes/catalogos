@@ -3,73 +3,77 @@
 <head>
   <meta charset="UTF-8">
   <title>Catálogo Impuls - Dama</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.css" />
   <style>
-    #flipbook {
-      width: 800px;
-      height: 1000px;
-      margin: auto;
+    body {
+      font-family: sans-serif;
+      background: #eee;
+      margin: 0;
+      padding: 0;
+      text-align: center;
     }
-    #flipbook .page {
+
+    .flipbook-container {
+      width: 90vw;
+      height: 90vh;
+      margin: auto;
+      overflow: hidden;
+    }
+
+    #catalogo {
       width: 100%;
       height: 100%;
     }
-    .zoom-container {
-      overflow: hidden;
-      position: relative;
+
+    .whatsapp-btn {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #25D366;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-  <h1 style="text-align:center;">Catálogo Impuls - Dama ya arta</h1>
-  <div class="zoom-container">
-    <div id="flipbook">
-      <!-- Las páginas se agregarán aquí -->
-    </div>
-  </div>
+  <h2>Catálogo Impuls - Dama rendid</h2>
 
-  <div style="text-align:center; margin-top:20px;">
-    <button onclick="zoomIn()">Acercar</button>
-    <button onclick="zoomOut()">Alejar</button>
-    <a href="https://wa.me/521XXXXXXXXXX?text=Hola%20quiero%20hacer%20un%20pedido%20de%20Impuls%20Dama" target="_blank">
-      <button>Contactar por WhatsApp</button>
-    </a>
-  </div>
+  <div class="flipbook-container" id="catalogo"></div>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
-  <script src="https://unpkg.com/@panzoom/panzoom/dist/panzoom.min.js"></script>
+  <a href="https://wa.me/521XXXXXXXXXX?text=Hola%2C%20quiero%20hacer%20un%20pedido%20de%20Impuls%20Dama" target="_blank">
+    <button class="whatsapp-btn">Contactar por WhatsApp</button>
+  </a>
+
+  <!-- Librería FlipbookJS -->
+  <script src="https://unpkg.com/page-flip/dist/page-flip.browser.min.js"></script>
 
   <script>
-    const totalPages = 384; // Cambia este número según cuántas páginas tengas
-    const flipbook = $("#flipbook");
+    const catalogo = document.getElementById("catalogo");
 
+    const pageFlip = new St.PageFlip(catalogo, {
+      width: 600,
+      height: 800,
+      size: "stretch",
+      maxShadowOpacity: 0.5,
+      showCover: false,
+      mobileScrollSupport: false
+    });
+
+    const totalPages = 20; // cambia este número a la cantidad de páginas que tengas
+
+    const getFilename = (num) => {
+      const padded = num.toString().padStart(4, '0');
+      return `pdfs/impuls_dama/MC_Impuls Dama_page-${padded}.webp`;
+    };
+
+    const imagePaths = [];
     for (let i = 1; i <= totalPages; i++) {
-      const pageNum = i.toString().padStart(4, '0'); // 0001
-      const imgPath = `pdfs/impuls_dama/MC_Impuls Dama_page-${pageNum}.webp`;
-      flipbook.append(`<div class="page"><img src="${imgPath}" style="width:100%; height:100%;" /></div>`);
+      imagePaths.push(getFilename(i));
     }
 
-    flipbook.turn({
-      width: 800,
-      height: 1000,
-      autoCenter: true
-    });
-
-    const panzoom = Panzoom(document.querySelector("#flipbook"), {
-      maxScale: 2,
-      minScale: 1,
-      contain: 'outside'
-    });
-
-    function zoomIn() {
-      panzoom.zoomIn();
-    }
-
-    function zoomOut() {
-      panzoom.zoomOut();
-    }
+    pageFlip.loadFromImages(imagePaths);
   </script>
 </body>
 </html>
