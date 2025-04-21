@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Catálogo Impuls - Dama dcsdc dc</title>
+  <title>Catálogo Impuls - Dama</title>
   <style>
     body {
       font-family: sans-serif;
@@ -38,7 +38,7 @@
 </head>
 <body>
 
-  <h2>Catálogo Impuls - Dama</h2>
+  <h2>Catálogo Impuls - Dama ult</h2>
 
   <div class="flipbook-container" id="catalogo"></div>
 
@@ -46,9 +46,9 @@
     <button class="whatsapp-btn">Contactar por WhatsApp</button>
   </a>
 
-  <!-- Cargar FlipbookJS correctamente con módulo -->
+  <!-- FlipbookJS - Versión correcta del módulo -->
   <script type="module">
-    import { PageFlip } from 'https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/page-flip.module.min.js';
+    import { PageFlip } from 'https://cdn.jsdelivr.net/npm/page-flip@2.1.4/build/page-flip.browser.esm.js';
 
     const catalogo = document.getElementById("catalogo");
 
@@ -61,7 +61,7 @@
       mobileScrollSupport: false
     });
 
-    const totalPages = 20; // cámbialo por el número real de páginas
+    const totalPages = 20; // ajusta al número de páginas que tengas
 
     const getFilename = (num) => {
       const padded = num.toString().padStart(4, '0');
