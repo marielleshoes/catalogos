@@ -26,32 +26,32 @@
       font-size: 16px;
       cursor: pointer;
     }
+.zoom-wrapper {
+  width: 100vw;
+  height: calc(100vh - 200px); /* Restamos espacio para botones y título */
+  overflow: auto;
+  background: white;
+  border: 1px solid #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-    .zoom-wrapper {
-      width: 100vw;
-      height: 75vh;
-      overflow: auto;
-      background: white;
-      border: 1px solid #ccc;
-    }
+.viewer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform-origin: center center;
+  transition: transform 0.3s ease;
+  width: fit-content;
+}
 
-    .viewer {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transform-origin: center center;
-      transition: transform 0.3s ease;
-      width: fit-content;
-      margin: auto;
-    }
-
-    .viewer img {
-      height: auto;
-      max-height: 100%;
-      max-width: 49vw; /* dos imágenes lado a lado en pantallas normales */
-      object-fit: contain;
-      margin: 0 2px;
-    }
+.viewer img {
+  max-height: 100%;
+  max-width: 49vw;
+  object-fit: contain;
+  margin: 0 2px;
+}
 
     .controls {
       margin-top: 15px;
@@ -69,7 +69,7 @@
 </head>
 <body>
 
-  <h1>Catálogo Impuls ya casi</h1>
+  <h1>Catálogo Impuls ya casi casi</h1>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
