@@ -1,205 +1,255 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Catálogo con Zoom y Flip</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catálogos Impuls</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
   <style>
-    body {
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
       margin: 0;
-      background: #222;
+      padding: 0;
+    }
+    body {
+      background-color: #fdfdfd;
+      color: #333;
+    }
+    header {
+      background-color: #fff;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    header h1 {
+      font-size: 1.8rem;
+      color: #444;
+    }
+    .categorias {
       display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 2rem;
       justify-content: center;
-      align-items: center;
-      height: 100vh;
     }
-
-    #catalogo {
-      width: 90vw;
-      height: 90vh;
-      position: relative;
-    }
-
-    .flipbook {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      perspective: 2000px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .page {
-      width: 50%;
-      height: 100%;
-      background: white;
-      position: absolute;
-      top: 0;
-      transition: transform 1s;
-      transform-origin: left center;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      overflow: hidden;
-    }
-
-    .page.right {
-      left: 50%;
-      transform-origin: right center;
-    }
-
-    .page-content {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      touch-action: none;
-    }
-
-    .zoom-wrapper {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    #controls {
-      position: absolute;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
-    }
-
-    button {
-      margin: 0 10px;
-      padding: 10px 20px;
-      border: none;
-      background: #444;
-      color: white;
-      font-size: 16px;
+    .categoria {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      width: 200px;
+      text-align: center;
+      transition: transform 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       cursor: pointer;
-      border-radius: 8px;
+    }
+    .categoria:hover {
+      transform: translateY(-5px);
+    }
+    .categoria h2 {
+      color: #555;
+    }
+    #catalogo {
+      width: 100%;
+      margin: 2rem auto;
+      text-align: center;
+    }
+    .back {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .back a {
+      color: #0077cc;
+      text-decoration: none;
+    }
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25D366;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    #flipbook {
+      margin: auto;
+    }
+    .navigation-buttons {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .navigation-buttons button {
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      margin: 0 0.5rem;
+      cursor: pointer;
+      border-radius: 5px;
     }
 
-    button:hover {
-      background: #666;
+    /* Ajustar imágenes para máxima calidad */
+    .page img {
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+      image-rendering: high-quality;
+      display: block;
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
 </head>
 <body>
+  <header>
+    <h1>Catálogos Impuls - con zoom</h1>
+  </header>
 
-<div id="catalogo">
-  <div class="flipbook" id="flipbook">
-    <!-- Las páginas se insertan aquí -->
+  <main class="categorias">
+    <div class="categoria" onclick="cargarCatalogo('dama')"><h2>Dama</h2></div>
+    <div class="categoria" onclick="cargarCatalogo('caballero')"><h2>Caballero</h2></div>
+    <div class="categoria" onclick="cargarCatalogo('niña')"><h2>Niña</h2></div>
+    <div class="categoria" onclick="cargarCatalogo('niño')"><h2>Niño</h2></div>
+  </main>
+
+  <div id="catalogo"></div>
+
+  <div class="back">
+    <a href="index.html">&larr; Volver al inicio</a>
   </div>
-  <div id="controls">
-    <button onclick="prevPage()">Anterior</button>
-    <button onclick="nextPage()">Siguiente</button>
-    <button onclick="resetZoom()">Resetear Zoom</button>
-  </div>
-</div>
 
-<!-- Librerías -->
-<script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@9.4.0/dist/panzoom.min.js"></script>
+  <a class="whatsapp-btn" href="https://wa.me/5211234567890" target="_blank">☎</a>
 
+<!-- Al final de tu archivo antes de </body> -->
 <script>
-  const flipbook = document.getElementById('flipbook');
-  const imageSources = [
-    'https://via.placeholder.com/800x1000?text=Página+1',
-    'https://via.placeholder.com/800x1000?text=Página+2',
-    'https://via.placeholder.com/800x1000?text=Página+3',
-    'https://via.placeholder.com/800x1000?text=Página+4'
-  ];
+  let pageFlip;
+  let scale = 1;
+  const minScale = 1;
+  const maxScale = 3;
+  const scaleStep = 0.1;
 
-  let currentPage = 0;
-  const pages = [];
+  function cargarCatalogo(categoria) {
+    const catalogoDiv = document.getElementById('catalogo');
+    catalogoDiv.innerHTML = '';
 
-  function createPageImage(src, side = 'left') {
-    const page = document.createElement('div');
-    page.className = 'page ' + (side === 'right' ? 'right' : '');
+    let totalPaginas = 0;
+    let ruta = '';
+    let prefijo = '';
 
-    const pageContent = document.createElement('div');
-    pageContent.className = 'page-content';
+    switch (categoria) {
+      case 'dama':
+        totalPaginas = 384;
+        ruta = 'pdfs/impuls_dama/';
+        prefijo = 'MC_Impuls Dama_page-';
+        break;
+      case 'caballero':
+        totalPaginas = 100;
+        ruta = 'pdfs/impuls_caballero/';
+        prefijo = 'MC_Impuls Caballero_page-';
+        break;
+      case 'niña':
+        totalPaginas = 80;
+        ruta = 'pdfs/impuls_niña/';
+        prefijo = 'MC_Impuls Niña_page-';
+        break;
+      case 'niño':
+        totalPaginas = 70;
+        ruta = 'pdfs/impuls_niño/';
+        prefijo = 'MC_Impuls Niño_page-';
+        break;
+      default:
+        return;
+    }
 
-    const zoomWrapper = document.createElement('div');
-    zoomWrapper.className = 'zoom-wrapper';
+    const bookContainer = document.createElement('div');
+    bookContainer.id = 'flipbook';
+    catalogoDiv.appendChild(bookContainer);
 
-    const img = document.createElement('img');
-    img.src = src;
+    const navButtons = document.createElement('div');
+    navButtons.className = 'navigation-buttons';
+    navButtons.innerHTML = `
+      <button onclick="pageFlip.flipPrev()">Anterior</button>
+      <button onclick="pageFlip.flipNext()">Siguiente</button>
+    `;
+    catalogoDiv.appendChild(navButtons);
 
-    zoomWrapper.appendChild(img);
-    pageContent.appendChild(zoomWrapper);
-    page.appendChild(pageContent);
-    flipbook.appendChild(page);
-
-    // Aplicar panzoom después de insertar
-    const zoomInstance = panzoom(zoomWrapper, {
-      maxZoom: 3,
-      minZoom: 1,
-      bounds: true,
-      boundsPadding: 0.1
+    pageFlip = new St.PageFlip(bookContainer, {
+      width: 1199,
+      height: 1583,
+      size: 'stretch',
+      minWidth: 600,
+      maxWidth: 1400,
+      minHeight: 800,
+      maxHeight: 1800,
+      showCover: false,
+      mobileScrollSupport: true,
+      useMouseEvents: true
     });
 
-    // Guardar la instancia para reset
-    page._zoom = zoomInstance;
-
-    return page;
-  }
-
-  function loadPages() {
-    for (let i = 0; i < imageSources.length; i += 2) {
-      const leftPage = createPageImage(imageSources[i], 'left');
-      pages.push(leftPage);
-      if (imageSources[i + 1]) {
-        const rightPage = createPageImage(imageSources[i + 1], 'right');
-        pages.push(rightPage);
-      }
+    const pages = [];
+    for (let i = 1; i <= totalPaginas; i++) {
+      const num = i.toString().padStart(4, '0');
+      const imgPath = `${ruta}${prefijo}${num}.webp`;
+      pages.push({ src: imgPath });
     }
-    updatePages();
-  }
 
-  function updatePages() {
-    pages.forEach((page, index) => {
-      if (index === currentPage || index === currentPage + 1) {
-        page.style.zIndex = 2;
-        page.style.transform = 'rotateY(0deg)';
-      } else if (index < currentPage) {
-        page.style.zIndex = 1;
-        page.style.transform = 'rotateY(-180deg)';
-      } else {
-        page.style.zIndex = 0;
-        page.style.transform = 'rotateY(0deg)';
-      }
+    pageFlip.loadFromImages(pages.map(p => p.src)).then(() => {
+      // Zoom con rueda del mouse
+      bookContainer.addEventListener("wheel", (e) => {
+        if (e.ctrlKey) {
+          e.preventDefault();
+          scale += (e.deltaY < 0 ? scaleStep : -scaleStep);
+          scale = Math.min(maxScale, Math.max(minScale, scale));
+          aplicarZoom();
+        }
+      });
+
+      // Zoom con doble clic
+      bookContainer.addEventListener("dblclick", () => {
+        scale = scale === 1 ? 2 : 1;
+        aplicarZoom();
+      });
+
+      // Zoom táctil (pinch-to-zoom)
+      let pinchStartDist = 0;
+      bookContainer.addEventListener("touchstart", (e) => {
+        if (e.touches.length === 2) {
+          pinchStartDist = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+        }
+      });
+
+      bookContainer.addEventListener("touchmove", (e) => {
+        if (e.touches.length === 2) {
+          const pinchCurrentDist = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          const pinchDiff = pinchCurrentDist - pinchStartDist;
+          scale += pinchDiff * 0.001;
+          scale = Math.min(maxScale, Math.max(minScale, scale));
+          aplicarZoom();
+          pinchStartDist = pinchCurrentDist;
+        }
+      });
     });
   }
 
-  function nextPage() {
-    if (currentPage + 2 < pages.length) {
-      currentPage += 2;
-      updatePages();
-    }
-  }
-
-  function prevPage() {
-    if (currentPage - 2 >= 0) {
-      currentPage -= 2;
-      updatePages();
-    }
-  }
-
-  function resetZoom() {
+  function aplicarZoom() {
+    const pages = document.querySelectorAll("#flipbook .page");
     pages.forEach(page => {
-      if (page._zoom) {
-        page._zoom.zoomAbs(0, 0, 1); // zoom al 100%
-        page._zoom.moveTo(0, 0);     // reposicionar al centro
-      }
+      page.style.transform = `scale(${scale})`;
+      page.style.transformOrigin = "center center";
     });
   }
-
-  loadPages();
 </script>
 
 </body>
