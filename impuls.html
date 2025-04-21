@@ -2,143 +2,74 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Catálogo Impuls</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <!-- ✅ Turn.js desde fuente oficial -->
-  <script src="https://cdn.jsdelivr.net/gh/blasten/turn.js@4/turn.min.js"></script>
-
+  <title>Catálogo Impuls - Dama</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.css" />
   <style>
-    body {
-      background: #f5f5f5;
-      font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    h1 {
-      margin-top: 20px;
-    }
-
-    select {
-      padding: 10px;
-      font-size: 16px;
-      margin-top: 10px;
-    }
-
     #flipbook {
       width: 800px;
-      height: 1056px;
-      margin-top: 30px;
+      height: 1000px;
+      margin: auto;
     }
-
     #flipbook .page {
       width: 100%;
       height: 100%;
     }
-
-    .whatsapp-btn {
-      margin-top: 20px;
-      padding: 12px 20px;
-      background: #25D366;
-      color: white;
-      font-size: 16px;
-      border: none;
-      border-radius: 10px;
-      text-decoration: none;
+    .zoom-container {
+      overflow: hidden;
+      position: relative;
     }
   </style>
 </head>
 <body>
 
-  <h1>Catálogo Impuls prueba test ultimo y ya</h1>
-
-  <label for="categoria">Selecciona una categoría:</label>
-  <select id="categoria">
-    <option value="dama">Dama</option>
-    <option value="caballero">Caballero</option>
-    <option value="niño">Niño</option>
-    <option value="niña">Niña</option>
-  </select>
-
-  <!-- ✅ Clase flipbook agregada -->
-  <div id="flipbook" class="flipbook">
-    <!-- Las páginas se insertan dinámicamente -->
+  <h1 style="text-align:center;">Catálogo Impuls - Dama ya arta</h1>
+  <div class="zoom-container">
+    <div id="flipbook">
+      <!-- Las páginas se agregarán aquí -->
+    </div>
   </div>
 
-  <a id="whatsapp-link" class="whatsapp-btn" href="#" target="_blank">
-    Realizar pedido por WhatsApp
-  </a>
+  <div style="text-align:center; margin-top:20px;">
+    <button onclick="zoomIn()">Acercar</button>
+    <button onclick="zoomOut()">Alejar</button>
+    <a href="https://wa.me/521XXXXXXXXXX?text=Hola%20quiero%20hacer%20un%20pedido%20de%20Impuls%20Dama" target="_blank">
+      <button>Contactar por WhatsApp</button>
+    </a>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
+  <script src="https://unpkg.com/@panzoom/panzoom/dist/panzoom.min.js"></script>
 
   <script>
-    const totalPagesPorCategoria = {
-      dama: 4,
-      caballero: 3,
-      niño: 2,
-      niña: 2
-    };
+    const totalPages = 20; // Cambia este número según cuántas páginas tengas
+    const flipbook = $("#flipbook");
 
-    const carpetaPorCategoria = {
-      dama: "impuls_dama",
-      caballero: "impuls_caballero",
-      niño: "impuls_niño",
-      niña: "impuls_niña"
-    };
-
-    function cargarCatalogo(categoria) {
-      const totalPages = totalPagesPorCategoria[categoria];
-      const carpeta = carpetaPorCategoria[categoria];
-      const flipbook = $("#flipbook");
-
-      // Destruye el flipbook anterior si existe
-      if (flipbook.data("turn")) {
-        flipbook.turn("destroy").html("");
-      } else {
-        flipbook.html("");
-      }
-
-      // Inserta nuevas páginas
-      for (let i = 1; i <= totalPages; i++) {
-        const padded = i.toString().padStart(4, '0');
-        const imgPath = `pdfs/${carpeta}/MC_Impuls ${capitalize(categoria)}_page-${padded}.webp`;
-        flipbook.append(`<div class="page"><img src="${imgPath}" style="width:100%; height:100%;" /></div>`);
-      }
-
-      // Esperar a que todas las imágenes carguen antes de iniciar el flipbook
-      let loadedImages = 0;
-      flipbook.find("img").on("load", function () {
-        loadedImages++;
-        if (loadedImages === totalPages) {
-          flipbook.turn({
-            width: 800,
-            height: 1056,
-            autoCenter: true
-          });
-        }
-      });
-
-      // Actualiza el link de WhatsApp
-      const mensaje = encodeURIComponent(`Hola, quiero hacer un pedido del catálogo Impuls - ${capitalize(categoria)}.`);
-      $("#whatsapp-link").attr("href", `https://wa.me/5211234567890?text=${mensaje}`);
+    for (let i = 1; i <= totalPages; i++) {
+      const pageNum = i.toString().padStart(4, '0'); // 0001
+      const imgPath = `pdfs/impuls_dama/MC_Impuls Dama_page-${pageNum}.webp`;
+      flipbook.append(`<div class="page"><img src="${imgPath}" style="width:100%; height:100%;" /></div>`);
     }
 
-    function capitalize(texto) {
-      return texto.charAt(0).toUpperCase() + texto.slice(1);
-    }
-
-    $(document).ready(function () {
-      const selector = $("#categoria");
-
-      // Cargar la primera categoría por defecto
-      cargarCatalogo(selector.val());
-
-      // Al cambiar la categoría
-      selector.on("change", function () {
-        cargarCatalogo($(this).val());
-      });
+    flipbook.turn({
+      width: 800,
+      height: 1000,
+      autoCenter: true
     });
-  </script>
 
+    const panzoom = Panzoom(document.querySelector("#flipbook"), {
+      maxScale: 2,
+      minScale: 1,
+      contain: 'outside'
+    });
+
+    function zoomIn() {
+      panzoom.zoomIn();
+    }
+
+    function zoomOut() {
+      panzoom.zoomOut();
+    }
+  </script>
 </body>
 </html>
