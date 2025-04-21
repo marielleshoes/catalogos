@@ -53,6 +53,12 @@
       max-width: 1000px;
       margin: 2rem auto;
     }
+      #flipbook {
+    width: 100%;
+    max-width: 1200px;
+    height: 85vh;
+    margin: 2rem auto;
+  }
     .back {
       text-align: center;
       margin-top: 1rem;
@@ -104,7 +110,7 @@
 </head>
 <body>
   <header>
-    <h1>Catálogos Impuls - mejora calidad webp</h1>
+    <h1>Catálogos Impuls - mejora webp</h1>
   </header>
 
   <main class="categorias">
@@ -131,81 +137,88 @@
   <a class="whatsapp-btn" href="https://wa.me/5211234567890" target="_blank">☎</a>
 
   <script>
-    let pageFlip;
+  let pageFlip;
 
-    function cargarCatalogo(categoria) {
-      const catalogoDiv = document.getElementById('catalogo');
-      catalogoDiv.innerHTML = ''; // Limpiar contenido anterior
+  function cargarCatalogo(categoria) {
+    const catalogoDiv = document.getElementById('catalogo');
+    catalogoDiv.innerHTML = ''; // Limpiar contenido anterior
 
-      let totalPaginas = 0;
-      let ruta = '';
-      let prefijo = '';
+    let totalPaginas = 0;
+    let ruta = '';
+    let prefijo = '';
 
-      switch (categoria) {
-        case 'dama':
-          totalPaginas = 384;
-          ruta = 'pdfs/impuls_dama/';
-          prefijo = 'MC_Impuls Dama_page-';
-          break;
-        case 'caballero':
-          totalPaginas = 100;
-          ruta = 'pdfs/impuls_caballero/';
-          prefijo = 'MC_Impuls Caballero_page-';
-          break;
-        case 'niña':
-          totalPaginas = 80;
-          ruta = 'pdfs/impuls_niña/';
-          prefijo = 'MC_Impuls Niña_page-';
-          break;
-        case 'niño':
-          totalPaginas = 70;
-          ruta = 'pdfs/impuls_niño/';
-          prefijo = 'MC_Impuls Niño_page-';
-          break;
-        default:
-          return;
-      }
-
-      const bookContainer = document.createElement('div');
-      bookContainer.id = 'flipbook';
-      catalogoDiv.appendChild(bookContainer);
-
-      const navButtons = document.createElement('div');
-      navButtons.className = 'navigation-buttons';
-      navButtons.innerHTML = `
-        <button onclick="pageFlip.flipPrev()">Anterior</button>
-        <button onclick="pageFlip.flipNext()">Siguiente</button>
-      `;
-      catalogoDiv.appendChild(navButtons);
-
-pageFlip = new St.PageFlip(bookContainer, {
-  size: 'stretch',
-  minWidth: 600,
-  minHeight: 800,
-  maxWidth: 1200,
-  maxHeight: 1600,
-  maxShadowOpacity: 0.2,
-  showCover: false,
-  mobileScrollSupport: true,
-});
-
-
-      const pages = [];
-
-      for (let i = 1; i <= totalPaginas; i++) {
-        const num = i.toString().padStart(4, '0');
-        const imgPath = `${ruta}${prefijo}${num}.webp`;
-        pages.push({ src: imgPath });
-      }
-
-      // Pre-carga para que no se vean borrosas las primeras imágenes
-      pages.forEach(p => {
-        const preloadImg = new Image();
-        preloadImg.src = p.src;
-      });
-
-      pageFlip.loadFromImages(pages.map(p => p.src));
+    switch (categoria) {
+      case 'dama':
+        totalPaginas = 384;
+        ruta = 'pdfs/impuls_dama/';
+        prefijo = 'MC_Impuls Dama_page-';
+        break;
+      case 'caballero':
+        totalPaginas = 100;
+        ruta = 'pdfs/impuls_caballero/';
+        prefijo = 'MC_Impuls Caballero_page-';
+        break;
+      case 'niña':
+        totalPaginas = 80;
+        ruta = 'pdfs/impuls_niña/';
+        prefijo = 'MC_Impuls Niña_page-';
+        break;
+      case 'niño':
+        totalPaginas = 70;
+        ruta = 'pdfs/impuls_niño/';
+        prefijo = 'MC_Impuls Niño_page-';
+        break;
+      default:
+        return;
     }
-  </script>
+
+    const bookContainer = document.createElement('div');
+    bookContainer.id = 'flipbook';
+
+    // 🔧 Estilo por JS para asegurar dimensiones
+    bookContainer.style.width = '100%';
+    bookContainer.style.maxWidth = '1200px';
+    bookContainer.style.height = '85vh';
+    bookContainer.style.margin = '2rem auto';
+
+    catalogoDiv.appendChild(bookContainer);
+
+    const navButtons = document.createElement('div');
+    navButtons.className = 'navigation-buttons';
+    navButtons.innerHTML = `
+      <button onclick="pageFlip.flipPrev()">Anterior</button>
+      <button onclick="pageFlip.flipNext()">Siguiente</button>
+    `;
+    catalogoDiv.appendChild(navButtons);
+
+    pageFlip = new St.PageFlip(bookContainer, {
+      size: 'stretch',
+      minWidth: 600,
+      minHeight: 800,
+      maxWidth: 1200,
+      maxHeight: 1600,
+      maxShadowOpacity: 0.2,
+      showCover: false,
+      mobileScrollSupport: true,
+    });
+
+    const pages = [];
+
+    for (let i = 1; i <= totalPaginas; i++) {
+      const num = i.toString().padStart(4, '0');
+      const imgPath = `${ruta}${prefijo}${num}.webp`;
+      pages.push({ src: imgPath });
+    }
+
+    // Pre-carga para que no se vean borrosas las primeras imágenes
+    pages.forEach(p => {
+      const preloadImg = new Image();
+      preloadImg.src = p.src;
+    });
+
+    pageFlip.loadFromImages(pages.map(p => p.src));
+  }
+</script>
+
 </body>
 </html>
