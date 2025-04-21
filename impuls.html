@@ -2,78 +2,136 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Catálogo Impuls - Dama</title>
+  <title>Catálogo Impuls</title>
   <style>
     body {
-      font-family: sans-serif;
-      background: #eee;
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
       margin: 0;
-      padding: 0;
       text-align: center;
     }
 
-    .flipbook-container {
-      width: 90vw;
-      height: 90vh;
-      margin: auto;
-      overflow: hidden;
+    h1 {
+      margin-top: 20px;
     }
 
-    #catalogo {
-      width: 100%;
-      height: 100%;
+    .menu {
+      margin: 20px;
     }
 
-    .whatsapp-btn {
-      margin-top: 10px;
+    .menu button {
+      margin: 5px;
       padding: 10px 20px;
-      font-size: 18px;
-      background-color: #25D366;
-      color: white;
-      border: none;
-      border-radius: 10px;
+      font-size: 16px;
       cursor: pointer;
+    }
+
+    .viewer {
+      position: relative;
+      display: inline-block;
+      margin-top: 20px;
+      max-width: 90vw;
+    }
+
+    #catalogImage {
+      max-width: 100%;
+      max-height: 80vh;
+      transition: transform 0.3s ease;
+    }
+
+    .controls {
+      margin-top: 15px;
+    }
+
+    .controls button {
+      margin: 0 10px;
+      padding: 8px 16px;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
 
-  <h2>Catálogo Impuls - Dama ult</h2>
+  <h1>Catálogo Impuls reinicio</h1>
 
-  <div class="flipbook-container" id="catalogo"></div>
+  <div class="menu">
+    <button onclick="cargarCategoria('dama')">Dama</button>
+    <button onclick="cargarCategoria('caballero')">Caballero</button>
+    <button onclick="cargarCategoria('niño')">Niño</button>
+    <button onclick="cargarCategoria('niña')">Niña</button>
+  </div>
 
-  <a href="https://wa.me/521XXXXXXXXXX?text=Hola%2C%20quiero%20hacer%20un%20pedido%20de%20Impuls%20Dama" target="_blank">
-    <button class="whatsapp-btn">Contactar por WhatsApp</button>
-  </a>
+  <div class="viewer">
+    <img id="catalogImage" src="" alt="Catálogo Impuls">
+  </div>
 
-  <!-- FlipbookJS - Versión correcta del módulo -->
-  <script type="module">
-    import { PageFlip } from 'https://cdn.jsdelivr.net/npm/page-flip@2.1.4/build/page-flip.browser.esm.js';
+  <div class="controls">
+    <button onclick="paginaAnterior()">⏪ Anterior</button>
+    <button onclick="zoomIn()">🔍 Acercar</button>
+    <button onclick="zoomOut()">🔍 Alejar</button>
+    <button onclick="paginaSiguiente()">⏩ Siguiente</button>
+  </div>
 
-    const catalogo = document.getElementById("catalogo");
-
-    const pageFlip = new PageFlip(catalogo, {
-      width: 600,
-      height: 800,
-      size: "stretch",
-      maxShadowOpacity: 0.5,
-      showCover: false,
-      mobileScrollSupport: false
-    });
-
-    const totalPages = 20; // ajusta al número de páginas que tengas
-
-    const getFilename = (num) => {
-      const padded = num.toString().padStart(4, '0');
-      return `pdfs/impuls_dama/MC_Impuls Dama_page-${padded}.webp`;
+  <script>
+    let categoria = 'dama';
+    let pagina = 1;
+    const totalPaginas = {
+      dama: 20,
+      caballero: 15,
+      niño: 10,
+      niña: 12
     };
 
-    const imagePaths = [];
-    for (let i = 1; i <= totalPages; i++) {
-      imagePaths.push(getFilename(i));
+    let zoom = 1;
+
+    function actualizarImagen() {
+      const padded = pagina.toString().padStart(4, '0');
+      const ruta = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-${padded}.webp`;
+      document.getElementById('catalogImage').src = ruta;
+      document.getElementById('catalogImage').style.transform = `scale(${zoom})`;
     }
 
-    pageFlip.loadFromImages(imagePaths);
+    function cargarCategoria(cat) {
+      categoria = cat;
+      pagina = 1;
+      zoom = 1;
+      actualizarImagen();
+    }
+
+    function paginaSiguiente() {
+      if (pagina < totalPaginas[categoria]) {
+        pagina++;
+        actualizarImagen();
+      }
+    }
+
+    function paginaAnterior() {
+      if (pagina > 1) {
+        pagina--;
+        actualizarImagen();
+      }
+    }
+
+    function zoomIn() {
+      zoom += 0.1;
+      actualizarImagen();
+    }
+
+    function zoomOut() {
+      if (zoom > 0.2) {
+        zoom -= 0.1;
+        actualizarImagen();
+      }
+    }
+
+    function capitalizar(texto) {
+      return texto.charAt(0).toUpperCase() + texto.slice(1);
+    }
+
+    // Cargar la primera imagen al abrir la página
+    window.onload = () => {
+      actualizarImagen();
+    };
   </script>
 </body>
 </html>
