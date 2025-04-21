@@ -9,6 +9,7 @@
       background: #f4f4f4;
       margin: 0;
       text-align: center;
+      overflow-x: hidden;
     }
 
     h1 {
@@ -26,21 +27,35 @@
       cursor: pointer;
     }
 
-    .viewer {
-      position: relative;
-      display: inline-block;
-      margin-top: 20px;
+    .zoom-wrapper {
       max-width: 90vw;
+      max-height: 80vh;
+      margin: auto;
+      overflow: auto;
+      border: 1px solid #ccc;
+      display: inline-block;
+      background: white;
     }
 
-    #catalogImage {
-      max-width: 100%;
-      max-height: 80vh;
+    .viewer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transform-origin: center center;
       transition: transform 0.3s ease;
+    }
+
+    .viewer img {
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+      object-fit: contain;
     }
 
     .controls {
       margin-top: 15px;
+      position: relative;
+      z-index: 10;
     }
 
     .controls button {
@@ -52,7 +67,7 @@
 </head>
 <body>
 
-  <h1>Catálogo Impuls reinicio</h1>
+  <h1>Catálogo Impuls mejor fin</h1>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
@@ -61,8 +76,11 @@
     <button onclick="cargarCategoria('niña')">Niña</button>
   </div>
 
-  <div class="viewer">
-    <img id="catalogImage" src="" alt="Catálogo Impuls">
+  <div class="zoom-wrapper">
+    <div class="viewer" id="viewer">
+      <img id="leftPage" src="" alt="Página izquierda">
+      <img id="rightPage" src="" alt="Página derecha">
+    </div>
   </div>
 
   <div class="controls">
@@ -75,6 +93,8 @@
   <script>
     let categoria = 'dama';
     let pagina = 1;
+    let zoom = 1;
+
     const totalPaginas = {
       dama: 20,
       caballero: 15,
@@ -82,56 +102,62 @@
       niña: 12
     };
 
-    let zoom = 1;
+    function capitalizar(texto) {
+      return texto.charAt(0).toUpperCase() + texto.slice(1);
+    }
 
-    function actualizarImagen() {
-      const padded = pagina.toString().padStart(4, '0');
-      const ruta = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-${padded}.webp`;
-      document.getElementById('catalogImage').src = ruta;
-      document.getElementById('catalogImage').style.transform = `scale(${zoom})`;
+    function actualizarImagenes() {
+      const cat = capitalizar(categoria);
+      const pag1 = pagina.toString().padStart(4, '0');
+      const pag2 = (pagina + 1).toString().padStart(4, '0');
+
+      const base = `pdfs/impuls_${categoria}/MC_Impuls%20${cat}_page-`;
+
+      document.getElementById('leftPage').src = `${base}${pag1}.webp`;
+      document.getElementById('rightPage').src = (pagina + 1 <= totalPaginas[categoria])
+        ? `${base}${pag2}.webp`
+        : '';
+
+      document.getElementById('viewer').style.transform = `scale(${zoom})`;
     }
 
     function cargarCategoria(cat) {
       categoria = cat;
       pagina = 1;
       zoom = 1;
-      actualizarImagen();
+      actualizarImagenes();
     }
 
     function paginaSiguiente() {
-      if (pagina < totalPaginas[categoria]) {
-        pagina++;
-        actualizarImagen();
+      if (pagina + 2 <= totalPaginas[categoria]) {
+        pagina += 2;
+        actualizarImagenes();
       }
     }
 
     function paginaAnterior() {
-      if (pagina > 1) {
-        pagina--;
-        actualizarImagen();
+      if (pagina - 2 >= 1) {
+        pagina -= 2;
+        actualizarImagenes();
       }
     }
 
     function zoomIn() {
       zoom += 0.1;
-      actualizarImagen();
+      actualizarImagenes();
     }
 
     function zoomOut() {
       if (zoom > 0.2) {
         zoom -= 0.1;
-        actualizarImagen();
+        actualizarImagenes();
       }
     }
 
-    function capitalizar(texto) {
-      return texto.charAt(0).toUpperCase() + texto.slice(1);
-    }
-
-    // Cargar la primera imagen al abrir la página
     window.onload = () => {
-      actualizarImagen();
+      actualizarImagenes();
     };
   </script>
+
 </body>
 </html>
