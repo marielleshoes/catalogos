@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Catálogo Impuls</title>
   <style>
     * {
       box-sizing: border-box;
     }
+
     body {
       margin: 0;
-      overflow: hidden;
       background-color: #f0f0f0;
       font-family: Arial, sans-serif;
+      overflow: hidden;
     }
 
     header {
@@ -24,14 +25,14 @@
     }
 
     header select {
-      padding: 8px;
+      padding: 6px;
       font-size: 16px;
     }
 
-    .zoom-wrapper {
+    .viewer-container {
       width: 100vw;
       height: calc(100vh - 60px);
-      overflow: auto;
+      overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -39,20 +40,12 @@
 
     .viewer {
       display: flex;
-      flex-wrap: nowrap;
-      transform-origin: center center;
       transition: transform 0.3s ease;
+      transform-origin: center center;
     }
 
-    .page-pair {
-      display: flex;
-      flex-direction: row;
-    }
-
-    .page-pair img {
-      height: 100%;
-      width: auto;
-      max-height: 3166px;
+    .page {
+      max-height: 100%;
       max-width: 50vw;
       object-fit: contain;
     }
@@ -60,21 +53,24 @@
     .controls {
       position: fixed;
       bottom: 10px;
-      right: 10px;
-      z-index: 1000;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 10;
     }
 
     .controls button {
-      margin: 0 5px;
-      padding: 10px 15px;
+      padding: 8px 14px;
       font-size: 16px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
 <header>
-  <h2>Catálogo Impuls creo que ya casi</h2>
+  <h2>Catálogo Impuls tratando</h2>
   <div>
     <label for="categoria">Categoría: </label>
     <select id="categoria" onchange="cambiarCategoria(this.value)">
@@ -86,13 +82,15 @@
   </div>
 </header>
 
-<div class="zoom-wrapper">
+<div class="viewer-container">
   <div class="viewer" id="viewer"></div>
 </div>
 
 <div class="controls">
+  <button onclick="paginaAnterior()">← Anterior</button>
   <button onclick="zoomOut()">Zoom -</button>
   <button onclick="zoomIn()">Zoom +</button>
+  <button onclick="paginaSiguiente()">Siguiente →</button>
 </div>
 
 <script>
@@ -103,77 +101,88 @@
     nino: 100
   };
 
-  const viewer = document.getElementById("viewer");
-  let scale = 1;
   let categoriaActual = 'dama';
+  let paginaActual = 1;
+  let escala = 1;
+
+  const viewer = document.getElementById("viewer");
 
   function pad(num) {
     return num.toString().padStart(4, '0');
-  }
-
-  function limpiarViewer() {
-    viewer.innerHTML = "";
-  }
-
-  function cargarPaginas(categoria) {
-    const carpeta = `pdfs/impuls_${categoria}`;
-    const prefijo = `MC_Impuls ${capitalizar(categoria)}_page-`;
-    const total = totalPaginasPorCategoria[categoria];
-
-    for (let i = 1; i <= total; i += 2) {
-      const contenedor = document.createElement("div");
-      contenedor.className = "page-pair";
-
-      const img1 = document.createElement("img");
-      img1.src = `${carpeta}/${prefijo}${pad(i)}.webp`;
-      img1.alt = `Página ${i}`;
-      contenedor.appendChild(img1);
-
-      if (i + 1 <= total) {
-        const img2 = document.createElement("img");
-        img2.src = `${carpeta}/${prefijo}${pad(i + 1)}.webp`;
-        img2.alt = `Página ${i + 1}`;
-        contenedor.appendChild(img2);
-      }
-
-      viewer.appendChild(contenedor);
-    }
-  }
-
-  function ajustarEscalaInicial() {
-    const availableHeight = window.innerHeight - 60;
-    const originalPageHeight = 3166;
-    scale = availableHeight / originalPageHeight;
-    viewer.style.transform = `scale(${scale})`;
-  }
-
-  function zoomIn() {
-    scale += 0.1;
-    viewer.style.transform = `scale(${scale})`;
-  }
-
-  function zoomOut() {
-    scale = Math.max(0.1, scale - 0.1);
-    viewer.style.transform = `scale(${scale})`;
-  }
-
-  function cambiarCategoria(categoria) {
-    categoriaActual = categoria;
-    limpiarViewer();
-    cargarPaginas(categoriaActual);
-    ajustarEscalaInicial();
   }
 
   function capitalizar(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  window.addEventListener("load", () => {
-    cargarPaginas(categoriaActual);
-    ajustarEscalaInicial();
-  });
+  function limpiarViewer() {
+    viewer.innerHTML = "";
+  }
 
-  window.addEventListener("resize", ajustarEscalaInicial);
+  function cargarPaginas() {
+    limpiarViewer();
+
+    const carpeta = `pdfs/impuls_${categoriaActual}`;
+    const prefijo = `MC_Impuls ${capitalizar(categoriaActual)}_page-`;
+    const total = totalPaginasPorCategoria[categoriaActual];
+
+    const img1 = document.createElement("img");
+    img1.className = "page";
+    img1.src = `${carpeta}/${prefijo}${pad(paginaActual)}.webp`;
+    img1.alt = `Página ${paginaActual}`;
+    viewer.appendChild(img1);
+
+    if (paginaActual + 1 <= total) {
+      const img2 = document.createElement("img");
+      img2.className = "page";
+      img2.src = `${carpeta}/${prefijo}${pad(paginaActual + 1)}.webp`;
+      img2.alt = `Página ${paginaActual + 1}`;
+      viewer.appendChild(img2);
+    }
+
+    ajustarZoom();
+  }
+
+  function ajustarZoom() {
+    viewer.style.transform = `scale(${escala})`;
+  }
+
+  function zoomIn() {
+    escala += 0.1;
+    ajustarZoom();
+  }
+
+  function zoomOut() {
+    escala = Math.max(0.1, escala - 0.1);
+    ajustarZoom();
+  }
+
+  function paginaSiguiente() {
+    const total = totalPaginasPorCategoria[categoriaActual];
+    if (paginaActual + 2 <= total) {
+      paginaActual += 2;
+      cargarPaginas();
+    }
+  }
+
+  function paginaAnterior() {
+    if (paginaActual - 2 >= 1) {
+      paginaActual -= 2;
+      cargarPaginas();
+    }
+  }
+
+  function cambiarCategoria(cat) {
+    categoriaActual = cat;
+    paginaActual = 1;
+    escala = 1;
+    cargarPaginas();
+  }
+
+  window.addEventListener("load", cargarPaginas);
+  window.addEventListener("resize", () => {
+    ajustarZoom();
+  });
 </script>
 
 </body>
