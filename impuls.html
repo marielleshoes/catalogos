@@ -78,12 +78,14 @@
       text-decoration: none;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
-    .page img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      image-rendering: auto;
-    }
+.page img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  image-rendering: high-quality;
+}
     .navigation-buttons {
       text-align: center;
       margin-top: 1rem;
@@ -102,7 +104,7 @@
 </head>
 <body>
   <header>
-    <h1>Catálogos Impuls - Libro en alta calidad webp</h1>
+    <h1>Catálogos Impuls - mejora calidad webp</h1>
   </header>
 
   <main class="categorias">
@@ -176,16 +178,17 @@
       `;
       catalogoDiv.appendChild(navButtons);
 
-      pageFlip = new St.PageFlip(bookContainer, {
-        width: 600,
-        height: 800,
-        size: 'stretch',
-        minWidth: 315,
-        maxWidth: 1000,
-        maxHeight: 1200,
-        showCover: false,
-        mobileScrollSupport: true,
-      });
+pageFlip = new St.PageFlip(bookContainer, {
+  size: 'stretch',
+  minWidth: 600,
+  minHeight: 800,
+  maxWidth: 1200,
+  maxHeight: 1600,
+  maxShadowOpacity: 0.2,
+  showCover: false,
+  mobileScrollSupport: true,
+});
+
 
       const pages = [];
 
