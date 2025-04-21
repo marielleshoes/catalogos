@@ -5,8 +5,8 @@
   <title>Catálogo Impuls</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- ✅ Turn.js que funciona correctamente -->
-  <script src="https://cdn.jsdelivr.net/gh/scaleflex/flipbook-demos@master/libs/turn.min.js"></script>
+  <!-- ✅ Turn.js desde fuente oficial -->
+  <script src="https://cdn.jsdelivr.net/gh/blasten/turn.js@4/turn.min.js"></script>
 
   <style>
     body {
@@ -52,7 +52,7 @@
 </head>
 <body>
 
-  <h1>Catálogo Impuls prueba test</h1>
+  <h1>Catálogo Impuls prueba test ultimo y ya</h1>
 
   <label for="categoria">Selecciona una categoría:</label>
   <select id="categoria">
@@ -62,7 +62,8 @@
     <option value="niña">Niña</option>
   </select>
 
-  <div id="flipbook">
+  <!-- ✅ Clase flipbook agregada -->
+  <div id="flipbook" class="flipbook">
     <!-- Las páginas se insertan dinámicamente -->
   </div>
 
@@ -93,6 +94,8 @@
       // Destruye el flipbook anterior si existe
       if (flipbook.data("turn")) {
         flipbook.turn("destroy").html("");
+      } else {
+        flipbook.html("");
       }
 
       // Inserta nuevas páginas
@@ -102,14 +105,18 @@
         flipbook.append(`<div class="page"><img src="${imgPath}" style="width:100%; height:100%;" /></div>`);
       }
 
-      // Esperamos a que las imágenes se carguen para inicializar el flipbook
-      setTimeout(() => {
-        flipbook.turn({
-          width: 800,
-          height: 1056,
-          autoCenter: true
-        });
-      }, 500);
+      // Esperar a que todas las imágenes carguen antes de iniciar el flipbook
+      let loadedImages = 0;
+      flipbook.find("img").on("load", function () {
+        loadedImages++;
+        if (loadedImages === totalPages) {
+          flipbook.turn({
+            width: 800,
+            height: 1056,
+            autoCenter: true
+          });
+        }
+      });
 
       // Actualiza el link de WhatsApp
       const mensaje = encodeURIComponent(`Hola, quiero hacer un pedido del catálogo Impuls - ${capitalize(categoria)}.`);
