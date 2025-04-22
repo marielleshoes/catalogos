@@ -39,10 +39,18 @@
       position: relative;
     }
 
+    #panzoom-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.3s ease;
+    }
+
     #viewer {
       display: flex;
       gap: 10px;
-      transition: transform 0.3s ease;
+      justify-content: center;
+      align-items: center;
     }
 
     .page {
@@ -63,14 +71,16 @@
 <body>
 
   <div class="categorias">
-    <button onclick="cargarCategoria('dama')">Dama ya merito</button>
+    <button onclick="cargarCategoria('dama')">Dama reescr</button>
     <button onclick="cargarCategoria('caballero')">Caballero</button>
     <button onclick="cargarCategoria('niña')">Niña</button>
     <button onclick="cargarCategoria('niño')">Niño</button>
   </div>
 
   <div class="viewer-container">
-    <div id="viewer"></div>
+    <div id="panzoom-wrapper">
+      <div id="viewer"></div>
+    </div>
   </div>
 
   <div class="controls">
@@ -96,6 +106,7 @@
     let escala = 1;
 
     const viewer = document.getElementById('viewer');
+    const panzoomWrapper = document.getElementById('panzoom-wrapper');
 
     function cargarCategoria(categoria) {
       categoriaActual = categoria;
@@ -130,16 +141,7 @@
       viewer.appendChild(img1);
       viewer.appendChild(img2);
 
-      if (panzoomInstance) panzoomInstance.destroy();
-
-      panzoomInstance = Panzoom(viewer, {
-        maxScale: 4,
-        minScale: 1,
-        contain: 'outside',
-      });
-
-      viewer.addEventListener('wheel', panzoomInstance.zoomWithWheel);
-      escala = 1;
+      resetZoom(true); // true para no reiniciar panzoom, solo reusar
     }
 
     function paginaSiguiente() {
@@ -171,12 +173,18 @@
       }
     }
 
-    function resetZoom() {
-      if (panzoomInstance) {
-        escala = 1;
-        panzoomInstance.zoomTo(0, 0, escala);
-        panzoomInstance.setTransform({ scale: 1, x: 0, y: 0 });
+    function resetZoom(preserve = false) {
+      escala = 1;
+      if (!preserve && panzoomInstance) {
+        panzoomInstance.destroy();
       }
+      panzoomInstance = Panzoom(panzoomWrapper, {
+        maxScale: 4,
+        minScale: 1,
+        contain: 'outside',
+      });
+      panzoomWrapper.addEventListener('wheel', panzoomInstance.zoomWithWheel);
+      panzoomInstance.zoomTo(0, 0, escala);
     }
 
     // Inicializar
