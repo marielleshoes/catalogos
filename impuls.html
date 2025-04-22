@@ -2,193 +2,200 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Catálogo Impuls</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catálogos Impuls</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
-    }
-
-    body {
+      font-family: 'Poppins', sans-serif;
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      overflow: hidden;
+      padding: 0;
     }
-
+    body {
+      background-color: #fdfdfd;
+      color: #333;
+    }
+    header {
+      background-color: #fff;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    header h1 {
+      font-size: 1.8rem;
+      color: #444;
+    }
     .categorias {
-      text-align: center;
-      padding: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 2rem;
+      justify-content: center;
     }
-
-    .categorias button,
-    .controls button {
-      margin: 5px;
-      padding: 10px 15px;
-      font-size: 16px;
+    .categoria {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      width: 200px;
+      text-align: center;
+      transition: transform 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       cursor: pointer;
     }
-
-    .viewer-container {
-      width: 100vw;
-      height: calc(100vh - 120px);
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
+    .categoria:hover {
+      transform: translateY(-5px);
     }
-
-    #panzoom-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: transform 0.3s ease;
+    .categoria h2 {
+      color: #555;
     }
-
-    #viewer {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .page {
-      max-width: 45vw;
-      max-height: 90vh;
-      object-fit: contain;
-      box-shadow: 0 0 8px rgba(0,0,0,0.3);
-      user-select: none;
-      pointer-events: none;
-    }
-
-    .controls {
+    #catalogo {
+      width: 100%;
+      margin: 2rem auto;
       text-align: center;
-      padding: 10px;
+    }
+    .back {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .back a {
+      color: #0077cc;
+      text-decoration: none;
+    }
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25D366;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    #flipbook {
+      margin: auto;
+    }
+    .navigation-buttons {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .navigation-buttons button {
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      margin: 0 0.5rem;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .page img {
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+      image-rendering: high-quality;
+      display: block;
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
 </head>
 <body>
+  <header>
+    <h1>Catálogos Impuls - Libro en alta calidad</h1>
+  </header>
 
-  <div class="categorias">
-    <button onclick="cargarCategoria('dama')">Dama reescr</button>
-    <button onclick="cargarCategoria('caballero')">Caballero</button>
-    <button onclick="cargarCategoria('niña')">Niña</button>
-    <button onclick="cargarCategoria('niño')">Niño</button>
+  <main class="categorias">
+    <div class="categoria" onclick="cargarCatalogo('dama')"><h2>Dama</h2></div>
+    <div class="categoria" onclick="cargarCatalogo('caballero')"><h2>Caballero</h2></div>
+    <div class="categoria" onclick="cargarCatalogo('niña')"><h2>Niña</h2></div>
+    <div class="categoria" onclick="cargarCatalogo('niño')"><h2>Niño</h2></div>
+  </main>
+
+  <div id="catalogo"></div>
+
+  <div class="back">
+    <a href="index.html">&larr; Volver al inicio</a>
   </div>
 
-  <div class="viewer-container">
-    <div id="panzoom-wrapper">
-      <div id="viewer"></div>
-    </div>
-  </div>
+  <a class="whatsapp-btn" href="https://wa.me/5211234567890" target="_blank">☎</a>
 
-  <div class="controls">
-    <button onclick="paginaAnterior()">⏪ Anterior</button>
-    <button onclick="paginaSiguiente()">Siguiente ⏩</button>
-    <button onclick="zoomIn()">🔍+</button>
-    <button onclick="zoomOut()">🔍−</button>
-    <button onclick="resetZoom()">🔄 Tamaño original</button>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@9.4.0/dist/panzoom.min.js"></script>
   <script>
-    const totalPaginasPorCategoria = {
-      dama: 384,
-      caballero: 100,
-      niña: 60,
-      niño: 80
-    };
+    let pageFlip;
 
-    let categoriaActual = 'dama';
-    let paginaActual = 1;
-    let panzoomInstance;
-    let escala = 1;
+    function cargarCatalogo(categoria) {
+      const catalogoDiv = document.getElementById('catalogo');
+      catalogoDiv.innerHTML = '';
 
-    const viewer = document.getElementById('viewer');
-    const panzoomWrapper = document.getElementById('panzoom-wrapper');
+      let totalPaginas = 0;
+      let ruta = '';
+      let prefijo = '';
 
-    function cargarCategoria(categoria) {
-      categoriaActual = categoria;
-      paginaActual = 1;
-      cargarPaginas();
-    }
-
-    function capitalizar(texto) {
-      return texto.charAt(0).toUpperCase() + texto.slice(1);
-    }
-
-    function cargarPaginas() {
-      viewer.innerHTML = '';
-
-      const img1 = document.createElement('img');
-      const img2 = document.createElement('img');
-      img1.className = 'page';
-      img2.className = 'page';
-
-      const carpeta = `pdfs/impuls_${categoriaActual}`;
-      const total = totalPaginasPorCategoria[categoriaActual];
-
-      let pagina1 = paginaActual;
-      let pagina2 = paginaActual + 1;
-
-      if (pagina1 > total) pagina1 = total;
-      if (pagina2 > total) pagina2 = total;
-
-      img1.src = `${carpeta}/MC_Impuls ${capitalizar(categoriaActual)}_page-${pagina1.toString().padStart(4, '0')}.webp`;
-      img2.src = `${carpeta}/MC_Impuls ${capitalizar(categoriaActual)}_page-${pagina2.toString().padStart(4, '0')}.webp`;
-
-      viewer.appendChild(img1);
-      viewer.appendChild(img2);
-
-      resetZoom(true); // true para no reiniciar panzoom, solo reusar
-    }
-
-    function paginaSiguiente() {
-      const total = totalPaginasPorCategoria[categoriaActual];
-      if (paginaActual + 2 <= total) {
-        paginaActual += 2;
-        cargarPaginas();
+      switch (categoria) {
+        case 'dama':
+          totalPaginas = 384;
+          ruta = 'pdfs/impuls_dama/';
+          prefijo = 'MC_Impuls Dama_page-';
+          break;
+        case 'caballero':
+          totalPaginas = 100;
+          ruta = 'pdfs/impuls_caballero/';
+          prefijo = 'MC_Impuls Caballero_page-';
+          break;
+        case 'niña':
+          totalPaginas = 80;
+          ruta = 'pdfs/impuls_niña/';
+          prefijo = 'MC_Impuls Niña_page-';
+          break;
+        case 'niño':
+          totalPaginas = 70;
+          ruta = 'pdfs/impuls_niño/';
+          prefijo = 'MC_Impuls Niño_page-';
+          break;
+        default:
+          return;
       }
-    }
 
-    function paginaAnterior() {
-      if (paginaActual - 2 >= 1) {
-        paginaActual -= 2;
-        cargarPaginas();
-      }
-    }
+      const bookContainer = document.createElement('div');
+      bookContainer.id = 'flipbook';
+      catalogoDiv.appendChild(bookContainer);
 
-    function zoomIn() {
-      if (panzoomInstance) {
-        escala = Math.min(4, escala + 0.2);
-        panzoomInstance.zoomTo(0, 0, escala);
-      }
-    }
+      const navButtons = document.createElement('div');
+      navButtons.className = 'navigation-buttons';
+      navButtons.innerHTML = `
+        <button onclick="pageFlip.flipPrev()">Anterior</button>
+        <button onclick="pageFlip.flipNext()">Siguiente</button>
+      `;
+      catalogoDiv.appendChild(navButtons);
 
-    function zoomOut() {
-      if (panzoomInstance) {
-        escala = Math.max(1, escala - 0.2);
-        panzoomInstance.zoomTo(0, 0, escala);
-      }
-    }
-
-    function resetZoom(preserve = false) {
-      escala = 1;
-      if (!preserve && panzoomInstance) {
-        panzoomInstance.destroy();
-      }
-      panzoomInstance = Panzoom(panzoomWrapper, {
-        maxScale: 4,
-        minScale: 1,
-        contain: 'outside',
+      pageFlip = new St.PageFlip(bookContainer, {
+        width: 1199,
+        height: 1583,
+        size: 'stretch',
+        minWidth: 600,
+        maxWidth: 1400,
+        minHeight: 800,
+        maxHeight: 1800,
+        showCover: false,
+        mobileScrollSupport: true,
+        useMouseEvents: true
       });
-      panzoomWrapper.addEventListener('wheel', panzoomInstance.zoomWithWheel);
-      panzoomInstance.zoomTo(0, 0, escala);
-    }
 
-    // Inicializar
-    cargarCategoria('dama');
+      const pages = [];
+
+      for (let i = 1; i <= totalPaginas; i++) {
+        const num = i.toString().padStart(4, '0');
+        const imgPath = `${ruta}${prefijo}${num}.webp`;
+        pages.push({ src: imgPath });
+      }
+
+      pageFlip.loadFromImages(pages.map(p => p.src));
+    }
   </script>
 </body>
 </html>
