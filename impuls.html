@@ -34,26 +34,21 @@
       overflow: hidden;
     }
 
-.viewer {
-  display: flex;
-  justify-content: center; /* 👈 CENTRAR imágenes */
-  align-items: center;
-  border: 2px solid #ccc;
-  background: white;
-  max-width: 95vw;
-  max-height: 80vh;
-  overflow: scroll;
-  margin: auto;
-  position: relative;
-}
+    .viewer {
+      display: flex;
+      border: 2px solid #ccc;
+      background: white;
+      max-width: 95vw;
+      max-height: 80vh;
+      overflow: scroll;
+      margin: auto;
+      position: relative;
+    }
 
-
-.image-container {
-  display: flex;
-  transform-origin: top left;
-  gap: 0; /* sin espacio entre páginas */
-}
-
+    .image-container {
+      display: flex;
+      transform-origin: top left;
+    }
 
     .image-container img {
       max-width: 100%;
@@ -76,7 +71,7 @@
 </head>
 <body>
 
-  <h1>Catálogo Impuls ya no merito</h1>
+  <h1>Catálogo Impuls</h1>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
