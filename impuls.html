@@ -34,28 +34,32 @@
       overflow: hidden;
     }
 
-    .viewer {
-      display: flex;
-      border: 2px solid #ccc;
-      background: white;
-      max-width: 95vw;
-      max-height: 80vh;
-      overflow: scroll;
-      margin: auto;
-      position: relative;
-    }
+.viewer {
+  display: flex;
+  justify-content: center; /* Centra el contenido */
+  align-items: center;
+  border: 2px solid #ccc;
+  background: white;
+  width: 95vw; /* Ancho flexible */
+  height: 80vh; /* Alto visible de la ventana */
+  overflow: hidden; /* Oculta lo que se salga */
+  margin: auto;
+  position: relative;
+}
 
-    .image-container {
-      display: flex;
-      transform-origin: top left;
-    }
+.image-container {
+  display: flex;
+  gap: 0;
+  transform-origin: center center;
+  transition: transform 0.3s ease;
+}
 
-    .image-container img {
-      max-width: 100%;
-      height: auto;
-      user-select: none;
-      pointer-events: none;
-    }
+.image-container img {
+  max-height: 100%;
+  height: auto;
+  width: auto;
+  display: block;
+}
 
     .controls {
       margin-top: 15px;
