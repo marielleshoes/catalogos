@@ -30,27 +30,30 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-top: 20px;
-      max-width: 100%;
       max-height: 80vh;
       overflow: hidden;
     }
 
     .viewer {
       display: flex;
-      overflow: auto;
       border: 2px solid #ccc;
       background: white;
-      max-width: 90vw;
+      max-width: 95vw;
       max-height: 80vh;
+      overflow: scroll;
       margin: auto;
-      scroll-behavior: smooth;
+      position: relative;
     }
 
-    .viewer img {
+    .image-container {
+      display: flex;
+      transform-origin: top left;
+    }
+
+    .image-container img {
       max-width: 100%;
       height: auto;
-      transition: transform 0.3s ease;
+      user-select: none;
       pointer-events: none;
     }
 
@@ -71,7 +74,7 @@
   <h1>Catálogo Impuls</h1>
 
   <div class="menu">
-    <button onclick="cargarCategoria('dama')">Dama contener</button>
+    <button onclick="cargarCategoria('dama')">Dama gdsvh</button>
     <button onclick="cargarCategoria('caballero')">Caballero</button>
     <button onclick="cargarCategoria('niño')">Niño</button>
     <button onclick="cargarCategoria('niña')">Niña</button>
@@ -79,8 +82,10 @@
 
   <div class="viewer-wrapper">
     <div id="viewer" class="viewer">
-      <img id="page1" src="" alt="Página izquierda">
-      <img id="page2" src="" alt="Página derecha">
+      <div id="imageContainer" class="image-container">
+        <img id="page1" src="" alt="Página izquierda">
+        <img id="page2" src="" alt="Página derecha">
+      </div>
     </div>
   </div>
 
@@ -112,16 +117,15 @@
       document.getElementById('page1').src = `${base}${padded1}.webp`;
       document.getElementById('page2').src = `${base}${padded2}.webp`;
 
-      const viewer = document.getElementById('viewer');
-      viewer.style.transform = `scale(${zoom})`;
+      document.getElementById('imageContainer').style.transform = `scale(${zoom})`;
     }
 
     function cargarCategoria(cat) {
       categoria = cat;
       pagina = 1;
       zoom = 1;
-      const viewer = document.getElementById('viewer');
-      viewer.scrollLeft = 0;
+      document.getElementById('viewer').scrollLeft = 0;
+      document.getElementById('viewer').scrollTop = 0;
       actualizarImagenes();
     }
 
