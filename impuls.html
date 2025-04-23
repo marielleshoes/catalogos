@@ -92,6 +92,17 @@
       cursor: pointer;
       border-radius: 5px;
     }
+    
+    .page {
+      width: 100%;
+      height: 100%;
+    }
+
+    .page img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
 </head>
@@ -163,17 +174,17 @@
       `;
       catalogoDiv.appendChild(navButtons);
 
-      pageFlip = new St.PageFlip(bookContainer, {
+      pageFlip = new St.PageFlip(flipbookContainer, {
         width: 800,
         height: 1056,
-        size: 'stretch',
-        minWidth: 600,
-        maxWidth: 1400,
-        minHeight: 800,
-        maxHeight: 1800,
+        size: 'fixed',
+        minWidth: 800,
+        maxWidth: 800,
+        minHeight: 1056,
+        maxHeight: 1056,
+        maxShadowOpacity: 0.5,
         showCover: false,
-        mobileScrollSupport: true,
-        useMouseEvents: true
+        mobileScrollSupport: false
       });
 
       const pages = [];
