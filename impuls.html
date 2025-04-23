@@ -1,144 +1,176 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Catálogo Impuls</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <!-- ✅ Turn.js desde fuente oficial -->
-  <script src="https://cdn.jsdelivr.net/gh/blasten/turn.js@4/turn.min.js"></script>
-
   <style>
     body {
-      background: #f5f5f5;
-      font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
+      overflow: hidden;
     }
 
-    h1 {
-      margin-top: 20px;
+    .categorias {
+      text-align: center;
+      margin: 10px 0;
     }
 
-    select {
-      padding: 10px;
+    .categorias button {
+      margin: 0 5px;
+      padding: 10px 15px;
       font-size: 16px;
-      margin-top: 10px;
+      cursor: pointer;
     }
 
-    #flipbook {
-      width: 800px;
-      height: 1056px;
-      margin-top: 30px;
+    .viewer-container {
+      width: 100vw;
+      height: calc(100vh - 100px);
+      overflow: hidden;
+      position: relative;
     }
 
-    #flipbook .page {
+    #viewer {
       width: 100%;
       height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
     }
 
-    .whatsapp-btn {
-      margin-top: 20px;
-      padding: 12px 20px;
-      background: #25D366;
-      color: white;
+    .page {
+      max-width: 45vw;
+      max-height: 90vh;
+      object-fit: contain;
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    }
+
+    .controls {
+      text-align: center;
+      padding: 10px;
+    }
+
+    .controls button {
+      margin: 5px;
+      padding: 10px 15px;
       font-size: 16px;
-      border: none;
-      border-radius: 10px;
-      text-decoration: none;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-  <h1>Catálogo Impuls prueba test</h1>
-
-  <label for="categoria">Selecciona una categoría:</label>
-  <select id="categoria">
-    <option value="dama">Dama</option>
-    <option value="caballero">Caballero</option>
-    <option value="niño">Niño</option>
-    <option value="niña">Niña</option>
-  </select>
-
-  <!-- ✅ Clase flipbook agregada -->
-  <div id="flipbook" class="flipbook">
-    <!-- Las páginas se insertan dinámicamente -->
+  <div class="categorias">
+    <button onclick="cargarCategoria('dama')">Dama</button>
+    <button onclick="cargarCategoria('caballero')">Caballero</button>
+    <button onclick="cargarCategoria('niña')">Niña</button>
+    <button onclick="cargarCategoria('niño')">Niño</button>
   </div>
 
-  <a id="whatsapp-link" class="whatsapp-btn" href="#" target="_blank">
-    Realizar pedido por WhatsApp
-  </a>
+  <div class="viewer-container">
+    <div id="viewer"></div>
+  </div>
 
+  <div class="controls">
+    <button onclick="paginaAnterior()">⏪ Anterior</button>
+    <button onclick="paginaSiguiente()">Siguiente ⏩</button>
+    <button onclick="zoomIn()">🔍+</button>
+    <button onclick="zoomOut()">🔍−</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@9.4.0/dist/panzoom.min.js"></script>
   <script>
-    const totalPagesPorCategoria = {
-      dama: 4,
-      caballero: 3,
-      niño: 2,
-      niña: 2
+    const totalPaginasPorCategoria = {
+      dama: 384,
+      caballero: 100,
+      niña: 60,
+      niño: 80
     };
 
-    const carpetaPorCategoria = {
-      dama: "impuls_dama",
-      caballero: "impuls_caballero",
-      niño: "impuls_niño",
-      niña: "impuls_niña"
-    };
+    let categoriaActual = 'dama';
+    let paginaActual = 1;
+    let panzoomInstance;
+    let escala = 1;
 
-    function cargarCatalogo(categoria) {
-      const totalPages = totalPagesPorCategoria[categoria];
-      const carpeta = carpetaPorCategoria[categoria];
-      const flipbook = $("#flipbook");
+    const viewer = document.getElementById('viewer');
 
-      // Destruye el flipbook anterior si existe
-      if (flipbook.data("turn")) {
-        flipbook.turn("destroy").html("");
-      } else {
-        flipbook.html("");
-      }
-
-      // Inserta nuevas páginas
-      for (let i = 1; i <= totalPages; i++) {
-        const padded = i.toString().padStart(4, '0');
-        const imgPath = pdfs/${carpeta}/MC_Impuls ${capitalize(categoria)}_page-${padded}.webp;
-        flipbook.append(<div class="page"><img src="${imgPath}" style="width:100%; height:100%;" /></div>);
-      }
-
-      // Esperar a que todas las imágenes carguen antes de iniciar el flipbook
-      let loadedImages = 0;
-      flipbook.find("img").on("load", function () {
-        loadedImages++;
-        if (loadedImages === totalPages) {
-          flipbook.turn({
-            width: 800,
-            height: 1056,
-            autoCenter: true
-          });
-        }
-      });
-
-      // Actualiza el link de WhatsApp
-      const mensaje = encodeURIComponent(Hola, quiero hacer un pedido del catálogo Impuls - ${capitalize(categoria)}.);
-      $("#whatsapp-link").attr("href", https://wa.me/5211234567890?text=${mensaje});
+    function cargarCategoria(categoria) {
+      categoriaActual = categoria;
+      paginaActual = 1;
+      cargarPaginas();
     }
 
-    function capitalize(texto) {
+    function cargarPaginas() {
+      viewer.innerHTML = '';
+
+      const imagen1 = document.createElement('img');
+      const imagen2 = document.createElement('img');
+      imagen1.className = 'page';
+      imagen2.className = 'page';
+
+      const carpeta = `pdfs/impuls_${categoriaActual}`;
+      const total = totalPaginasPorCategoria[categoriaActual];
+
+      let pagina1 = paginaActual;
+      let pagina2 = paginaActual + 1;
+
+      if (pagina1 > total) pagina1 = total;
+      if (pagina2 > total) pagina2 = total;
+
+      imagen1.src = `${carpeta}/MC_Impuls ${capitalizar(categoriaActual)}_page-${pagina1.toString().padStart(4, '0')}.webp`;
+      imagen2.src = `${carpeta}/MC_Impuls ${capitalizar(categoriaActual)}_page-${pagina2.toString().padStart(4, '0')}.webp`;
+
+      viewer.appendChild(imagen1);
+      viewer.appendChild(imagen2);
+
+      if (panzoomInstance) panzoomInstance.destroy();
+      panzoomInstance = Panzoom(viewer, {
+        maxScale: 4,
+        minScale: 1,
+        contain: 'outside',
+      });
+
+      viewer.addEventListener('wheel', panzoomInstance.zoomWithWheel);
+      escala = 1;
+    }
+
+    function capitalizar(texto) {
       return texto.charAt(0).toUpperCase() + texto.slice(1);
     }
 
-    $(document).ready(function () {
-      const selector = $("#categoria");
+    function paginaSiguiente() {
+      const total = totalPaginasPorCategoria[categoriaActual];
+      if (paginaActual + 2 <= total) {
+        paginaActual += 2;
+        cargarPaginas();
+      }
+    }
 
-      // Cargar la primera categoría por defecto
-      cargarCatalogo(selector.val());
+    function paginaAnterior() {
+      if (paginaActual - 2 >= 1) {
+        paginaActual -= 2;
+        cargarPaginas();
+      }
+    }
 
-      // Al cambiar la categoría
-      selector.on("change", function () {
-        cargarCatalogo($(this).val());
-      });
-    });
+    function zoomIn() {
+      if (panzoomInstance) {
+        escala = Math.min(4, escala + 0.1);
+        panzoomInstance.zoomTo(0, 0, escala);
+      }
+    }
+
+    function zoomOut() {
+      if (panzoomInstance) {
+        escala = Math.max(1, escala - 0.1);
+        panzoomInstance.zoomTo(0, 0, escala);
+      }
+    }
+
+    // Carga inicial
+    cargarCategoria('dama');
   </script>
-
 </body>
 </html>
