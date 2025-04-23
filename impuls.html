@@ -1,202 +1,144 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Catálogos Impuls</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Catálogo Impuls</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- ✅ Turn.js desde fuente oficial -->
+  <script src="https://cdn.jsdelivr.net/gh/blasten/turn.js@4/turn.min.js"></script>
+
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 0;
-    }
     body {
-      background-color: #fdfdfd;
-      color: #333;
-    }
-    header {
-      background-color: #fff;
-      padding: 1rem 2rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    header h1 {
-      font-size: 1.8rem;
-      color: #444;
-    }
-    .categorias {
+      background: #f5f5f5;
+      font-family: sans-serif;
       display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      padding: 2rem;
-      justify-content: center;
-    }
-    .categoria {
-      background-color: #ffffff;
-      border-radius: 12px;
-      padding: 1.5rem;
-      width: 200px;
-      text-align: center;
-      transition: transform 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      cursor: pointer;
-    }
-    .categoria:hover {
-      transform: translateY(-5px);
-    }
-    .categoria h2 {
-      color: #555;
-    }
-    .back {
-      text-align: center;
-      margin-top: 1rem;
-    }
-    .back a {
-      color: #0077cc;
-      text-decoration: none;
-    }
-    .whatsapp-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #25D366;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      font-size: 24px;
-      display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
-#flipbook {
-  width: 800px;
-  height: 1056px;
-  margin: 2rem auto;
-  box-shadow: 0 0 20px rgba(0,0,0,0.1);
-}
-    .navigation-buttons {
-      text-align: center;
-      margin-top: 1rem;
+
+    h1 {
+      margin-top: 20px;
     }
-    .navigation-buttons button {
-      background-color: #0077cc;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      margin: 0 0.5rem;
-      cursor: pointer;
-      border-radius: 5px;
+
+    select {
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 10px;
     }
-    
-    .page {
+
+    #flipbook {
+      width: 800px;
+      height: 1056px;
+      margin-top: 30px;
+    }
+
+    #flipbook .page {
       width: 100%;
       height: 100%;
     }
 
-    .page img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .whatsapp-btn {
+      margin-top: 20px;
+      padding: 12px 20px;
+      background: #25D366;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      text-decoration: none;
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
 </head>
 <body>
-  <header>
-    <h1>Catálogos Impuls - reduc 4</h1>
-  </header>
 
-  <main class="categorias">
-    <div class="categoria" onclick="cargarCatalogo('dama')"><h2>Dama</h2></div>
-    <div class="categoria" onclick="cargarCatalogo('caballero')"><h2>Caballero</h2></div>
-    <div class="categoria" onclick="cargarCatalogo('niña')"><h2>Niña</h2></div>
-    <div class="categoria" onclick="cargarCatalogo('niño')"><h2>Niño</h2></div>
-  </main>
+  <h1>Catálogo Impuls prueba test</h1>
 
-  <div id="catalogo"></div>
+  <label for="categoria">Selecciona una categoría:</label>
+  <select id="categoria">
+    <option value="dama">Dama</option>
+    <option value="caballero">Caballero</option>
+    <option value="niño">Niño</option>
+    <option value="niña">Niña</option>
+  </select>
 
-  <div class="back">
-    <a href="index.html">&larr; Volver al inicio</a>
+  <!-- ✅ Clase flipbook agregada -->
+  <div id="flipbook" class="flipbook">
+    <!-- Las páginas se insertan dinámicamente -->
   </div>
 
-  <a class="whatsapp-btn" href="https://wa.me/5211234567890" target="_blank">☎</a>
+  <a id="whatsapp-link" class="whatsapp-btn" href="#" target="_blank">
+    Realizar pedido por WhatsApp
+  </a>
 
   <script>
-    let pageFlip;
+    const totalPagesPorCategoria = {
+      dama: 4,
+      caballero: 3,
+      niño: 2,
+      niña: 2
+    };
+
+    const carpetaPorCategoria = {
+      dama: "impuls_dama",
+      caballero: "impuls_caballero",
+      niño: "impuls_niño",
+      niña: "impuls_niña"
+    };
 
     function cargarCatalogo(categoria) {
-      const catalogoDiv = document.getElementById('catalogo');
-      catalogoDiv.innerHTML = '';
+      const totalPages = totalPagesPorCategoria[categoria];
+      const carpeta = carpetaPorCategoria[categoria];
+      const flipbook = $("#flipbook");
 
-      let totalPaginas = 0;
-      let ruta = '';
-      let prefijo = '';
-
-      switch (categoria) {
-        case 'dama':
-          totalPaginas = 384;
-          ruta = 'pdfs/impuls_dama/';
-          prefijo = 'MC_Impuls Dama_page-';
-          break;
-        case 'caballero':
-          totalPaginas = 100;
-          ruta = 'pdfs/impuls_caballero/';
-          prefijo = 'MC_Impuls Caballero_page-';
-          break;
-        case 'niña':
-          totalPaginas = 80;
-          ruta = 'pdfs/impuls_niña/';
-          prefijo = 'MC_Impuls Niña_page-';
-          break;
-        case 'niño':
-          totalPaginas = 70;
-          ruta = 'pdfs/impuls_niño/';
-          prefijo = 'MC_Impuls Niño_page-';
-          break;
-        default:
-          return;
+      // Destruye el flipbook anterior si existe
+      if (flipbook.data("turn")) {
+        flipbook.turn("destroy").html("");
+      } else {
+        flipbook.html("");
       }
 
-      const bookContainer = document.createElement('div');
-      bookContainer.id = 'flipbook';
-      catalogoDiv.appendChild(bookContainer);
+      // Inserta nuevas páginas
+      for (let i = 1; i <= totalPages; i++) {
+        const padded = i.toString().padStart(4, '0');
+        const imgPath = pdfs/${carpeta}/MC_Impuls ${capitalize(categoria)}_page-${padded}.webp;
+        flipbook.append(<div class="page"><img src="${imgPath}" style="width:100%; height:100%;" /></div>);
+      }
 
-      const navButtons = document.createElement('div');
-      navButtons.className = 'navigation-buttons';
-      navButtons.innerHTML = `
-        <button onclick="pageFlip.flipPrev()">Anterior</button>
-        <button onclick="pageFlip.flipNext()">Siguiente</button>
-      `;
-      catalogoDiv.appendChild(navButtons);
-
-      pageFlip = new St.PageFlip(flipbookContainer, {
-        width: 800,
-        height: 1056,
-        size: 'fixed',
-        minWidth: 800,
-        maxWidth: 800,
-        minHeight: 1056,
-        maxHeight: 1056,
-        maxShadowOpacity: 0.5,
-        showCover: false,
-        mobileScrollSupport: false
+      // Esperar a que todas las imágenes carguen antes de iniciar el flipbook
+      let loadedImages = 0;
+      flipbook.find("img").on("load", function () {
+        loadedImages++;
+        if (loadedImages === totalPages) {
+          flipbook.turn({
+            width: 800,
+            height: 1056,
+            autoCenter: true
+          });
+        }
       });
 
-      const pages = [];
-
-      for (let i = 1; i <= totalPaginas; i++) {
-        const num = i.toString().padStart(4, '0');
-        const imgPath = `${ruta}${prefijo}${num}.webp`;
-        pages.push({ src: imgPath });
-      }
-
-      pageFlip.loadFromImages(pages.map(p => p.src));
+      // Actualiza el link de WhatsApp
+      const mensaje = encodeURIComponent(Hola, quiero hacer un pedido del catálogo Impuls - ${capitalize(categoria)}.);
+      $("#whatsapp-link").attr("href", https://wa.me/5211234567890?text=${mensaje});
     }
+
+    function capitalize(texto) {
+      return texto.charAt(0).toUpperCase() + texto.slice(1);
+    }
+
+    $(document).ready(function () {
+      const selector = $("#categoria");
+
+      // Cargar la primera categoría por defecto
+      cargarCatalogo(selector.val());
+
+      // Al cambiar la categoría
+      selector.on("change", function () {
+        cargarCatalogo($(this).val());
+      });
+    });
   </script>
+
 </body>
 </html>
