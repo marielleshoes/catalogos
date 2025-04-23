@@ -36,13 +36,13 @@
 
 .viewer {
   display: flex;
-  justify-content: center; /* Centra el contenido */
-  align-items: center;
+  justify-content: center;      /* Centra horizontalmente */
+  align-items: center;          /* Centra verticalmente */
   border: 2px solid #ccc;
   background: white;
-  width: 95vw; /* Ancho flexible */
-  height: 80vh; /* Alto visible de la ventana */
-  overflow: hidden; /* Oculta lo que se salga */
+  width: 95vw;
+  height: 80vh;
+  overflow: hidden;
   margin: auto;
   position: relative;
 }
@@ -52,14 +52,17 @@
   gap: 0;
   transform-origin: center center;
   transition: transform 0.3s ease;
+  max-height: 100%;        /* evita que se desborde */
+  max-width: 100%;         /* evita que se desborde */
 }
 
 .image-container img {
-  max-height: 100%;
+  max-height: 100%;        /* Ajusta la altura al contenedor */
   height: auto;
   width: auto;
-  display: block;
+  object-fit: contain;
 }
+
 
     .controls {
       margin-top: 15px;
@@ -75,7 +78,7 @@
 </head>
 <body>
 
-  <h1>Catálogo Impuls</h1>
+  <h1>Catálogo Impuls sin nada</h1>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
@@ -84,14 +87,13 @@
     <button onclick="cargarCategoria('niña')">Niña</button>
   </div>
 
-  <div class="viewer-wrapper">
-    <div id="viewer" class="viewer">
-      <div id="imageContainer" class="image-container">
-        <img id="page1" src="" alt="Página izquierda">
-        <img id="page2" src="" alt="Página derecha">
-      </div>
-    </div>
+<div class="viewer">
+  <div class="image-container">
+    <img id="page1" src="ruta/a/la/imagen1.webp" alt="Página izquierda">
+    <img id="page2" src="ruta/a/la/imagen2.webp" alt="Página derecha">
   </div>
+</div>
+
 
   <div class="controls">
     <button onclick="paginaAnterior()">⏪ Anterior</button>
