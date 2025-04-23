@@ -5,20 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Catálogo Impuls</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f8f8f8;
+      background: #f4f4f4;
       overflow: hidden;
     }
 
     .categorias {
       text-align: center;
-      margin: 10px 0;
+      padding: 10px;
     }
 
-    .categorias button {
-      margin: 0 5px;
+    .categorias button,
+    .controls button {
+      margin: 5px;
       padding: 10px 15px;
       font-size: 16px;
       cursor: pointer;
@@ -26,51 +31,56 @@
 
     .viewer-container {
       width: 100vw;
-      height: calc(100vh - 100px);
+      height: calc(100vh - 120px);
       overflow: hidden;
-      position: relative;
-    }
-
-    #viewer {
-      width: 100%;
-      height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
+    }
+
+    #panzoom-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.3s ease;
+    }
+
+    #viewer {
+      display: flex;
       gap: 10px;
+      justify-content: center;
+      align-items: center;
     }
 
     .page {
       max-width: 45vw;
       max-height: 90vh;
       object-fit: contain;
-      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+      box-shadow: 0 0 8px rgba(0,0,0,0.3);
+      user-select: none;
+      pointer-events: none;
     }
 
     .controls {
       text-align: center;
       padding: 10px;
     }
-
-    .controls button {
-      margin: 5px;
-      padding: 10px 15px;
-      font-size: 16px;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
 
   <div class="categorias">
-    <button onclick="cargarCategoria('dama')">Dama</button>
+    <button onclick="cargarCategoria('dama')">Dama listo</button>
     <button onclick="cargarCategoria('caballero')">Caballero</button>
     <button onclick="cargarCategoria('niña')">Niña</button>
     <button onclick="cargarCategoria('niño')">Niño</button>
   </div>
 
   <div class="viewer-container">
-    <div id="viewer"></div>
+    <div id="panzoom-wrapper">
+      <div id="viewer"></div>
+    </div>
   </div>
 
   <div class="controls">
@@ -78,6 +88,7 @@
     <button onclick="paginaSiguiente()">Siguiente ⏩</button>
     <button onclick="zoomIn()">🔍+</button>
     <button onclick="zoomOut()">🔍−</button>
+    <button onclick="resetZoom()">🔄 Tamaño original</button>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@9.4.0/dist/panzoom.min.js"></script>
@@ -95,6 +106,7 @@
     let escala = 1;
 
     const viewer = document.getElementById('viewer');
+    const panzoomWrapper = document.getElementById('panzoom-wrapper');
 
     function cargarCategoria(categoria) {
       categoriaActual = categoria;
@@ -102,13 +114,17 @@
       cargarPaginas();
     }
 
+    function capitalizar(texto) {
+      return texto.charAt(0).toUpperCase() + texto.slice(1);
+    }
+
     function cargarPaginas() {
       viewer.innerHTML = '';
 
-      const imagen1 = document.createElement('img');
-      const imagen2 = document.createElement('img');
-      imagen1.className = 'page';
-      imagen2.className = 'page';
+      const img1 = document.createElement('img');
+      const img2 = document.createElement('img');
+      img1.className = 'page';
+      img2.className = 'page';
 
       const carpeta = `pdfs/impuls_${categoriaActual}`;
       const total = totalPaginasPorCategoria[categoriaActual];
@@ -119,25 +135,13 @@
       if (pagina1 > total) pagina1 = total;
       if (pagina2 > total) pagina2 = total;
 
-      imagen1.src = `${carpeta}/MC_Impuls ${capitalizar(categoriaActual)}_page-${pagina1.toString().padStart(4, '0')}.webp`;
-      imagen2.src = `${carpeta}/MC_Impuls ${capitalizar(categoriaActual)}_page-${pagina2.toString().padStart(4, '0')}.webp`;
+      img1.src = `${carpeta}/MC_Impuls ${capitalizar(categoriaActual)}_page-${pagina1.toString().padStart(4, '0')}.webp`;
+      img2.src = `${carpeta}/MC_Impuls ${capitalizar(categoriaActual)}_page-${pagina2.toString().padStart(4, '0')}.webp`;
 
-      viewer.appendChild(imagen1);
-      viewer.appendChild(imagen2);
+      viewer.appendChild(img1);
+      viewer.appendChild(img2);
 
-      if (panzoomInstance) panzoomInstance.destroy();
-      panzoomInstance = Panzoom(viewer, {
-        maxScale: 4,
-        minScale: 1,
-        contain: 'outside',
-      });
-
-      viewer.addEventListener('wheel', panzoomInstance.zoomWithWheel);
-      escala = 1;
-    }
-
-    function capitalizar(texto) {
-      return texto.charAt(0).toUpperCase() + texto.slice(1);
+      resetZoom(true); // true para no reiniciar panzoom, solo reusar
     }
 
     function paginaSiguiente() {
@@ -157,19 +161,33 @@
 
     function zoomIn() {
       if (panzoomInstance) {
-        escala = Math.min(4, escala + 0.1);
+        escala = Math.min(4, escala + 0.2);
         panzoomInstance.zoomTo(0, 0, escala);
       }
     }
 
     function zoomOut() {
       if (panzoomInstance) {
-        escala = Math.max(1, escala - 0.1);
+        escala = Math.max(1, escala - 0.2);
         panzoomInstance.zoomTo(0, 0, escala);
       }
     }
 
-    // Carga inicial
+    function resetZoom(preserve = false) {
+      escala = 1;
+      if (!preserve && panzoomInstance) {
+        panzoomInstance.destroy();
+      }
+      panzoomInstance = Panzoom(panzoomWrapper, {
+        maxScale: 4,
+        minScale: 1,
+        contain: 'outside',
+      });
+      panzoomWrapper.addEventListener('wheel', panzoomInstance.zoomWithWheel);
+      panzoomInstance.zoomTo(0, 0, escala);
+    }
+
+    // Inicializar
     cargarCategoria('dama');
   </script>
 </body>
