@@ -2,48 +2,73 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Catálogo Impuls cagada</title>
+  <title>Catálogo Impuls</title>
   <style>
     body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
       margin: 0;
-      font-family: sans-serif;
-      background: #f5f5f5;
+      text-align: center;
     }
 
-    .viewer {
-      width: 100vw;
-      height: 90vh;
+    h1 {
+      margin-top: 20px;
+    }
+
+    .menu {
+      margin: 20px;
+    }
+
+    .menu button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .viewer-wrapper {
       display: flex;
       justify-content: center;
       align-items: center;
+      max-height: 80vh;
       overflow: hidden;
-      position: relative;
-      background: white;
-      border: 2px solid #ccc;
     }
 
-    .image-container {
+    .viewer {
       display: flex;
-      transition: transform 0.3s ease;
-      transform-origin: center center;
-      cursor: grab;
+      border: 2px solid #ccc;
+      background: white;
+      max-width: 95vw;
+      max-height: 80vh;
+      overflow: scroll;
+      margin: auto;
+      position: relative;
     }
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  transform-origin: center;
+}
+
 
     .image-container img {
-      max-height: 100%;
+      max-width: 100%;
       height: auto;
-      width: auto;
-      object-fit: contain;
+      user-select: none;
+      pointer-events: none;
     }
 
     .controls {
-      text-align: center;
-      margin-top: 10px;
+      margin-top: 15px;
     }
 
-    button {
-      margin: 5px;
-      padding: 10px 20px;
+    .controls button {
+      margin: 0 10px;
+      padding: 8px 16px;
       font-size: 16px;
       cursor: pointer;
     }
@@ -51,123 +76,97 @@
 </head>
 <body>
 
-  <div class="viewer" id="viewer">
-    <div class="image-container" id="imageContainer"></div>
+  <h1>Catálogo Impuls</h1>
+
+  <div class="menu">
+    <button onclick="cargarCategoria('dama')">Dama</button>
+    <button onclick="cargarCategoria('caballero')">Caballero</button>
+    <button onclick="cargarCategoria('niño')">Niño</button>
+    <button onclick="cargarCategoria('niña')">Niña</button>
+  </div>
+
+  <div class="viewer-wrapper">
+    <div id="viewer" class="viewer">
+      <div id="imageContainer" class="image-container">
+        <img id="page1" src="" alt="Página izquierda">
+        <img id="page2" src="" alt="Página derecha">
+      </div>
+    </div>
   </div>
 
   <div class="controls">
-    <button onclick="prevPage()">⬅ Página anterior</button>
-    <button onclick="nextPage()">Página siguiente ➡</button>
-    <button onclick="zoomIn()">Zoom +</button>
-    <button onclick="zoomOut()">Zoom -</button>
-    <button onclick="resetZoom()">Reset Zoom</button>
+    <button onclick="paginaAnterior()">⏪ Anterior</button>
+    <button onclick="zoomIn()">🔍 Acercar</button>
+    <button onclick="zoomOut()">🔍 Alejar</button>
+    <button onclick="paginaSiguiente()">⏩ Siguiente</button>
   </div>
 
   <script>
-    const imageContainer = document.getElementById("imageContainer");
-    const viewer = document.getElementById("viewer");
+    let categoria = 'dama';
+    let pagina = 1;
+    const totalPaginas = {
+      dama: 20,
+      caballero: 15,
+      niño: 10,
+      niña: 12
+    };
 
-    const totalPages = 20; // Cambia este número según cuántas páginas tenga tu categoría
-    const folder = "pdfs/impuls_dama/";
-    const prefix = "MC_Impuls Dama_page-";
-    const suffix = ".webp";
-    let currentPage = 1;
-    let scale = 1;
-    let originX = 0, originY = 0;
-    let lastX = 0, lastY = 0;
-    let isDragging = false, startX, startY;
+    let zoom = 1;
 
-    function pad(num) {
-      return num.toString().padStart(4, '0');
+    function actualizarImagenes() {
+      const padded1 = pagina.toString().padStart(4, '0');
+      const padded2 = (pagina + 1).toString().padStart(4, '0');
+
+      const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
+
+      document.getElementById('page1').src = `${base}${padded1}.webp`;
+      document.getElementById('page2').src = `${base}${padded2}.webp`;
+
+      document.getElementById('imageContainer').style.transform = `scale(${zoom})`;
     }
 
-    function loadPages() {
-      imageContainer.innerHTML = "";
-      const img1 = document.createElement("img");
-      img1.src = `${folder}${prefix}${pad(currentPage)}${suffix}`;
-      img1.alt = `Página ${currentPage}`;
-      imageContainer.appendChild(img1);
-
-      if (currentPage + 1 <= totalPages) {
-        const img2 = document.createElement("img");
-        img2.src = `${folder}${prefix}${pad(currentPage + 1)}${suffix}`;
-        img2.alt = `Página ${currentPage + 1}`;
-        imageContainer.appendChild(img2);
-      }
-      resetZoom(false); // solo resetea zoom sin reiniciar la página
+    function cargarCategoria(cat) {
+      categoria = cat;
+      pagina = 1;
+      zoom = 1;
+      document.getElementById('viewer').scrollLeft = 0;
+      document.getElementById('viewer').scrollTop = 0;
+      actualizarImagenes();
     }
 
-    function nextPage() {
-      if (currentPage + 2 <= totalPages) {
-        currentPage += 2;
-        loadPages();
-      }
-    }
-
-    function prevPage() {
-      if (currentPage - 2 >= 1) {
-        currentPage -= 2;
-        loadPages();
+    function paginaSiguiente() {
+      if (pagina + 2 <= totalPaginas[categoria]) {
+        pagina += 2;
+        actualizarImagenes();
       }
     }
 
-    function applyTransform() {
-      imageContainer.style.transform = `scale(${scale}) translate(${originX}px, ${originY}px)`;
+    function paginaAnterior() {
+      if (pagina - 2 >= 1) {
+        pagina -= 2;
+        actualizarImagenes();
+      }
     }
 
     function zoomIn() {
-      scale = Math.min(scale + 0.2, 3);
-      applyTransform();
+      zoom += 0.1;
+      actualizarImagenes();
     }
 
     function zoomOut() {
-      scale = Math.max(scale - 0.2, 1);
-      applyTransform();
-    }
-
-    function resetZoom(resetPos = true) {
-      scale = 1;
-      if (resetPos) {
-        currentPage = 1;
-        loadPages();
-      } else {
-        originX = 0;
-        originY = 0;
-        lastX = 0;
-        lastY = 0;
-        applyTransform();
+      if (zoom > 0.2) {
+        zoom -= 0.1;
+        actualizarImagenes();
       }
     }
 
-    // Pan - arrastrar imágenes cuando hay zoom
-    viewer.addEventListener("mousedown", (e) => {
-      if (scale === 1) return;
-      isDragging = true;
-      startX = e.clientX - lastX;
-      startY = e.clientY - lastY;
-      viewer.style.cursor = "grabbing";
-    });
+    function capitalizar(texto) {
+      return texto.charAt(0).toUpperCase() + texto.slice(1);
+    }
 
-    viewer.addEventListener("mousemove", (e) => {
-      if (!isDragging) return;
-      lastX = e.clientX - startX;
-      lastY = e.clientY - startY;
-      originX = lastX;
-      originY = lastY;
-      applyTransform();
-    });
-
-    viewer.addEventListener("mouseup", () => {
-      isDragging = false;
-      viewer.style.cursor = "grab";
-    });
-
-    viewer.addEventListener("mouseleave", () => {
-      isDragging = false;
-      viewer.style.cursor = "grab";
-    });
-
-    loadPages();
+    window.onload = () => {
+      actualizarImagenes();
+    };
   </script>
 
 </body>
