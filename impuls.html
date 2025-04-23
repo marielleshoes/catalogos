@@ -67,27 +67,38 @@
       font-size: 16px;
       cursor: pointer;
     }
+    .centerer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: fit-content;
+  min-height: fit-content;
+}
+
   </style>
 </head>
 <body>
 
-  <h1>Catálogo Impuls</h1>
+  <h1>Catálogo Impuls ya merito</h1>
 
   <div class="menu">
-    <button onclick="cargarCategoria('dama')">Dama gdsvh</button>
+    <button onclick="cargarCategoria('dama')">Dama</button>
     <button onclick="cargarCategoria('caballero')">Caballero</button>
     <button onclick="cargarCategoria('niño')">Niño</button>
     <button onclick="cargarCategoria('niña')">Niña</button>
   </div>
 
-  <div class="viewer-wrapper">
-    <div id="viewer" class="viewer">
+<div class="viewer-wrapper">
+  <div id="viewer" class="viewer">
+    <div class="centerer">
       <div id="imageContainer" class="image-container">
         <img id="page1" src="" alt="Página izquierda">
         <img id="page2" src="" alt="Página derecha">
       </div>
     </div>
   </div>
+</div>
+
 
   <div class="controls">
     <button onclick="paginaAnterior()">⏪ Anterior</button>
