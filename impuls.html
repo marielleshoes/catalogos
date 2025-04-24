@@ -53,10 +53,10 @@
       display: flex;
       flex-direction: row;
       gap: 10px;
+      padding: 10px;
     }
 
     .image-container img {
-      width: 100%;
       height: auto;
       max-width: none;
       user-select: none;
@@ -77,7 +77,7 @@
 </head>
 <body>
 
-  <h1>Catálogo Impuls mejora 2</h1>
+  <h1>Catálogo Impuls edit 3</h1>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
@@ -118,7 +118,6 @@
     function actualizarImagenes() {
       const padded1 = pagina.toString().padStart(4, '0');
       const padded2 = (pagina + 1).toString().padStart(4, '0');
-
       const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
 
       document.getElementById('page1').src = `${base}${padded1}.webp`;
@@ -149,15 +148,13 @@
     }
 
     function zoomIn() {
-      zoom += 0.1;
+      zoom = Math.min(zoom + 0.1, 3); // máximo 3x
       aplicarZoom();
     }
 
     function zoomOut() {
-      if (zoom > 0.2) {
-        zoom -= 0.1;
-        aplicarZoom();
-      }
+      zoom = Math.max(zoom - 0.1, 0.3); // mínimo 0.3x
+      aplicarZoom();
     }
 
     function resetZoom() {
@@ -168,8 +165,21 @@
     function aplicarZoom() {
       const page1 = document.getElementById('page1');
       const page2 = document.getElementById('page2');
+      const viewer = document.getElementById('viewer');
+
+      const oldScrollLeft = viewer.scrollLeft;
+      const oldWidth = page1.offsetWidth + page2.offsetWidth;
+
+      // Aplicar nuevo zoom
       page1.style.width = `${zoom * 100}%`;
       page2.style.width = `${zoom * 100}%`;
+
+      // Ajustar scroll para mantener centrado
+      setTimeout(() => {
+        const newWidth = page1.offsetWidth + page2.offsetWidth;
+        const newScrollLeft = (viewer.scrollLeft / oldWidth) * newWidth;
+        viewer.scrollLeft = newScrollLeft;
+      }, 0);
     }
 
     function capitalizar(texto) {
