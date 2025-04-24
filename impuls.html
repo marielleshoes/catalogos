@@ -3,50 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <title>Catálogo Impuls</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     * {
       box-sizing: border-box;
     }
 
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
       margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
       text-align: center;
     }
 
     h1 {
-      margin-top: 20px;
+      margin: 20px 0 10px;
     }
 
     .menu {
-      margin: 20px;
+      margin-bottom: 10px;
     }
 
     .menu button {
-      margin: 5px;
       padding: 10px 20px;
+      margin: 5px;
       font-size: 16px;
       cursor: pointer;
     }
 
-    .viewer-wrapper {
+    .viewer {
+      width: 100vw;
+      height: 80vh;
+      overflow-x: auto;
+      overflow-y: hidden;
+      border-top: 2px solid #ccc;
+      border-bottom: 2px solid #ccc;
+      background-color: white;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 80vh;
-      overflow: hidden;
-    }
-
-    .viewer {
-      display: flex;
-      border: 2px solid #ccc;
-      background: white;
-      width: 95vw;
-      height: 100%;
-      overflow: auto;
-      position: relative;
     }
 
     .image-container {
@@ -54,22 +49,24 @@
       flex-direction: row;
       gap: 10px;
       padding: 10px;
+      transform-origin: left top;
+      transition: transform 0.2s ease-in-out;
     }
 
     .image-container img {
-      height: auto;
       max-width: none;
+      height: auto;
       user-select: none;
       pointer-events: none;
     }
 
     .controls {
-      margin-top: 15px;
+      margin: 20px 0;
     }
 
     .controls button {
+      padding: 10px 15px;
       margin: 0 10px;
-      padding: 8px 16px;
       font-size: 16px;
       cursor: pointer;
     }
@@ -77,7 +74,7 @@
 </head>
 <body>
 
-  <h1>Catálogo Impuls edit 3</h1>
+  <h1>Catálogo Impuls 3</h1>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
@@ -86,12 +83,10 @@
     <button onclick="cargarCategoria('niña')">Niña</button>
   </div>
 
-  <div class="viewer-wrapper">
-    <div id="viewer" class="viewer">
-      <div id="imageContainer" class="image-container">
-        <img id="page1" src="" alt="Página izquierda">
-        <img id="page2" src="" alt="Página derecha">
-      </div>
+  <div class="viewer" id="viewer">
+    <div class="image-container" id="imageContainer">
+      <img id="page1" src="" alt="Página izquierda">
+      <img id="page2" src="" alt="Página derecha">
     </div>
   </div>
 
@@ -115,15 +110,22 @@
 
     let zoom = 1;
 
+    const viewer = document.getElementById('viewer');
+    const imageContainer = document.getElementById('imageContainer');
+    const page1 = document.getElementById('page1');
+    const page2 = document.getElementById('page2');
+
+    function capitalizar(texto) {
+      return texto.charAt(0).toUpperCase() + texto.slice(1);
+    }
+
     function actualizarImagenes() {
       const padded1 = pagina.toString().padStart(4, '0');
       const padded2 = (pagina + 1).toString().padStart(4, '0');
       const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
 
-      document.getElementById('page1').src = `${base}${padded1}.webp`;
-      document.getElementById('page2').src = `${base}${padded2}.webp`;
-
-      aplicarZoom();
+      page1.src = `${base}${padded1}.webp`;
+      page2.src = `${base}${padded2}.webp`;
     }
 
     function cargarCategoria(cat) {
@@ -131,6 +133,7 @@
       pagina = 1;
       zoom = 1;
       actualizarImagenes();
+      aplicarZoom();
     }
 
     function paginaSiguiente() {
@@ -148,12 +151,12 @@
     }
 
     function zoomIn() {
-      zoom = Math.min(zoom + 0.1, 3); // máximo 3x
+      zoom = Math.min(zoom + 0.1, 3);
       aplicarZoom();
     }
 
     function zoomOut() {
-      zoom = Math.max(zoom - 0.1, 0.3); // mínimo 0.3x
+      zoom = Math.max(zoom - 0.1, 0.3);
       aplicarZoom();
     }
 
@@ -163,31 +166,13 @@
     }
 
     function aplicarZoom() {
-      const page1 = document.getElementById('page1');
-      const page2 = document.getElementById('page2');
-      const viewer = document.getElementById('viewer');
-
-      const oldScrollLeft = viewer.scrollLeft;
-      const oldWidth = page1.offsetWidth + page2.offsetWidth;
-
-      // Aplicar nuevo zoom
-      page1.style.width = `${zoom * 100}%`;
-      page2.style.width = `${zoom * 100}%`;
-
-      // Ajustar scroll para mantener centrado
-      setTimeout(() => {
-        const newWidth = page1.offsetWidth + page2.offsetWidth;
-        const newScrollLeft = (viewer.scrollLeft / oldWidth) * newWidth;
-        viewer.scrollLeft = newScrollLeft;
-      }, 0);
-    }
-
-    function capitalizar(texto) {
-      return texto.charAt(0).toUpperCase() + texto.slice(1);
+      imageContainer.style.transform = `scale(${zoom})`;
+      viewer.scrollLeft = 0; // opcional: ir al inicio tras zoom
     }
 
     window.onload = () => {
       actualizarImagenes();
+      aplicarZoom();
     };
   </script>
 
