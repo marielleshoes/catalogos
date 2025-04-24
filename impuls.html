@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Catálogo Impuls</title>
   <style>
     body {
@@ -49,7 +49,6 @@
     .image-container {
       display: flex;
       transform-origin: top left;
-      justify-content: center;
       transition: transform 0.2s ease;
     }
 
@@ -70,11 +69,23 @@
       font-size: 16px;
       cursor: pointer;
     }
+
+    /* En móvil, mostrar solo una imagen */
+    @media (max-width: 768px) {
+      .image-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .image-container img:nth-child(2) {
+        display: none;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <h1>Catálogo Impuls arta nuevamente</h1>
+  <h1>Catálogo Impuls ashhh</h1>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
@@ -111,6 +122,10 @@
 
     let zoom = 1;
 
+    function esMovil() {
+      return window.innerWidth <= 768;
+    }
+
     function actualizarImagenes() {
       const padded1 = pagina.toString().padStart(4, '0');
       const padded2 = (pagina + 1).toString().padStart(4, '0');
@@ -118,7 +133,13 @@
       const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
 
       document.getElementById('page1').src = `${base}${padded1}.webp`;
-      document.getElementById('page2').src = `${base}${padded2}.webp`;
+
+      if (!esMovil()) {
+        document.getElementById('page2').style.display = 'inline';
+        document.getElementById('page2').src = `${base}${padded2}.webp`;
+      } else {
+        document.getElementById('page2').style.display = 'none';
+      }
 
       document.getElementById('imageContainer').style.transform = `scale(${zoom})`;
     }
@@ -133,15 +154,17 @@
     }
 
     function paginaSiguiente() {
-      if (pagina + 2 <= totalPaginas[categoria]) {
-        pagina += 2;
+      const incremento = esMovil() ? 1 : 2;
+      if (pagina + incremento <= totalPaginas[categoria]) {
+        pagina += incremento;
         actualizarImagenes();
       }
     }
 
     function paginaAnterior() {
-      if (pagina - 2 >= 1) {
-        pagina -= 2;
+      const decremento = esMovil() ? 1 : 2;
+      if (pagina - decremento >= 1) {
+        pagina -= decremento;
         actualizarImagenes();
       }
     }
@@ -163,6 +186,10 @@
     }
 
     window.onload = () => {
+      actualizarImagenes();
+    };
+
+    window.onresize = () => {
       actualizarImagenes();
     };
   </script>
