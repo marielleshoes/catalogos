@@ -70,22 +70,26 @@
       cursor: pointer;
     }
 
-    /* En móvil, mostrar solo una imagen */
+    /* En móvil */
     @media (max-width: 768px) {
       .image-container {
         flex-direction: column;
         align-items: center;
       }
-
+    
       .image-container img:nth-child(2) {
         display: none;
+      }
+    
+      .viewer {
+        height: auto; /* que se ajuste al contenido (imagen única) */
       }
     }
   </style>
 </head>
 <body>
 
-  <h1>Catálogo Impuls ashhh</h1>
+  <h1>Catálogo Impuls ashhh ajust</h1>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
