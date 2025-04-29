@@ -82,7 +82,13 @@
       }
     
       .viewer {
-        height: auto; /* que se ajuste al contenido (imagen única) */
+        height: auto; /* Ajustar al contenido */
+        max-height: none; /* Eliminar límite de altura */
+        overflow-y: auto; /* Permitir scroll si se necesita */
+      }
+    
+      .viewer-wrapper {
+        max-height: none;
       }
     }
     @media (min-width: 769px) {
@@ -95,7 +101,7 @@
 </head>
 <body>
 
-  <h1>Catálogo Impuls ashhh ajust gran</h1>
+  <h1>Catálogo Impuls gran ults</h1>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
