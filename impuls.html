@@ -35,16 +35,18 @@
       overflow: hidden;
     }
 
-    .viewer {
-      display: flex;
-      border: 2px solid #ccc;
-      background: white;
-      width: 95vw;
-      height: 80vh;
-      overflow: auto;
-      margin: auto;
-      touch-action: pan-x pan-y;
-    }
+.viewer {
+  position: relative;
+  display: flex;
+  border: 2px solid #ccc;
+  background: white;
+  width: 95vw;
+  height: 80vh;
+  overflow: auto;
+  margin: auto;
+  touch-action: pan-x pan-y;
+}
+
 
     .image-container {
       display: flex;
@@ -97,25 +99,26 @@
         width: 100%;
       }
     }
-    #loader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255,255,255,0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5rem;
-    z-index: 1000;
-  }
+.loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  z-index: 10;
+}
+
 
   </style>
 </head>
 <body>
 
-  <h1>Catálogo Impuls carga</h1>
+  <h1>Catálogo Impuls carga sol view</h1>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
@@ -124,18 +127,16 @@
     <button onclick="cargarCategoria('niña')">Niña</button>
   </div>
 
-  <div id="loader" style="display: none;">
-  <p>Cargando imágenes...</p>
-</div>
-
-  <div class="viewer-wrapper">
-    <div id="viewer" class="viewer">
-      <div id="imageContainer" class="image-container">
-        <img id="page1" src="" alt="Página izquierda">
-        <img id="page2" src="" alt="Página derecha">
-      </div>
+<div class="viewer-wrapper">
+  <div id="viewer" class="viewer">
+    <div id="loader" class="loader">Cargando imágenes...</div>
+    <div id="imageContainer" class="image-container">
+      <img id="page1" src="" alt="Página izquierda">
+      <img id="page2" src="" alt="Página derecha">
     </div>
   </div>
+</div>
+
 
   <div class="controls">
     <button onclick="paginaAnterior()">⏪ Anterior</button>
