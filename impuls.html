@@ -113,7 +113,7 @@
 </head>
 <body>
 
-  <h1>Catálogo Impuls tactil zoom stop</h1>
+  <h1>Catálogo Impuls tactil zoom stop touch</h1>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
@@ -285,15 +285,27 @@ document.getElementById('viewer').addEventListener('touchend', function(e) {
       }
     }, { passive: true });
 
-    document.getElementById('viewer').addEventListener('touchmove', function(e) {
-      if (e.touches.length === 2 && initialDistance !== null) {
-        const currentDistance = getDistance(e.touches);
-        const scale = currentDistance / initialDistance;
-        zoom = Math.min(3, Math.max(0.2, lastZoom * scale));
-        actualizarImagenes();
-        e.preventDefault();
-      }
-    }, { passive: false });
+document.getElementById('viewer').addEventListener('touchmove', function(e) {
+  if (e.touches.length === 2 && initialDistance !== null) {
+    const currentDistance = getDistance(e.touches);
+    const scale = currentDistance / initialDistance;
+    zoom = lastZoom * scale;
+
+    // Asegurar que no se baje de zoomInicial
+    if (zoom < zoomInicial) {
+      zoom = zoomInicial;
+    }
+
+    // Limitar zoom máximo si deseas (opcional)
+    if (zoom > 3) {
+      zoom = 3;
+    }
+
+    actualizarImagenes();
+    e.preventDefault();
+  }
+}, { passive: false });
+
 
     document.getElementById('viewer').addEventListener('touchend', function(e) {
       if (e.touches.length < 2) {
