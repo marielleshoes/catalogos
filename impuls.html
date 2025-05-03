@@ -113,7 +113,7 @@
 </head>
 <body>
 
-  <h1>Catálogo Impuls tactil correg</h1>
+  <h1>Catálogo Impuls tactil zoom stop</h1>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
@@ -149,7 +149,9 @@
       niña: 12
     };
 
-    let zoom = 1;
+let zoom = 1;
+let zoomInicial = 1; // valor mínimo permitido de zoom
+
 
     function esMovil() {
       return window.innerWidth <= 768;
@@ -192,6 +194,11 @@
       }
 
       container.style.transform = `scale(${zoom})`;
+      
+      if (zoomInicial > zoom) {
+        zoomInicial = zoom;
+      }
+
     }
 
     function cargarCategoria(cat) {
@@ -224,12 +231,15 @@
       actualizarImagenes();
     }
 
-    function zoomOut() {
-      if (zoom > 0.2) {
-        zoom -= 0.1;
-        actualizarImagenes();
-      }
-    }
+function zoomOut() {
+  if (zoom - 0.1 >= zoomInicial) {
+    zoom -= 0.1;
+    actualizarImagenes();
+  } else {
+    zoom = zoomInicial; // Evita que baje más
+  }
+}
+
 
     function capitalizar(texto) {
       return texto.charAt(0).toUpperCase() + texto.slice(1);
