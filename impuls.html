@@ -109,30 +109,31 @@
       inicializarFlipbook();
     }
 
-    function inicializarFlipbook() {
-      const flipbookElement = document.getElementById('flipbook');
-      pageFlip = new St.PageFlip(flipbookElement, {
-        width: flipbookElement.clientWidth / 2,
-        height: flipbookElement.clientHeight,
-        size: 'stretch',
-        minWidth: 315,
-        maxWidth: 1000,
-        minHeight: 420,
-        maxHeight: 1350,
-        maxShadowOpacity: 0.5,
-        showCover: false,
-        mobileScrollSupport: false
-      });
+function inicializarFlipbook() {
+  const flipbookElement = document.getElementById('flipbook');
+  pageFlip = new PageFlip(flipbookElement, {
+    width: flipbookElement.clientWidth / 2,
+    height: flipbookElement.clientHeight,
+    size: 'stretch',
+    minWidth: 315,
+    maxWidth: 1000,
+    minHeight: 420,
+    maxHeight: 1350,
+    maxShadowOpacity: 0.5,
+    showCover: false,
+    mobileScrollSupport: false
+  });
 
-      const pages = [];
-      for (let i = 1; i <= totalPaginas[categoria]; i++) {
-        const padded = i.toString().padStart(4, '0');
-        const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-${padded}.webp`;
-        pages.push({ src: base });
-      }
+  const pages = [];
+  for (let i = 1; i <= totalPaginas[categoria]; i++) {
+    const padded = i.toString().padStart(4, '0');
+    const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-${padded}.webp`;
+    pages.push({ src: base });
+  }
 
-      pageFlip.loadFromImages(pages.map(p => p.src));
-    }
+  pageFlip.loadFromImages(pages.map(p => p.src));
+}
+
 
     function paginaSiguiente() {
       pageFlip.flipNext();
