@@ -2,14 +2,15 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Catálogo Impuls</title>
+
   <style>
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
       text-align: center;
-      background: #f4f4f4;
     }
 
     h1 {
@@ -28,17 +29,13 @@
 
     #flipbook-container {
       width: 100%;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      touch-action: pan-y pinch-zoom;
+      max-width: 100vw;
+      overflow: hidden;
+      margin: auto;
     }
 
     #flipbook {
-      width: 100%;
-      max-width: 800px;
-      height: auto;
       margin: auto;
-      touch-action: manipulation;
     }
 
     .page img {
@@ -46,8 +43,6 @@
       height: auto;
       display: block;
       user-select: none;
-      touch-action: none;
-      -webkit-user-drag: none;
     }
 
     .controls {
@@ -61,13 +56,12 @@
     }
   </style>
 
-  <!-- jQuery y Turn.js -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/3/turn.min.js"></script>
 </head>
 <body>
 
-  <h1>Catálogo Impuls sol 1</h1>
+  <h1>Catálogo Impuls sol 2</h1>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
@@ -95,14 +89,22 @@
       niña: 12
     };
 
-    let categoriaActual = 'dama';
-
     function capitalizar(texto) {
       return texto.charAt(0).toUpperCase() + texto.slice(1);
     }
 
+    function calcularDimensiones() {
+      const anchoVentana = window.innerWidth;
+      const altoVentana = window.innerHeight;
+
+      if (anchoVentana < 768) {
+        return { width: anchoVentana * 0.9, height: altoVentana * 0.7, display: 'single' };
+      } else {
+        return { width: 800, height: 500, display: 'double' };
+      }
+    }
+
     function cargarCategoria(categoria) {
-      categoriaActual = categoria;
       const total = totalPaginas[categoria];
       const $flipbook = $('#flipbook');
       $flipbook.html('');
@@ -113,27 +115,37 @@
         $flipbook.append(`<div class="page"><img src="${url}" alt="Página ${i}"></div>`);
       }
 
+      // Si ya estaba inicializado, lo destruimos
       if ($flipbook.data('turn')) {
-        $flipbook.turn('destroy');
+        $flipbook.turn('destroy').removeClass('turnjs');
       }
 
-      const isMobile = window.innerWidth < 768;
+      const { width, height, display } = calcularDimensiones();
 
-      // Turn.js solo se activa en pantallas grandes
-      if (!isMobile) {
-        $flipbook.turn({
-          width: 800,
-          height: 500,
-          autoCenter: true,
-          display: 'double'
-        });
-      }
+      // Aplicamos el estilo y activamos turn.js
+      $flipbook.css({ width: `${width}px`, height: `${height}px` });
+
+      $flipbook.turn({
+        width: width,
+        height: height,
+        autoCenter: true,
+        display: display,
+        elevation: 50,
+        gradients: true
+      });
     }
 
+    // Cargar por defecto
     $(document).ready(() => {
       cargarCategoria('dama');
-    });
-  </script>
 
+      // Recargar en redimensionamiento (por si giran el móvil)
+      window.addEventListener('resize', () => {
+        cargarCategoria(categoriaActual);
+      });
+    });
+
+    let categoriaActual = 'dama';
+  </script>
 </body>
 </html>
