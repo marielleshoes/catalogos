@@ -10,6 +10,7 @@
       background: #f4f4f4;
       margin: 0;
       text-align: center;
+      touch-action: manipulation;
     }
 
     h1 {
@@ -31,6 +32,7 @@
       width: 90%;
       height: 80vh;
       margin: auto;
+      touch-action: manipulation;
     }
 
     .page {
@@ -40,14 +42,7 @@
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
-      touch-action: pinch-zoom;
-      transition: transform 0.3s ease;
-    }
-
-    .zoomed {
-      transform: scale(2);
-      transform-origin: center;
-      cursor: zoom-out;
+      touch-action: manipulation;
     }
 
     .controls {
@@ -66,21 +61,17 @@
         width: 100%;
         height: auto;
       }
-
-      .page {
-        height: 60vh;
-      }
     }
   </style>
 
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- Turn.js v3 -->
+  <!-- Turn.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/3/turn.min.js"></script>
 </head>
 <body>
 
-  <h1>Catálogo Impuls turns funcion</h1>
+  <h1>Catálogo Impuls moviles</h1>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
@@ -108,6 +99,10 @@
 
     let categoriaActual = 'dama';
 
+    function capitalizar(texto) {
+      return texto.charAt(0).toUpperCase() + texto.slice(1);
+    }
+
     function cargarCategoria(categoria) {
       categoriaActual = categoria;
       const total = totalPaginas[categoria];
@@ -122,35 +117,30 @@
       }
 
       if ($flipbook.data('turn')) {
-        $flipbook.turn('destroy');
+        $flipbook.turn('destroy').removeClass('turnjs');
       }
 
-      setTimeout(() => {
-        $flipbook.turn({
-          width: $flipbook.width(),
-          height: window.innerWidth < 768 ? window.innerHeight * 0.6 : $flipbook.height(),
-          autoCenter: true
-        });
-      }, 100);
+      const isMobile = window.innerWidth < 768;
+
+      $flipbook.turn({
+        width: $flipbook.width(),
+        height: $flipbook.height(),
+        autoCenter: true,
+        display: isMobile ? 'single' : 'double'
+      });
     }
 
-    function capitalizar(texto) {
-      return texto.charAt(0).toUpperCase() + texto.slice(1);
-    }
-
-    // Zoom al hacer doble clic
-    $(document).on('dblclick', '.page', function () {
-      $(this).toggleClass('zoomed');
-    });
-
-    $(document).ready(function () {
+    $(document).ready(function() {
       cargarCategoria('dama');
     });
 
-    $(window).on('resize', function () {
+    $(window).on('resize', function() {
       const $flipbook = $('#flipbook');
+      const isMobile = window.innerWidth < 768;
+
       if ($flipbook.data('turn')) {
-        $flipbook.turn('size', $flipbook.width(), window.innerWidth < 768 ? window.innerHeight * 0.6 : $flipbook.height());
+        $flipbook.turn('size', $flipbook.width(), $flipbook.height());
+        $flipbook.turn('display', isMobile ? 'single' : 'double');
       }
     });
   </script>
