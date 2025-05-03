@@ -113,7 +113,7 @@
 </head>
 <body>
 
-  <h1>Catálogo Impuls tactil zoom stop touch</h1>
+  <h1>Catálogo Impuls 0 y ulti</h1>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
@@ -133,10 +133,12 @@
   </div>
 
   <div class="controls">
+    <button onclick="irAPrimeraImagen()">Primera</button>
     <button onclick="paginaAnterior()">⏪ Anterior</button>
     <button onclick="zoomIn()">🔍 Acercar</button>
     <button onclick="zoomOut()">🔍 Alejar</button>
     <button onclick="paginaSiguiente()">⏩ Siguiente</button>
+    <button onclick="irAUltimaImagen()">Última</button>
   </div>
 
   <script>
@@ -224,6 +226,16 @@ let zoomInicial = 1; // valor mínimo permitido de zoom
         pagina -= decremento;
         actualizarImagenes();
       }
+    }
+    
+    function irAPrimeraImagen() {
+      indiceActual = 0;
+      actualizarImagenes();
+    }
+    
+    function irAUltimaImagen() {
+      indiceActual = imagenes.length - 1;
+      actualizarImagenes();
     }
 
     function zoomIn() {
