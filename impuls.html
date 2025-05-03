@@ -113,7 +113,7 @@
 </head>
 <body>
 
-  <h1>Catálogo Impuls 0 y ulti</h1>
+  <h1>Catálogo Impuls 0 y ulti mod</h1>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
@@ -228,15 +228,17 @@ let zoomInicial = 1; // valor mínimo permitido de zoom
       }
     }
     
-    function irAPrimeraImagen() {
-      indiceActual = 0;
-      actualizarImagenes();
-    }
-    
-    function irAUltimaImagen() {
-      indiceActual = imagenes.length - 1;
-      actualizarImagenes();
-    }
+function irAPrimeraImagen() {
+  pagina = 1;
+  actualizarImagenes();
+}
+
+function irAUltimaImagen() {
+  const maxPaginas = totalPaginas[categoria];
+  pagina = esMovil() ? maxPaginas : (maxPaginas % 2 === 0 ? maxPaginas - 1 : maxPaginas - 2);
+  actualizarImagenes();
+}
+
 
     function zoomIn() {
       zoom += 0.1;
