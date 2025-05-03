@@ -35,18 +35,17 @@
       overflow: hidden;
     }
 
-.viewer {
-  position: relative;
-  display: flex;
-  border: 2px solid #ccc;
-  background: white;
-  width: 95vw;
-  height: 80vh;
-  overflow: auto;
-  margin: auto;
-  touch-action: pan-x pan-y;
-}
-
+    .viewer {
+      position: relative;
+      display: flex;
+      border: 2px solid #ccc;
+      background: white;
+      width: 95vw;
+      height: 80vh;
+      overflow: auto;
+      margin: auto;
+      touch-action: pan-x pan-y;
+    }
 
     .image-container {
       display: flex;
@@ -72,53 +71,49 @@
       cursor: pointer;
     }
 
-    /* En móvil */
+    /* Loading message */
+    .loading {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      font-weight: bold;
+      z-index: 10;
+      pointer-events: none;
+    }
+
     @media (max-width: 768px) {
       .image-container {
         flex-direction: column;
         align-items: center;
       }
-    
+
       .image-container img:nth-child(2) {
         display: none;
       }
-    
+
       .viewer {
-        height: auto; /* Ajustar al contenido */
-        max-height: none; /* Eliminar límite de altura */
-        overflow-y: auto; /* Permitir scroll si se necesita */
-      }
-    
-      .viewer-wrapper {
-        max-height: none;
+        height: auto;
       }
     }
+
     @media (min-width: 769px) {
       .image-container {
         justify-content: center;
         width: 100%;
       }
     }
-.loader {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255,255,255,0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.2rem;
-  z-index: 10;
-}
-
-
   </style>
 </head>
 <body>
 
-  <h1>Catálogo Impuls carga sol view</h1>
+  <h1>Catálogo Impuls tactil</h1>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
@@ -127,16 +122,15 @@
     <button onclick="cargarCategoria('niña')">Niña</button>
   </div>
 
-<div class="viewer-wrapper">
-  <div id="viewer" class="viewer">
-    <div id="loader" class="loader">Cargando imágenes...</div>
-    <div id="imageContainer" class="image-container">
-      <img id="page1" src="" alt="Página izquierda">
-      <img id="page2" src="" alt="Página derecha">
+  <div class="viewer-wrapper">
+    <div id="viewer" class="viewer">
+      <div id="loading" class="loading" style="display: none;">Cargando...</div>
+      <div id="imageContainer" class="image-container">
+        <img id="page1" src="" alt="Página izquierda">
+        <img id="page2" src="" alt="Página derecha">
+      </div>
     </div>
   </div>
-</div>
-
 
   <div class="controls">
     <button onclick="paginaAnterior()">⏪ Anterior</button>
@@ -149,7 +143,7 @@
     let categoria = 'dama';
     let pagina = 1;
     const totalPaginas = {
-      dama: 20,
+      dama: 300,
       caballero: 15,
       niño: 10,
       niña: 12
@@ -161,39 +155,44 @@
       return window.innerWidth <= 768;
     }
 
-function actualizarImagenes() {
-  const loader = document.getElementById('loader');
-  loader.style.display = 'flex';
-
-  const padded1 = pagina.toString().padStart(4, '0');
-  const padded2 = (pagina + 1).toString().padStart(4, '0');
-  const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
-
-  const img1 = document.getElementById('page1');
-  const img2 = document.getElementById('page2');
-
-  img1.onload = () => {
-    if (esMovil()) {
-      loader.style.display = 'none';
+    function mostrarCargando(mostrar) {
+      document.getElementById('loading').style.display = mostrar ? 'flex' : 'none';
     }
-  };
 
-  img2.onload = () => {
-    loader.style.display = 'none';
-  };
+    function actualizarImagenes() {
+      const padded1 = pagina.toString().padStart(4, '0');
+      const padded2 = (pagina + 1).toString().padStart(4, '0');
+      const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
 
-  img1.src = `${base}${padded1}.webp`;
+      const img1 = document.getElementById('page1');
+      const img2 = document.getElementById('page2');
+      const container = document.getElementById('imageContainer');
 
-  if (!esMovil()) {
-    img2.style.display = 'inline';
-    img2.src = `${base}${padded2}.webp`;
-  } else {
-    img2.style.display = 'none';
-  }
+      mostrarCargando(true);
+      let loadedCount = 0;
+      const checkLoaded = () => {
+        loadedCount++;
+        if (loadedCount === (esMovil() ? 1 : 2)) {
+          mostrarCargando(false);
+        }
+      };
 
-  document.getElementById('imageContainer').style.transform = `scale(${zoom})`;
-}
+      img1.onload = checkLoaded;
+      img1.onerror = checkLoaded;
+      img1.src = `${base}${padded1}.webp`;
 
+      if (!esMovil()) {
+        img2.style.display = 'inline';
+        img2.onload = checkLoaded;
+        img2.onerror = checkLoaded;
+        img2.src = `${base}${padded2}.webp`;
+      } else {
+        img2.style.display = 'none';
+        img2.src = '';
+      }
+
+      container.style.transform = `scale(${zoom})`;
+    }
 
     function cargarCategoria(cat) {
       categoria = cat;
@@ -236,13 +235,63 @@ function actualizarImagenes() {
       return texto.charAt(0).toUpperCase() + texto.slice(1);
     }
 
-    window.onload = () => {
-      actualizarImagenes();
-    };
+    // Gestos táctiles
+    let startX = 0;
+    document.getElementById('viewer').addEventListener('touchstart', function(e) {
+      if (e.touches.length === 1) {
+        startX = e.touches[0].clientX;
+      }
+    }, { passive: true });
 
-    window.onresize = () => {
-      actualizarImagenes();
-    };
+    document.getElementById('viewer').addEventListener('touchend', function(e) {
+      if (e.changedTouches.length === 1) {
+        const endX = e.changedTouches[0].clientX;
+        const deltaX = endX - startX;
+        if (Math.abs(deltaX) > 50) {
+          if (deltaX > 0) {
+            paginaAnterior();
+          } else {
+            paginaSiguiente();
+          }
+        }
+      }
+    });
+
+    // Zoom táctil (pinch)
+    let initialDistance = null;
+    let lastZoom = zoom;
+
+    function getDistance(touches) {
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    document.getElementById('viewer').addEventListener('touchstart', function(e) {
+      if (e.touches.length === 2) {
+        initialDistance = getDistance(e.touches);
+        lastZoom = zoom;
+      }
+    }, { passive: true });
+
+    document.getElementById('viewer').addEventListener('touchmove', function(e) {
+      if (e.touches.length === 2 && initialDistance !== null) {
+        const currentDistance = getDistance(e.touches);
+        const scale = currentDistance / initialDistance;
+        zoom = Math.min(3, Math.max(0.2, lastZoom * scale));
+        actualizarImagenes();
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    document.getElementById('viewer').addEventListener('touchend', function(e) {
+      if (e.touches.length < 2) {
+        initialDistance = null;
+      }
+    });
+
+    window.onload = actualizarImagenes;
+    window.onresize = actualizarImagenes;
   </script>
 
 </body>
