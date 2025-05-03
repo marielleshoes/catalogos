@@ -2,15 +2,14 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5.0" />
   <title>Catálogo Impuls</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f4f4f4;
       margin: 0;
       text-align: center;
-      touch-action: manipulation;
+      background: #f4f4f4;
     }
 
     h1 {
@@ -25,24 +24,30 @@
       margin: 5px;
       padding: 10px 20px;
       font-size: 16px;
-      cursor: pointer;
+    }
+
+    #flipbook-container {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-y pinch-zoom;
     }
 
     #flipbook {
-      width: 90%;
-      height: 80vh;
+      width: 100%;
+      max-width: 800px;
+      height: auto;
       margin: auto;
       touch-action: manipulation;
     }
 
-    .page {
+    .page img {
       width: 100%;
-      height: 100%;
-      background-color: white;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      touch-action: manipulation;
+      height: auto;
+      display: block;
+      user-select: none;
+      touch-action: none;
+      -webkit-user-drag: none;
     }
 
     .controls {
@@ -53,25 +58,16 @@
       margin: 0 10px;
       padding: 8px 16px;
       font-size: 16px;
-      cursor: pointer;
-    }
-
-    @media (max-width: 768px) {
-      #flipbook {
-        width: 100%;
-        height: auto;
-      }
     }
   </style>
 
-  <!-- jQuery -->
+  <!-- jQuery y Turn.js -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- Turn.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/3/turn.min.js"></script>
 </head>
 <body>
 
-  <h1>Catálogo Impuls moviles actual</h1>
+  <h1>Catálogo Impuls sol 1</h1>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
@@ -80,7 +76,9 @@
     <button onclick="cargarCategoria('niña')">Niña</button>
   </div>
 
-  <div id="flipbook"></div>
+  <div id="flipbook-container">
+    <div id="flipbook"></div>
+  </div>
 
   <div class="controls">
     <button onclick="$('#flipbook').turn('page', 1)">Primera</button>
@@ -111,37 +109,29 @@
 
       for (let i = 1; i <= total; i++) {
         const padded = i.toString().padStart(4, '0');
-        const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-${padded}.webp`;
-        const page = $('<div class="page"></div>').css('background-image', `url(${base})`);
-        $flipbook.append(page);
+        const url = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-${padded}.webp`;
+        $flipbook.append(`<div class="page"><img src="${url}" alt="Página ${i}"></div>`);
       }
 
       if ($flipbook.data('turn')) {
-        $flipbook.turn('destroy').removeClass('turnjs');
+        $flipbook.turn('destroy');
       }
 
       const isMobile = window.innerWidth < 768;
 
-      $flipbook.turn({
-        width: $flipbook.width(),
-        height: $flipbook.height(),
-        autoCenter: true,
-        display: isMobile ? 'single' : 'double'
-      });
+      // Turn.js solo se activa en pantallas grandes
+      if (!isMobile) {
+        $flipbook.turn({
+          width: 800,
+          height: 500,
+          autoCenter: true,
+          display: 'double'
+        });
+      }
     }
 
-    $(document).ready(function() {
+    $(document).ready(() => {
       cargarCategoria('dama');
-    });
-
-    $(window).on('resize', function() {
-      const $flipbook = $('#flipbook');
-      const isMobile = window.innerWidth < 768;
-
-      if ($flipbook.data('turn')) {
-        $flipbook.turn('size', $flipbook.width(), $flipbook.height());
-        $flipbook.turn('display', isMobile ? 'single' : 'double');
-      }
     });
   </script>
 
