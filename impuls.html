@@ -2,76 +2,74 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Catálogo Impuls</title>
-
   <style>
     body {
+      font-family: sans-serif;
+      background-color: #f2f2f2;
       margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      padding: 0;
       text-align: center;
     }
 
     h1 {
-      margin-top: 20px;
+      margin-top: 1rem;
     }
 
-    .menu {
-      margin: 20px;
+    .controls {
+      margin: 1rem 0;
     }
 
-    .menu button {
-      margin: 5px;
-      padding: 10px 20px;
-      font-size: 16px;
+    .controls button {
+      padding: 0.5rem 1rem;
+      margin: 0 0.25rem;
+      font-size: 1rem;
+      border: none;
+      background-color: #333;
+      color: white;
+      cursor: pointer;
+      border-radius: 4px;
     }
 
-    #flipbook-container {
-      width: 100%;
-      max-width: 100vw;
-      overflow: hidden;
-      margin: auto;
+    .controls button:hover {
+      background-color: #555;
     }
 
     #flipbook {
       margin: auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      background: white;
+    }
+
+    .page {
+      width: 100%;
+      height: 100%;
     }
 
     .page img {
       width: 100%;
-      height: auto;
-      display: block;
-      user-select: none;
-    }
-
-    .controls {
-      margin-top: 15px;
-    }
-
-    .controls button {
-      margin: 0 10px;
-      padding: 8px 16px;
-      font-size: 16px;
+      height: 100%;
+      object-fit: contain;
+      touch-action: none;
     }
   </style>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/3/turn.min.js"></script>
+  <!-- Turn.js -->
+  <script src="https://cdn.jsdelivr.net/npm/turn.js@4/turn.min.js"></script>
+
+  <!-- Panzoom -->
+  <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@9.4.0/dist/panzoom.min.js"></script>
 </head>
 <body>
 
-  <h1>Catálogo Impuls sol 2</h1>
+  <h1>Catálogo Impuls zoom sol 3</h1>
 
-  <div class="menu">
+  <div class="controls">
     <button onclick="cargarCategoria('dama')">Dama</button>
     <button onclick="cargarCategoria('caballero')">Caballero</button>
     <button onclick="cargarCategoria('niño')">Niño</button>
     <button onclick="cargarCategoria('niña')">Niña</button>
-  </div>
-
-  <div id="flipbook-container">
-    <div id="flipbook"></div>
   </div>
 
   <div class="controls">
@@ -81,6 +79,15 @@
     <button onclick="$('#flipbook').turn('page', $('#flipbook').turn('pages'))">Última</button>
   </div>
 
+  <div class="controls">
+    <button id="zoom-in">🔍 Acercar</button>
+    <button id="zoom-out">🔎 Alejar</button>
+    <button id="reset-zoom">♻️ Restablecer</button>
+  </div>
+
+  <div id="flipbook"></div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     const totalPaginas = {
       dama: 384,
@@ -88,6 +95,9 @@
       niño: 10,
       niña: 12
     };
+
+    let panzoomInstance = null;
+    let categoriaActual = 'dama';
 
     function capitalizar(texto) {
       return texto.charAt(0).toUpperCase() + texto.slice(1);
@@ -104,7 +114,26 @@
       }
     }
 
+    function habilitarZoomEnPagina(pagina) {
+      if (panzoomInstance) {
+        panzoomInstance.destroy();
+      }
+
+      const img = $(pagina).find("img")[0];
+      if (img) {
+        panzoomInstance = Panzoom(img, {
+          maxScale: 3,
+          minScale: 1,
+          contain: "outside",
+          startScale: 1
+        });
+
+        img.parentElement.addEventListener('wheel', panzoomInstance.zoomWithWheel);
+      }
+    }
+
     function cargarCategoria(categoria) {
+      categoriaActual = categoria;
       const total = totalPaginas[categoria];
       const $flipbook = $('#flipbook');
       $flipbook.html('');
@@ -115,14 +144,12 @@
         $flipbook.append(`<div class="page"><img src="${url}" alt="Página ${i}"></div>`);
       }
 
-      // Si ya estaba inicializado, lo destruimos
       if ($flipbook.data('turn')) {
         $flipbook.turn('destroy').removeClass('turnjs');
       }
 
       const { width, height, display } = calcularDimensiones();
 
-      // Aplicamos el estilo y activamos turn.js
       $flipbook.css({ width: `${width}px`, height: `${height}px` });
 
       $flipbook.turn({
@@ -131,21 +158,38 @@
         autoCenter: true,
         display: display,
         elevation: 50,
-        gradients: true
+        gradients: true,
+        when: {
+          turned: function (e, page) {
+            const currentPage = $(this).find('.page').eq(page - 1);
+            habilitarZoomEnPagina(currentPage);
+          }
+        }
       });
+
+      // Habilitamos zoom en la primera página
+      habilitarZoomEnPagina($flipbook.find('.page').eq(0));
     }
 
-    // Cargar por defecto
     $(document).ready(() => {
       cargarCategoria('dama');
 
-      // Recargar en redimensionamiento (por si giran el móvil)
       window.addEventListener('resize', () => {
         cargarCategoria(categoriaActual);
       });
-    });
 
-    let categoriaActual = 'dama';
+      $('#zoom-in').on('click', () => {
+        if (panzoomInstance) panzoomInstance.zoomIn();
+      });
+
+      $('#zoom-out').on('click', () => {
+        if (panzoomInstance) panzoomInstance.zoomOut();
+      });
+
+      $('#reset-zoom').on('click', () => {
+        if (panzoomInstance) panzoomInstance.reset();
+      });
+    });
   </script>
 </body>
 </html>
