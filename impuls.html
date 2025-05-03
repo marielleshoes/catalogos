@@ -2,44 +2,35 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Catálogo Impuls</title>
   <style>
     body {
-      font-family: sans-serif;
-      background-color: #f2f2f2;
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
       margin: 0;
-      padding: 0;
       text-align: center;
     }
 
     h1 {
-      margin-top: 1rem;
+      margin-top: 20px;
     }
 
-    .controls {
-      margin: 1rem 0;
+    .menu {
+      margin: 20px;
     }
 
-    .controls button {
-      padding: 0.5rem 1rem;
-      margin: 0 0.25rem;
-      font-size: 1rem;
-      border: none;
-      background-color: #333;
-      color: white;
+    .menu button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
       cursor: pointer;
-      border-radius: 4px;
-    }
-
-    .controls button:hover {
-      background-color: #555;
     }
 
     #flipbook {
       margin: auto;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
       background: white;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     }
 
     .page {
@@ -53,19 +44,38 @@
       object-fit: contain;
       touch-action: none;
     }
+
+    .controls {
+      margin-top: 15px;
+    }
+
+    .controls button {
+      margin: 0 10px;
+      padding: 8px 16px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      #flipbook {
+        width: 90%;
+        height: auto;
+      }
+    }
   </style>
 
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- Turn.js -->
-  <script src="https://cdn.jsdelivr.net/npm/turn.js@4/turn.min.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4/turn.min.js"></script>
   <!-- Panzoom -->
   <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@9.4.0/dist/panzoom.min.js"></script>
 </head>
 <body>
 
-  <h1>Catálogo Impuls zoom sol 3</h1>
+  <h1>Catálogo Impuls va mal 4</h1>
 
-  <div class="controls">
+  <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
     <button onclick="cargarCategoria('caballero')">Caballero</button>
     <button onclick="cargarCategoria('niño')">Niño</button>
@@ -87,7 +97,6 @@
 
   <div id="flipbook"></div>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     const totalPaginas = {
       dama: 384,
