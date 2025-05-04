@@ -113,7 +113,7 @@
 </head>
 <body>
 
-  <h1>Catálogo Impuls 0 y ulti mod</h1>
+  <h1>Catálogo Impuls primera y ultima</h1>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
@@ -163,45 +163,55 @@ let zoomInicial = 1; // valor mínimo permitido de zoom
       document.getElementById('loading').style.display = mostrar ? 'flex' : 'none';
     }
 
-    function actualizarImagenes() {
-      const padded1 = pagina.toString().padStart(4, '0');
-      const padded2 = (pagina + 1).toString().padStart(4, '0');
-      const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
+function actualizarImagenes() {
+  const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
+  const img1 = document.getElementById('page1');
+  const img2 = document.getElementById('page2');
+  const container = document.getElementById('imageContainer');
 
-      const img1 = document.getElementById('page1');
-      const img2 = document.getElementById('page2');
-      const container = document.getElementById('imageContainer');
+  const maxPaginas = totalPaginas[categoria];
 
-      mostrarCargando(true);
-      let loadedCount = 0;
-      const checkLoaded = () => {
-        loadedCount++;
-        if (loadedCount === (esMovil() ? 1 : 2)) {
-          mostrarCargando(false);
-        }
-      };
+  const padded1 = pagina.toString().padStart(4, '0');
+  const padded2 = (pagina + 1).toString().padStart(4, '0');
 
-      img1.onload = checkLoaded;
-      img1.onerror = checkLoaded;
-      img1.src = `${base}${padded1}.webp`;
+  mostrarCargando(true);
+  let loadedCount = 0;
+  const isMobile = esMovil();
 
-      if (!esMovil()) {
-        img2.style.display = 'inline';
-        img2.onload = checkLoaded;
-        img2.onerror = checkLoaded;
-        img2.src = `${base}${padded2}.webp`;
-      } else {
-        img2.style.display = 'none';
-        img2.src = '';
-      }
-
-      container.style.transform = `scale(${zoom})`;
-      
-      if (zoomInicial > zoom) {
-        zoomInicial = zoom;
-      }
-
+  const checkLoaded = () => {
+    loadedCount++;
+    const expected = (!isMobile && img2.style.display !== 'none') ? 2 : 1;
+    if (loadedCount === expected) {
+      mostrarCargando(false);
     }
+  };
+
+  img1.onload = checkLoaded;
+  img1.onerror = checkLoaded;
+  img1.src = `${base}${padded1}.webp`;
+
+  // Mostrar lógica de "libro"
+  if (isMobile) {
+    img2.style.display = 'none';
+    img2.src = '';
+  } else if (pagina === 1 || pagina >= maxPaginas) {
+    // Primera o última página: mostrar solo una
+    img2.style.display = 'none';
+    img2.src = '';
+  } else {
+    // Doble página en el medio
+    img2.style.display = 'inline';
+    img2.onload = checkLoaded;
+    img2.onerror = checkLoaded;
+    img2.src = `${base}${padded2}.webp`;
+  }
+
+  container.style.transform = `scale(${zoom})`;
+  if (zoomInicial > zoom) {
+    zoomInicial = zoom;
+  }
+}
+
 
     function cargarCategoria(cat) {
       categoria = cat;
@@ -212,21 +222,43 @@ let zoomInicial = 1; // valor mínimo permitido de zoom
       actualizarImagenes();
     }
 
-    function paginaSiguiente() {
-      const incremento = esMovil() ? 1 : 2;
-      if (pagina + incremento <= totalPaginas[categoria]) {
-        pagina += incremento;
-        actualizarImagenes();
-      }
-    }
+function paginaSiguiente() {
+  const maxPaginas = totalPaginas[categoria];
 
-    function paginaAnterior() {
-      const decremento = esMovil() ? 1 : 2;
-      if (pagina - decremento >= 1) {
-        pagina -= decremento;
-        actualizarImagenes();
-      }
+  if (esMovil()) {
+    if (pagina + 1 <= maxPaginas) {
+      pagina += 1;
+      actualizarImagenes();
     }
+  } else {
+    if (pagina === 1) {
+      pagina += 1; // Ir de portada a doble página
+    } else if (pagina + 2 <= maxPaginas) {
+      pagina += 2;
+    } else if (pagina + 1 <= maxPaginas) {
+      pagina += 1; // Para alcanzar la última si queda una sola
+    }
+    actualizarImagenes();
+  }
+}
+
+
+function paginaAnterior() {
+  if (esMovil()) {
+    if (pagina - 1 >= 1) {
+      pagina -= 1;
+      actualizarImagenes();
+    }
+  } else {
+    if (pagina <= 2) {
+      pagina = 1; // Volver a portada
+    } else {
+      pagina -= 2;
+    }
+    actualizarImagenes();
+  }
+}
+
     
 function irAPrimeraImagen() {
   pagina = 1;
