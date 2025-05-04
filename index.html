@@ -34,6 +34,7 @@ body {
   background-size: cover;
   margin: 0;
   padding: 0;
+  overflow-x: hidden; /* importante para evitar scroll horizontal en PC */
 }
     body {
   background: url('pdfs/img/f1.jpg') no-repeat center center fixed;
@@ -122,9 +123,13 @@ body {
       header h1 {
         font-size: 1.6rem;
       }
-      body {
-        background-attachment: scroll;
-      }
+    body {
+      background-attachment: scroll; /* importante: NO FIXED en móviles */
+      background-position: top left;
+      background-size: auto; /* para que no recorte ni escale forzadamente */
+      background-repeat: repeat; /* opcional: se repite si hace falta */
+      overflow-x: auto; /* permite scroll horizontal si la imagen es grande */
+    }
     }
   </style>
 </head>
