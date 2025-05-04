@@ -189,13 +189,13 @@ let zoomInicial = 1; // valor mínimo permitido de zoom
         img2.style.display = 'inline';
         img2.onload = checkLoaded;
         img2.onerror = checkLoaded;
-        img2.src = ${base}${padded2}.webp;
+        img2.src = `${base}${padded2}.webp`;
       } else {
         img2.style.display = 'none';
         img2.src = '';
       }
 
-      container.style.transform = scale(${zoom});
+      container.style.transform = `scale(${zoom})`;
       
       if (zoomInicial > zoom) {
         zoomInicial = zoom;
