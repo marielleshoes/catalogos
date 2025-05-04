@@ -5,29 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Marielle - Catálogos</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
   <style>
+    :root {
+      --color-fondo: #FDFDFB;
+      --color-tarjeta: #F6EDE4;
+      --color-borde: #DABEB2;
+      --color-acento: #AB9689;
+      --color-texto: #5a4a42;
+      --color-header: #EBE1DA;
+      --color-whatsapp: #25D366;
+    }
+
     * {
       box-sizing: border-box;
       font-family: 'Poppins', sans-serif;
       margin: 0;
       padding: 0;
     }
+
     body {
-      background: linear-gradient(to bottom right, #fdf4ff, #f0eaff);
-      color: #333;
+      background-color: var(--color-fondo);
+      color: var(--color-texto);
     }
+
     header {
-      background-color: #fff;
-      padding: 1.5rem 2rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      background-color: var(--color-header);
+      padding: 2rem;
       text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
+
     header h1 {
-      font-size: 2rem;
-      color: #AD14D1;
+      font-size: 2.2rem;
       font-weight: 700;
+      color: var(--color-acento);
+      letter-spacing: 1px;
     }
+
     .marcas {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -36,30 +51,34 @@
       max-width: 1200px;
       margin: auto;
     }
+
     .marca {
-      background-color: #fff;
+      background-color: var(--color-tarjeta);
+      border: 2px solid var(--color-borde);
       border-radius: 16px;
       padding: 2rem 1rem;
       text-align: center;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
       cursor: pointer;
     }
+
     .marca:hover {
       transform: translateY(-6px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
     }
+
     .marca h2 {
-      color: #6a1b9a;
-      font-size: 1.2rem;
-      font-weight: 500;
+      font-size: 1.3rem;
+      color: var(--color-acento);
+      font-weight: 600;
     }
 
     .whatsapp-btn {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background-color: #25D366;
+      background-color: var(--color-whatsapp);
       color: white;
       border: none;
       border-radius: 50%;
@@ -73,6 +92,7 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       z-index: 1000;
     }
+
     .whatsapp-btn:hover {
       background-color: #1ebe5d;
     }
@@ -86,7 +106,7 @@
 </head>
 <body>
   <header>
-    <h1>Catálogos Marielle mejor</h1>
+    <h1>Catálogos Marielle colores</h1>
   </header>
 
   <main class="marcas">
