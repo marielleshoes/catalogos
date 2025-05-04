@@ -27,21 +27,37 @@
       cursor: pointer;
     }
 
-    .flipbook {
+    .viewer-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      max-height: 80vh;
+      overflow: hidden;
+    }
+
+    .viewer {
+      position: relative;
+      display: flex;
+      border: 2px solid #ccc;
+      background: white;
       width: 95vw;
       height: 80vh;
+      overflow: auto;
       margin: auto;
+      touch-action: pan-x pan-y;
     }
 
-    .flipbook .page {
-      width: 100%;
-      height: 100%;
+    .image-container {
+      display: flex;
+      transform-origin: top left;
+      transition: transform 0.2s ease;
     }
 
-    .flipbook .page img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
+    .image-container img {
+      max-width: 100%;
+      height: auto;
+      user-select: none;
+      pointer-events: none;
     }
 
     .controls {
@@ -73,16 +89,31 @@
     }
 
     @media (max-width: 768px) {
-      .flipbook {
-        width: 100vw;
+      .image-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .image-container img:nth-child(2) {
+        display: none;
+      }
+
+      .viewer {
         height: auto;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .image-container {
+        justify-content: center;
+        width: 100%;
       }
     }
   </style>
 </head>
 <body>
 
-  <h1>Catálogo Impuls otra vez turns</h1>
+  <h1>Catálogo Impuls 0 y ulti mod</h1>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
@@ -91,24 +122,24 @@
     <button onclick="cargarCategoria('niña')">Niña</button>
   </div>
 
-  <div id="loading" class="loading" style="display: none;">Cargando...</div>
-
-  <div id="flipbook" class="flipbook">
-    <!-- Las páginas se cargarán dinámicamente aquí -->
+  <div class="viewer-wrapper">
+    <div id="viewer" class="viewer">
+      <div id="loading" class="loading" style="display: none;">Cargando...</div>
+      <div id="imageContainer" class="image-container">
+        <img id="page1" src="" alt="Página izquierda">
+        <img id="page2" src="" alt="Página derecha">
+      </div>
+    </div>
   </div>
 
   <div class="controls">
-    <button onclick="irAPrimeraPagina()">Primera</button>
+    <button onclick="irAPrimeraImagen()">Primera</button>
     <button onclick="paginaAnterior()">⏪ Anterior</button>
     <button onclick="zoomIn()">🔍 Acercar</button>
     <button onclick="zoomOut()">🔍 Alejar</button>
     <button onclick="paginaSiguiente()">⏩ Siguiente</button>
-    <button onclick="irAUltimaPagina()">Última</button>
+    <button onclick="irAUltimaImagen()">Última</button>
   </div>
-
-  <!-- Incluir jQuery y Turn.js -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://www.turnjs.com/lib/turn.min.js"></script>
 
   <script>
     let categoria = 'dama';
@@ -120,9 +151,9 @@
       niña: 12
     };
 
-    let zoom = 1;
-    const zoomMinimo = 1;
-    const zoomMaximo = 3;
+let zoom = 1;
+let zoomInicial = 1; // valor mínimo permitido de zoom
+
 
     function esMovil() {
       return window.innerWidth <= 768;
@@ -132,83 +163,172 @@
       document.getElementById('loading').style.display = mostrar ? 'flex' : 'none';
     }
 
-    function capitalizar(texto) {
-      return texto.charAt(0).toUpperCase() + texto.slice(1);
+    function actualizarImagenes() {
+      const padded1 = pagina.toString().padStart(4, '0');
+      const padded2 = (pagina + 1).toString().padStart(4, '0');
+      const base = pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-;
+
+      const img1 = document.getElementById('page1');
+      const img2 = document.getElementById('page2');
+      const container = document.getElementById('imageContainer');
+
+      mostrarCargando(true);
+      let loadedCount = 0;
+      const checkLoaded = () => {
+        loadedCount++;
+        if (loadedCount === (esMovil() ? 1 : 2)) {
+          mostrarCargando(false);
+        }
+      };
+
+      img1.onload = checkLoaded;
+      img1.onerror = checkLoaded;
+      img1.src = ${base}${padded1}.webp;
+
+      if (!esMovil()) {
+        img2.style.display = 'inline';
+        img2.onload = checkLoaded;
+        img2.onerror = checkLoaded;
+        img2.src = ${base}${padded2}.webp;
+      } else {
+        img2.style.display = 'none';
+        img2.src = '';
+      }
+
+      container.style.transform = scale(${zoom});
+      
+      if (zoomInicial > zoom) {
+        zoomInicial = zoom;
+      }
+
     }
 
     function cargarCategoria(cat) {
       categoria = cat;
       pagina = 1;
       zoom = 1;
-      cargarPaginas();
-    }
-
-    function cargarPaginas() {
-      mostrarCargando(true);
-      const flipbook = $('#flipbook');
-      flipbook.html('');
-      const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
-      const total = totalPaginas[categoria];
-      const incremento = esMovil() ? 1 : 2;
-
-      for (let i = 1; i <= total; i += incremento) {
-        const padded = i.toString().padStart(4, '0');
-        const img = `${base}${padded}.webp`;
-        flipbook.append(`<div class="page"><img src="${img}" alt="Página ${i}"></div>`);
-      }
-
-      flipbook.turn({
-        width: flipbook.width(),
-        height: flipbook.height(),
-        autoCenter: true,
-        display: esMovil() ? 'single' : 'double'
-      });
-
-      mostrarCargando(false);
+      document.getElementById('viewer').scrollLeft = 0;
+      document.getElementById('viewer').scrollTop = 0;
+      actualizarImagenes();
     }
 
     function paginaSiguiente() {
-      $('#flipbook').turn('next');
+      const incremento = esMovil() ? 1 : 2;
+      if (pagina + incremento <= totalPaginas[categoria]) {
+        pagina += incremento;
+        actualizarImagenes();
+      }
     }
 
     function paginaAnterior() {
-      $('#flipbook').turn('previous');
+      const decremento = esMovil() ? 1 : 2;
+      if (pagina - decremento >= 1) {
+        pagina -= decremento;
+        actualizarImagenes();
+      }
     }
+    
+function irAPrimeraImagen() {
+  pagina = 1;
+  actualizarImagenes();
+}
 
-    function irAPrimeraPagina() {
-      $('#flipbook').turn('page', 1);
-    }
+function irAUltimaImagen() {
+  const maxPaginas = totalPaginas[categoria];
+  pagina = esMovil() ? maxPaginas : (maxPaginas % 2 === 0 ? maxPaginas - 1 : maxPaginas - 2);
+  actualizarImagenes();
+}
 
-    function irAUltimaPagina() {
-      const total = $('#flipbook').turn('pages');
-      $('#flipbook').turn('page', total);
-    }
 
     function zoomIn() {
-      if (zoom < zoomMaximo) {
-        zoom += 0.1;
-        aplicarZoom();
+      zoom += 0.1;
+      actualizarImagenes();
+    }
+
+function zoomOut() {
+  if (zoom - 0.1 >= zoomInicial) {
+    zoom -= 0.1;
+    actualizarImagenes();
+  } else {
+    zoom = zoomInicial; // Evita que baje más
+  }
+}
+
+
+    function capitalizar(texto) {
+      return texto.charAt(0).toUpperCase() + texto.slice(1);
+    }
+
+    // Gestos táctiles
+    let startX = 0;
+    document.getElementById('viewer').addEventListener('touchstart', function(e) {
+      if (e.touches.length === 1) {
+        startX = e.touches[0].clientX;
+      }
+    }, { passive: true });
+
+document.getElementById('viewer').addEventListener('touchend', function(e) {
+  if (e.changedTouches.length === 1 && zoom === 1) {
+    const endX = e.changedTouches[0].clientX;
+    const deltaX = endX - startX;
+    if (Math.abs(deltaX) > 50) {
+      if (deltaX > 0) {
+        paginaAnterior();
+      } else {
+        paginaSiguiente();
       }
     }
+  }
+});
 
-    function zoomOut() {
-      if (zoom > zoomMinimo) {
-        zoom -= 0.1;
-        aplicarZoom();
+
+    // Zoom táctil (pinch)
+    let initialDistance = null;
+    let lastZoom = zoom;
+
+    function getDistance(touches) {
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    document.getElementById('viewer').addEventListener('touchstart', function(e) {
+      if (e.touches.length === 2) {
+        initialDistance = getDistance(e.touches);
+        lastZoom = zoom;
       }
+    }, { passive: true });
+
+document.getElementById('viewer').addEventListener('touchmove', function(e) {
+  if (e.touches.length === 2 && initialDistance !== null) {
+    const currentDistance = getDistance(e.touches);
+    const scale = currentDistance / initialDistance;
+    zoom = lastZoom * scale;
+
+    // Asegurar que no se baje de zoomInicial
+    if (zoom < zoomInicial) {
+      zoom = zoomInicial;
     }
 
-    function aplicarZoom() {
-      $('#flipbook').css('transform', `scale(${zoom})`);
+    // Limitar zoom máximo si deseas (opcional)
+    if (zoom > 3) {
+      zoom = 3;
     }
 
-    $(document).ready(function() {
-      cargarPaginas();
+    actualizarImagenes();
+    e.preventDefault();
+  }
+}, { passive: false });
+
+
+    document.getElementById('viewer').addEventListener('touchend', function(e) {
+      if (e.touches.length < 2) {
+        initialDistance = null;
+      }
     });
 
-    $(window).on('resize', function() {
-      cargarPaginas();
-    });
+    window.onload = actualizarImagenes;
+    window.onresize = actualizarImagenes;
   </script>
 
 </body>
