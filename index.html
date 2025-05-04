@@ -35,6 +35,14 @@ body {
   margin: 0;
   padding: 0;
 }
+    body {
+  background: url('pdfs/img/f1.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: var(--color-texto);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px); /* Safari */
+  min-height: 100vh;
+}
 
 .fondo-blur {
   backdrop-filter: blur(6px); /* Puedes subir el blur si quieres más suavidad */
@@ -114,13 +122,16 @@ body {
       header h1 {
         font-size: 1.6rem;
       }
+      body {
+        background-attachment: scroll;
+      }
     }
   </style>
 </head>
 <body>
   <div class="fondo-blur">
     <header>
-      <h1>Catálogos Marielle colores</h1>
+      <h1>Catálogos Marielle sin mover</h1>
     </header>
   
     <main class="marcas">
