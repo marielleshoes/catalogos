@@ -29,11 +29,19 @@
       color: var(--color-texto);
     }*/
 
-    body {
-      background: url('pdfs/img/f1.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: var(--color-texto);
-    }
+body {
+  background: url('pdfs/img/f1.jpg') no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+}
+
+.fondo-blur {
+  backdrop-filter: blur(4px);
+  background-color: rgba(255, 255, 255, 0.7);
+  min-height: 100vh;
+  width: 100%;
+}
     
     header {
       background-color: var(--color-header);
@@ -111,36 +119,38 @@
   </style>
 </head>
 <body>
-  <header>
-    <h1>Catálogos Marielle colores</h1>
-  </header>
-
-  <main class="marcas">
-    <div class="marca" onclick="location.href='cklass.html'">
-      <h2>Cklass</h2>
-    </div>
-    <div class="marca" onclick="location.href='andrea.html'">
-      <h2>Andrea</h2>
-    </div>
-    <div class="marca" onclick="location.href='impuls.html'">
-      <h2>Impuls</h2>
-    </div>
-    <div class="marca" onclick="location.href='shoespakar.html'">
-      <h2>Shoes Pakar</h2>
-    </div>
-    <div class="marca" onclick="location.href='ilusion.html'">
-      <h2>Ilusión</h2>
-    </div>
-    <div class="marca" onclick="location.href='vianey.html'">
-      <h2>Vianey</h2>
-    </div>
-    <div class="marca" onclick="location.href='tupperware.html'">
-      <h2>Tupperware</h2>
-    </div>
-  </main>
-
-  <a class="whatsapp-btn" href="https://wa.me/5211234567890" target="_blank" aria-label="Chatea por WhatsApp">
-    <i class="fab fa-whatsapp"></i>
-  </a>
+  <div class="fondo-blur">
+    <header>
+      <h1>Catálogos Marielle colores</h1>
+    </header>
+  
+    <main class="marcas">
+      <div class="marca" onclick="location.href='cklass.html'">
+        <h2>Cklass</h2>
+      </div>
+      <div class="marca" onclick="location.href='andrea.html'">
+        <h2>Andrea</h2>
+      </div>
+      <div class="marca" onclick="location.href='impuls.html'">
+        <h2>Impuls</h2>
+      </div>
+      <div class="marca" onclick="location.href='shoespakar.html'">
+        <h2>Shoes Pakar</h2>
+      </div>
+      <div class="marca" onclick="location.href='ilusion.html'">
+        <h2>Ilusión</h2>
+      </div>
+      <div class="marca" onclick="location.href='vianey.html'">
+        <h2>Vianey</h2>
+      </div>
+      <div class="marca" onclick="location.href='tupperware.html'">
+        <h2>Tupperware</h2>
+      </div>
+    </main>
+  
+    <a class="whatsapp-btn" href="https://wa.me/5211234567890" target="_blank" aria-label="Chatea por WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+  </div>
 </body>
 </html>
