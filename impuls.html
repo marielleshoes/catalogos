@@ -166,7 +166,7 @@ let zoomInicial = 1; // valor mínimo permitido de zoom
     function actualizarImagenes() {
       const padded1 = pagina.toString().padStart(4, '0');
       const padded2 = (pagina + 1).toString().padStart(4, '0');
-      const base = pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-;
+      const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
 
       const img1 = document.getElementById('page1');
       const img2 = document.getElementById('page2');
@@ -183,7 +183,7 @@ let zoomInicial = 1; // valor mínimo permitido de zoom
 
       img1.onload = checkLoaded;
       img1.onerror = checkLoaded;
-      img1.src = ${base}${padded1}.webp;
+      img1.src = `${base}${padded1}.webp`;
 
       if (!esMovil()) {
         img2.style.display = 'inline';
