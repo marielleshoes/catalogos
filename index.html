@@ -121,7 +121,7 @@
 <body>
   <div class="fondo-blur">
     <header>
-      <h1>Catálogos Marielle mover</h1>
+      <h1>Catálogos Marielle fluido</h1>
     </header>
 
     <main class="marcas">
@@ -157,30 +157,35 @@
   if (window.innerWidth <= 768) {
     document.addEventListener("DOMContentLoaded", () => {
       const body = document.body;
-      let lastX = 50;
-      let lastY = 50;
 
-      body.style.backgroundPosition = `${lastX}% ${lastY}%`;
+      let backgroundPos = { x: 50, y: 50 }; // posición inicial en porcentaje
+      let startTouch = { x: 0, y: 0 };
+      let startBackground = { x: 50, y: 50 };
 
-      body.addEventListener("touchmove", (e) => {
+      body.style.backgroundPosition = `${backgroundPos.x}% ${backgroundPos.y}%`;
+
+      body.addEventListener("touchstart", (e) => {
         if (e.touches.length === 1) {
-          const touch = e.touches[0];
-          const posX = touch.clientX / window.innerWidth;
-          const posY = touch.clientY / window.innerHeight;
-
-          const offsetX = (posX - 0.5) * 30; // ajusta el 30 si deseas más/menos movimiento
-          const offsetY = (posY - 0.5) * 30;
-
-          lastX = 50 + offsetX;
-          lastY = 50 + offsetY;
-
-          body.style.backgroundPosition = `${lastX}% ${lastY}%`;
+          startTouch.x = e.touches[0].clientX;
+          startTouch.y = e.touches[0].clientY;
+          startBackground.x = backgroundPos.x;
+          startBackground.y = backgroundPos.y;
         }
       });
 
-      // Aplica la última posición cuando se toca sin moverse
-      body.addEventListener("touchstart", () => {
-        body.style.backgroundPosition = `${lastX}% ${lastY}%`;
+      body.addEventListener("touchmove", (e) => {
+        if (e.touches.length === 1) {
+          const moveX = e.touches[0].clientX - startTouch.x;
+          const moveY = e.touches[0].clientY - startTouch.y;
+
+          // Ajusta la sensibilidad (cuanto menor, más se mueve)
+          const sensitivity = 0.2;
+
+          backgroundPos.x = Math.max(0, Math.min(100, startBackground.x + moveX * sensitivity));
+          backgroundPos.y = Math.max(0, Math.min(100, startBackground.y + moveY * sensitivity));
+
+          body.style.backgroundPosition = `${backgroundPos.x}% ${backgroundPos.y}%`;
+        }
       });
     });
   }
