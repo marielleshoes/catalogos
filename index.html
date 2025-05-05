@@ -123,12 +123,13 @@ body {
       header h1 {
         font-size: 1.6rem;
       }
-    body {
-      background-attachment: scroll; /* importante: NO FIXED en móviles */
-      background-position: top left;
-      background-size: auto; /* para que no recorte ni escale forzadamente */
-      overflow-x: auto; /* permite scroll horizontal si la imagen es grande */
-    }
+      body {
+        background-attachment: scroll; /* permite que se mueva con el scroll */
+        background-position: top left;
+        background-size: 100vh auto; /* mantiene el alto igual al viewport y ancho automático */
+        background-repeat: no-repeat;
+        overflow-x: auto; /* permite scroll horizontal si la imagen es más ancha */
+      }
     }
   </style>
 </head>
