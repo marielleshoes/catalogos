@@ -114,13 +114,46 @@
         background-size: cover;
         overflow-x: auto;
       }
+        .marcas {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+    padding: 1.5rem;
+  }
+
+  .marca {
+    background: rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 2rem 1.2rem;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .marca h2 {
+    font-size: 1.5rem;
+    color: #3B2D24;
+    font-weight: 600;
+  }
+
+  .marca:active {
+    transform: scale(0.96);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  }
+
+  header h1 {
+    font-size: 1.7rem;
+  }
     }
   </style>
 </head>
 <body>
   <div class="fondo-blur">
     <header>
-      <h1>Catálogos Marielle whats 5</h1>
+      <h1>Catálogos Marielle cas 6</h1>
     </header>
 
     <main class="marcas">
