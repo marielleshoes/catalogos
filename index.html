@@ -24,33 +24,22 @@
       padding: 0;
     }
 
-   /* body {
-      background-color: var(--color-fondo);
-      color: var(--color-texto);
-    }*/
-
-body {
-  background: url('pdfs/img/f1.jpg') no-repeat center center fixed;
-  background-size: cover;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden; /* importante para evitar scroll horizontal en PC */
-}
     body {
-  background: url('pdfs/img/f1.jpg') no-repeat center center fixed;
-  background-size: cover;
-  color: var(--color-texto);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px); /* Safari */
-  min-height: 100vh;
-}
+      background: url('pdfs/img/f1.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--color-texto);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px); /* Safari */
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-.fondo-blur {
-  backdrop-filter: blur(6px); /* Puedes subir el blur si quieres más suavidad */
-  min-height: 100vh;
-  width: 100%;
-}
-    
+    .fondo-blur {
+      backdrop-filter: blur(6px);
+      min-height: 100vh;
+      width: 100%;
+    }
+
     header {
       background-color: var(--color-header);
       padding: 2rem;
@@ -90,11 +79,11 @@ body {
       box-shadow: 0 6px 18px rgba(0,0,0,0.1);
     }
 
-  .marca h2 {
-    font-size: 1.3rem;
-    color: var(--color-texto); /* Aplica también a títulos */
-    font-weight: 600;
-  }
+    .marca h2 {
+      font-size: 1.3rem;
+      color: var(--color-texto);
+      font-weight: 600;
+    }
 
     .whatsapp-btn {
       position: fixed;
@@ -120,15 +109,11 @@ body {
     }
 
     @media (max-width: 600px) {
-      header h1 {
-        font-size: 1.6rem;
-      }
       body {
-        background-attachment: scroll; /* permite que se mueva con el scroll */
-        background-position: top left;
-        background-size: 100vh auto; /* mantiene el alto igual al viewport y ancho automático */
-        background-repeat: no-repeat;
-        overflow-x: auto; /* permite scroll horizontal si la imagen es más ancha */
+        background-attachment: scroll;
+        background-position: center center;
+        background-size: cover;
+        overflow-x: auto;
       }
     }
   </style>
@@ -136,9 +121,9 @@ body {
 <body>
   <div class="fondo-blur">
     <header>
-      <h1>Catálogos Marielle sin mover</h1>
+      <h1>Catálogos Marielle mover dedo</h1>
     </header>
-  
+
     <main class="marcas">
       <div class="marca" onclick="location.href='cklass.html'">
         <h2>Cklass</h2>
@@ -162,10 +147,32 @@ body {
         <h2>Tupperware</h2>
       </div>
     </main>
-  
+
     <a class="whatsapp-btn" href="https://wa.me/5211234567890" target="_blank" aria-label="Chatea por WhatsApp">
       <i class="fab fa-whatsapp"></i>
     </a>
   </div>
+
+  <script>
+    // Solo activar en móviles
+    if (window.innerWidth <= 768) {
+      document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+
+        body.addEventListener("touchmove", (e) => {
+          if (e.touches.length === 1) {
+            const touch = e.touches[0];
+            const posX = touch.clientX / window.innerWidth;
+            const posY = touch.clientY / window.innerHeight;
+
+            const offsetX = (posX - 0.5) * 30; // ajusta 30 para más/menos movimiento
+            const offsetY = (posY - 0.5) * 30;
+
+            body.style.backgroundPosition = `${50 + offsetX}% ${50 + offsetY}%`;
+          }
+        });
+      });
+    }
+  </script>
 </body>
 </html>
