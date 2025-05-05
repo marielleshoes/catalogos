@@ -121,7 +121,7 @@
 <body>
   <div class="fondo-blur">
     <header>
-      <h1>Catálogos Marielle mover dedo</h1>
+      <h1>Catálogos Marielle mover</h1>
     </header>
 
     <main class="marcas">
@@ -153,26 +153,38 @@
     </a>
   </div>
 
-  <script>
-    // Solo activar en móviles
-    if (window.innerWidth <= 768) {
-      document.addEventListener("DOMContentLoaded", () => {
-        const body = document.body;
+<script>
+  if (window.innerWidth <= 768) {
+    document.addEventListener("DOMContentLoaded", () => {
+      const body = document.body;
+      let lastX = 50;
+      let lastY = 50;
 
-        body.addEventListener("touchmove", (e) => {
-          if (e.touches.length === 1) {
-            const touch = e.touches[0];
-            const posX = touch.clientX / window.innerWidth;
-            const posY = touch.clientY / window.innerHeight;
+      body.style.backgroundPosition = `${lastX}% ${lastY}%`;
 
-            const offsetX = (posX - 0.5) * 30; // ajusta 30 para más/menos movimiento
-            const offsetY = (posY - 0.5) * 30;
+      body.addEventListener("touchmove", (e) => {
+        if (e.touches.length === 1) {
+          const touch = e.touches[0];
+          const posX = touch.clientX / window.innerWidth;
+          const posY = touch.clientY / window.innerHeight;
 
-            body.style.backgroundPosition = `${50 + offsetX}% ${50 + offsetY}%`;
-          }
-        });
+          const offsetX = (posX - 0.5) * 30; // ajusta el 30 si deseas más/menos movimiento
+          const offsetY = (posY - 0.5) * 30;
+
+          lastX = 50 + offsetX;
+          lastY = 50 + offsetY;
+
+          body.style.backgroundPosition = `${lastX}% ${lastY}%`;
+        }
       });
-    }
-  </script>
+
+      // Aplica la última posición cuando se toca sin moverse
+      body.addEventListener("touchstart", () => {
+        body.style.backgroundPosition = `${lastX}% ${lastY}%`;
+      });
+    });
+  }
+</script>
+
 </body>
 </html>
