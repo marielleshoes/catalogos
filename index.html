@@ -121,23 +121,44 @@
     padding: 1.5rem;
   }
 
-  .marca {
-    background: rgba(255, 255, 255, 0.25);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 20px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    padding: 2rem 1.2rem;
-    text-align: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
+.marca {
+  background-color: #f5eee6;
+  border-radius: 20px;
+  text-align: center;
+  padding: 2rem 1.2rem;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  overflow: hidden;
+}
 
-  .marca h2 {
-    font-size: 1.5rem;
-    color: #3B2D24;
-    font-weight: 600;
-  }
+.marca img {
+  width: 80px;
+  height: auto;
+  margin-bottom: 1rem;
+  filter: grayscale(100%) brightness(0.7);
+  transition: filter 0.4s ease;
+}
+
+.marca h2 {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #4a3b2d;
+  transition: color 0.4s ease;
+}
+
+.marca:hover {
+  background-color: #e6d4c6;
+}
+
+.marca:hover img {
+  filter: grayscale(0%) brightness(1);
+}
+
+.marca:hover h2 {
+  color: #3B2D24;
+}
+
 
   .marca:active {
     transform: scale(0.96);
@@ -153,11 +174,12 @@
 <body>
   <div class="fondo-blur">
     <header>
-      <h1>Catálogos Marielle cas 6</h1>
+      <h1>Catálogos Marielle img</h1>
     </header>
 
     <main class="marcas">
       <div class="marca" onclick="location.href='cklass.html'">
+        <img src="logos/cklass.png" alt="Cklass" />
         <h2>Cklass</h2>
       </div>
       <div class="marca" onclick="location.href='andrea.html'">
