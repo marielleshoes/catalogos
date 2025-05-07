@@ -81,12 +81,14 @@
 .marca img {
   width: 100%;
   height: auto;
-  filter: sepia(90%) hue-rotate(320deg) saturate(250%) brightness(90%);
   transition: filter 0.4s ease;
   object-fit: cover;
   display: block;
   margin-left: auto;
   margin-right: auto;
+  filter: grayscale(100%) brightness(0.7); /* imagen apagada */
+  background-color: #433425;
+  mix-blend-mode: multiply;
 }
     .marca:hover {
       transform: translateY(-6px);
