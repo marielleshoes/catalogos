@@ -40,19 +40,49 @@
       z-index: 1;
     }
 
-    header {
-      background-color: var(--color-header);
-      padding: 2rem;
-      text-align: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
+header {
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  border-radius: 0 0 30px 30px;
+  position: relative;
+  z-index: 10;
+  transition: background-color 0.3s ease;
+}
 
-    header h1 {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: var(--color-acento);
-      letter-spacing: 1px;
-    }
+header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-texto);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  animation: fadeDown 0.8s ease-out;
+}
+
+header p.subtitulo {
+  font-size: 1rem;
+  color: #7b6456;
+  font-weight: 300;
+  letter-spacing: 1px;
+  animation: fadeDown 1s ease-out;
+  opacity: 0.8;
+}
+
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 
     .marcas {
       display: grid;
@@ -99,36 +129,36 @@
       color: var(--color-texto);
       font-weight: 600;
         color: #4a3b2d;
-  transition: color 0.4s ease;
+      transition: color 0.4s ease;
+      }
+    
+    .marca:hover img {
+      filter: grayscale(0%) brightness(1);
     }
-
-.marca:hover img {
-  filter: grayscale(0%) brightness(1);
-}
-
-.marca:hover h2 {
-  color: #3B2D24;
-}
-
-
-.whatsapp-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #25D366;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  font-size: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  z-index: 999999; /* MÁS alto aún */
-}
+    
+    .marca:hover h2 {
+      color: #3B2D24;
+    }
+    
+    
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25D366;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      z-index: 999999; /* MÁS alto aún */
+    }
     .whatsapp-btn:hover {
       background-color: #1ebe5d;
     }
@@ -140,28 +170,25 @@
         background-size: cover;
         overflow-x: auto;
       }
-        .marcas {
-    display: flex;
-    flex-direction: column;
-    gap: 1.8rem;
-    padding: 1.5rem;
-  }
-
-  .marca:active {
-    transform: scale(0.96);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  }
-
-  header h1 {
-    font-size: 1.7rem;
-  }
+      .marcas {
+        display: flex;
+        flex-direction: column;
+        gap: 1.8rem;
+        padding: 1.5rem;
+      }
+    
+      .marca:active {
+        transform: scale(0.96);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      }
     }
   </style>
 </head>
 <body>
   <div class="fondo-blur">
     <header>
-      <h1>Catálogos Marielle im</h1>
+      <h1>Catálogos Marielle</h1>
+      <p class="subtitulo">Descubre estilo y elegancia en cada marca</p>
     </header>
 
     <main class="marcas">
