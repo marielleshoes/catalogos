@@ -38,20 +38,21 @@
     .viewer {
       position: relative;
       display: flex;
+      justify-content: center;
+      align-items: center;
       border: 2px solid #ccc;
       background: white;
-      width: 95vw;
-      height: 80vh;
-      overflow: auto;
+      max-width: 100%;
       margin: auto;
-      touch-action: pan-x pan-y;
+      overflow: auto;
     }
 
-    .image-container {
-      display: flex;
-      transform-origin: top left;
-      transition: transform 0.2s ease;
-    }
+.image-container {
+  display: flex;
+  transform-origin: top left;
+  transition: transform 0.2s ease;
+  align-items: center;
+}
 
     .image-container img {
       max-width: 100%;
@@ -290,6 +291,34 @@ function zoomOut() {
     function capitalizar(texto) {
       return texto.charAt(0).toUpperCase() + texto.slice(1);
     }
+
+    function ajustarTamanioViewer() {
+  const viewer = document.getElementById('viewer');
+  const container = document.getElementById('imageContainer');
+  const img1 = document.getElementById('page1');
+  const img2 = document.getElementById('page2');
+
+  // Obtener dimensiones reales de las imágenes
+  let width = img1.naturalWidth;
+  let height = img1.naturalHeight;
+
+  if (!esMovil() && img2.style.display !== 'none' && img2.naturalWidth > 0) {
+    width += img2.naturalWidth;
+    height = Math.max(height, img2.naturalHeight);
+  }
+
+  // Aplicar el zoom
+  ajustarTamanioViewer();
+
+  // Ajustar tamaño del contenedor para que se adapte a imágenes visibles
+  container.style.width = `${width}px`;
+  container.style.height = `${height}px`;
+
+  // Ajustar también tamaño del viewer para que se ajuste
+  viewer.style.width = `${width * zoom}px`;
+  viewer.style.height = `${height * zoom}px`;
+}
+
 
     // Gestos táctiles
     let startX = 0;
