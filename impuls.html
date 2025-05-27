@@ -38,21 +38,20 @@
     .viewer {
       position: relative;
       display: flex;
-      justify-content: center;
-      align-items: center;
       border: 2px solid #ccc;
       background: white;
-      max-width: 100%;
-      margin: auto;
+      width: 95vw;
+      height: 80vh;
       overflow: auto;
+      margin: auto;
+      touch-action: pan-x pan-y;
     }
 
-.image-container {
-  display: flex;
-  transform-origin: top left;
-  transition: transform 0.2s ease;
-  align-items: center;
-}
+    .image-container {
+      display: flex;
+      transform-origin: top left;
+      transition: transform 0.2s ease;
+    }
 
     .image-container img {
       max-width: 100%;
@@ -165,7 +164,7 @@ let zoomInicial = 1; // valor mínimo permitido de zoom
     }
 
 function actualizarImagenes() {
-  const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
+  const base = pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-;
   const img1 = document.getElementById('page1');
   const img2 = document.getElementById('page2');
   const container = document.getElementById('imageContainer');
@@ -189,7 +188,7 @@ function actualizarImagenes() {
 
   img1.onload = checkLoaded;
   img1.onerror = checkLoaded;
-  img1.src = `${base}${padded1}.webp`;
+  img1.src = ${base}${padded1}.webp;
 
   // Mostrar lógica de "libro"
   if (isMobile) {
@@ -204,10 +203,10 @@ function actualizarImagenes() {
     img2.style.display = 'inline';
     img2.onload = checkLoaded;
     img2.onerror = checkLoaded;
-    img2.src = `${base}${padded2}.webp`;
+    img2.src = ${base}${padded2}.webp;
   }
 
-  container.style.transform = `scale(${zoom})`;
+  container.style.transform = scale(${zoom});
   if (zoomInicial > zoom) {
     zoomInicial = zoom;
   }
@@ -291,34 +290,6 @@ function zoomOut() {
     function capitalizar(texto) {
       return texto.charAt(0).toUpperCase() + texto.slice(1);
     }
-
-    function ajustarTamanioViewer() {
-  const viewer = document.getElementById('viewer');
-  const container = document.getElementById('imageContainer');
-  const img1 = document.getElementById('page1');
-  const img2 = document.getElementById('page2');
-
-  // Obtener dimensiones reales de las imágenes
-  let width = img1.naturalWidth;
-  let height = img1.naturalHeight;
-
-  if (!esMovil() && img2.style.display !== 'none' && img2.naturalWidth > 0) {
-    width += img2.naturalWidth;
-    height = Math.max(height, img2.naturalHeight);
-  }
-
-  // Aplicar el zoom
-  ajustarTamanioViewer();
-
-  // Ajustar tamaño del contenedor para que se adapte a imágenes visibles
-  container.style.width = `${width}px`;
-  container.style.height = `${height}px`;
-
-  // Ajustar también tamaño del viewer para que se ajuste
-  viewer.style.width = `${width * zoom}px`;
-  viewer.style.height = `${height * zoom}px`;
-}
-
 
     // Gestos táctiles
     let startX = 0;
