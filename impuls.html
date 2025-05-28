@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <title>Catálogo Impuls</title>
   <style>
     body {
@@ -235,6 +236,8 @@ header h1 {
 <button onclick="zoomOut()">🔍 Alejar</button>
 <button onclick="paginaSiguiente()">➡️ Siguiente</button>
 <button onclick="irAUltimaImagen()">⏭ Última</button>
+    <button onclick="descargarComoPDF()">📥 Descargar PDF</button>
+
   </div>
  </div>
   <script>
@@ -468,6 +471,72 @@ document.getElementById('viewer').addEventListener('touchmove', function(e) {
 
     window.onload = actualizarImagenes;
     window.onresize = actualizarImagenes;
+
+    function capitalizar(texto) {
+      return texto.charAt(0).toUpperCase() + texto.slice(1).toLowerCase();
+    }
+
+    async function descargarComoPDF() {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF('p', 'mm', 'a4');
+// Extraer marca y categoría desde la carpeta, por ejemplo: "impuls_dama"
+const partes = categoria.split('_');
+const marcaRaw = partes[0];      // "impuls"
+const categoriaRaw = partes[1];  // "dama"
+
+const marca = capitalizar(marcaRaw);
+const nombreCategoria = capitalizar(categoriaRaw);
+const nombreArchivo = `Marielle_${marca}_${nombreCategoria}.pdf`;
+
+
+  const maxPag = totalPaginas[categoria];
+  const isMobile = esMovil();
+
+  mostrarCargando(true);
+
+  for (let i = 1; i <= maxPag; i += (isMobile ? 1 : 2)) {
+    const padded1 = i.toString().padStart(4, '0');
+    const padded2 = (i + 1).toString().padStart(4, '0');
+    const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
+
+    const img1 = await cargarImagen(`${base}${padded1}.webp`);
+    if (!img1) continue;
+    pdf.addImage(img1, 'WEBP', 0, 0, 210, 297); // A4 = 210x297 mm
+
+    if (!isMobile && i + 1 <= maxPag) {
+      const img2 = await cargarImagen(`${base}${padded2}.webp`);
+      if (img2) {
+        pdf.addPage();
+        pdf.addImage(img2, 'WEBP', 0, 0, 210, 297);
+      }
+    }
+
+    if (i + 2 <= maxPag) {
+      pdf.addPage();
+    }
+  }
+
+  mostrarCargando(false);
+  pdf.save(nombreArchivo);
+}
+
+function cargarImagen(src) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      resolve(canvas.toDataURL('image/webp'));
+    };
+    img.onerror = () => resolve(null);
+    img.src = src;
+  });
+}
+
   </script>
 
 </body>
