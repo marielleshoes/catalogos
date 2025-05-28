@@ -71,6 +71,7 @@
       cursor: pointer;
     }
 
+    /* Loading message */
     .loading {
       position: absolute;
       top: 0;
@@ -112,7 +113,7 @@
 </head>
 <body>
 
-  <h1>Catálogo Impuls primera y última</h1>
+  <h1>Catálogo Impuls primera y ultima</h1>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
@@ -150,8 +151,9 @@
       niña: 12
     };
 
-    let zoom = 1;
-    let zoomInicial = 1;
+let zoom = 1;
+let zoomInicial = 1; // valor mínimo permitido de zoom
+
 
     function esMovil() {
       return window.innerWidth <= 768;
@@ -161,52 +163,55 @@
       document.getElementById('loading').style.display = mostrar ? 'flex' : 'none';
     }
 
-    function capitalizar(texto) {
-      return texto.charAt(0).toUpperCase() + texto.slice(1);
+function actualizarImagenes() {
+  const base = pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-;
+  const img1 = document.getElementById('page1');
+  const img2 = document.getElementById('page2');
+  const container = document.getElementById('imageContainer');
+
+  const maxPaginas = totalPaginas[categoria];
+
+  const padded1 = pagina.toString().padStart(4, '0');
+  const padded2 = (pagina + 1).toString().padStart(4, '0');
+
+  mostrarCargando(true);
+  let loadedCount = 0;
+  const isMobile = esMovil();
+
+  const checkLoaded = () => {
+    loadedCount++;
+    const expected = (!isMobile && img2.style.display !== 'none') ? 2 : 1;
+    if (loadedCount === expected) {
+      mostrarCargando(false);
     }
+  };
 
-    function actualizarImagenes() {
-      const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
-      const img1 = document.getElementById('page1');
-      const img2 = document.getElementById('page2');
-      const container = document.getElementById('imageContainer');
+  img1.onload = checkLoaded;
+  img1.onerror = checkLoaded;
+  img1.src = ${base}${padded1}.webp;
 
-      const maxPaginas = totalPaginas[categoria];
+  // Mostrar lógica de "libro"
+  if (isMobile) {
+    img2.style.display = 'none';
+    img2.src = '';
+  } else if (pagina === 1 || pagina >= maxPaginas) {
+    // Primera o última página: mostrar solo una
+    img2.style.display = 'none';
+    img2.src = '';
+  } else {
+    // Doble página en el medio
+    img2.style.display = 'inline';
+    img2.onload = checkLoaded;
+    img2.onerror = checkLoaded;
+    img2.src = ${base}${padded2}.webp;
+  }
 
-      const padded1 = pagina.toString().padStart(4, '0');
-      const padded2 = (pagina + 1).toString().padStart(4, '0');
+  container.style.transform = scale(${zoom});
+  if (zoomInicial > zoom) {
+    zoomInicial = zoom;
+  }
+}
 
-      mostrarCargando(true);
-      let loadedCount = 0;
-      const isMobile = esMovil();
-
-      const checkLoaded = () => {
-        loadedCount++;
-        const expected = (!isMobile && img2.style.display !== 'none') ? 2 : 1;
-        if (loadedCount === expected) {
-          mostrarCargando(false);
-        }
-      };
-
-      img1.onload = checkLoaded;
-      img1.onerror = checkLoaded;
-      img1.src = `${base}${padded1}.webp`;
-
-      if (isMobile || pagina === 1 || pagina >= maxPaginas) {
-        img2.style.display = 'none';
-        img2.src = '';
-      } else {
-        img2.style.display = 'inline';
-        img2.onload = checkLoaded;
-        img2.onerror = checkLoaded;
-        img2.src = `${base}${padded2}.webp`;
-      }
-
-      container.style.transform = `scale(${zoom})`;
-      if (zoomInicial > zoom) {
-        zoomInicial = zoom;
-      }
-    }
 
     function cargarCategoria(cat) {
       categoria = cat;
@@ -217,62 +222,73 @@
       actualizarImagenes();
     }
 
-    function paginaSiguiente() {
-      const maxPaginas = totalPaginas[categoria];
-      if (esMovil()) {
-        if (pagina + 1 <= maxPaginas) {
-          pagina += 1;
-        }
-      } else {
-        if (pagina === 1) {
-          pagina += 1;
-        } else if (pagina + 2 <= maxPaginas) {
-          pagina += 2;
-        } else if (pagina + 1 <= maxPaginas) {
-          pagina += 1;
-        }
-      }
-      actualizarImagenes();
-    }
+function paginaSiguiente() {
+  const maxPaginas = totalPaginas[categoria];
 
-    function paginaAnterior() {
-      if (esMovil()) {
-        if (pagina - 1 >= 1) {
-          pagina -= 1;
-        }
-      } else {
-        if (pagina <= 2) {
-          pagina = 1;
-        } else {
-          pagina -= 2;
-        }
-      }
+  if (esMovil()) {
+    if (pagina + 1 <= maxPaginas) {
+      pagina += 1;
       actualizarImagenes();
     }
+  } else {
+    if (pagina === 1) {
+      pagina += 1; // Ir de portada a doble página
+    } else if (pagina + 2 <= maxPaginas) {
+      pagina += 2;
+    } else if (pagina + 1 <= maxPaginas) {
+      pagina += 1; // Para alcanzar la última si queda una sola
+    }
+    actualizarImagenes();
+  }
+}
 
-    function irAPrimeraImagen() {
-      pagina = 1;
-      actualizarImagenes();
-    }
 
-    function irAUltimaImagen() {
-      const maxPaginas = totalPaginas[categoria];
-      pagina = esMovil() ? maxPaginas : (maxPaginas % 2 === 0 ? maxPaginas - 1 : maxPaginas - 2);
+function paginaAnterior() {
+  if (esMovil()) {
+    if (pagina - 1 >= 1) {
+      pagina -= 1;
       actualizarImagenes();
     }
+  } else {
+    if (pagina <= 2) {
+      pagina = 1; // Volver a portada
+    } else {
+      pagina -= 2;
+    }
+    actualizarImagenes();
+  }
+}
+
+    
+function irAPrimeraImagen() {
+  pagina = 1;
+  actualizarImagenes();
+}
+
+function irAUltimaImagen() {
+  const maxPaginas = totalPaginas[categoria];
+  pagina = esMovil() ? maxPaginas : (maxPaginas % 2 === 0 ? maxPaginas - 1 : maxPaginas - 2);
+  actualizarImagenes();
+}
+
 
     function zoomIn() {
       zoom += 0.1;
       actualizarImagenes();
     }
 
-    function zoomOut() {
-      if (zoom - 0.1 >= zoomInicial) {
-        zoom -= 0.1;
-        actualizarImagenes();
-      } else {
-        zoom = zoomInicial;
-      }
+function zoomOut() {
+  if (zoom - 0.1 >= zoomInicial) {
+    zoom -= 0.1;
+    actualizarImagenes();
+  } else {
+    zoom = zoomInicial; // Evita que baje más
+  }
+}
+
+
+    function capitalizar(texto) {
+      return texto.charAt(0).toUpperCase() + texto.slice(1);
     }
 
     // Gestos táctiles
@@ -283,19 +299,68 @@
       }
     }, { passive: true });
 
+document.getElementById('viewer').addEventListener('touchend', function(e) {
+  if (e.changedTouches.length === 1 && zoom === 1) {
+    const endX = e.changedTouches[0].clientX;
+    const deltaX = endX - startX;
+    if (Math.abs(deltaX) > 50) {
+      if (deltaX > 0) {
+        paginaAnterior();
+      } else {
+        paginaSiguiente();
+      }
+    }
+  }
+});
+
+
+    // Zoom táctil (pinch)
+    let initialDistance = null;
+    let lastZoom = zoom;
+
+    function getDistance(touches) {
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    document.getElementById('viewer').addEventListener('touchstart', function(e) {
+      if (e.touches.length === 2) {
+        initialDistance = getDistance(e.touches);
+        lastZoom = zoom;
+      }
+    }, { passive: true });
+
+document.getElementById('viewer').addEventListener('touchmove', function(e) {
+  if (e.touches.length === 2 && initialDistance !== null) {
+    const currentDistance = getDistance(e.touches);
+    const scale = currentDistance / initialDistance;
+    zoom = lastZoom * scale;
+
+    // Asegurar que no se baje de zoomInicial
+    if (zoom < zoomInicial) {
+      zoom = zoomInicial;
+    }
+
+    // Limitar zoom máximo si deseas (opcional)
+    if (zoom > 3) {
+      zoom = 3;
+    }
+
+    actualizarImagenes();
+    e.preventDefault();
+  }
+}, { passive: false });
+
+
     document.getElementById('viewer').addEventListener('touchend', function(e) {
-      if (e.changedTouches.length === 1 && zoom === 1) {
-        const endX = e.changedTouches[0].clientX;
-        const deltaX = endX - startX;
-        if (Math.abs(deltaX) > 50) {
-          if (deltaX > 0) {
-            paginaAnterior();
-          } else {
-            paginaSiguiente();
-          }
-        }
+      if (e.touches.length < 2) {
+        initialDistance = null;
       }
     });
+
+    window.onload = actualizarImagenes;
+    window.onresize = actualizarImagenes;
   </script>
 
 </body>
