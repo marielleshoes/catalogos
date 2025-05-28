@@ -15,6 +15,13 @@
       min-height: 100vh;
       overflow-x: hidden;
     }
+        .fondo-blur {
+      backdrop-filter: blur(7px);
+      min-height: 100vh;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
 
     h1 {
   background-color: rgba(255, 255, 255, 0.3);
@@ -154,7 +161,7 @@
   </style>
 </head>
 <body>
-
+  <div class="fondo-blur">
   <h1>Catálogo Impuls primera y ultima</h1>
 
   <div class="menu">
@@ -182,7 +189,7 @@
     <button onclick="paginaSiguiente()">⏩ Siguiente</button>
     <button onclick="irAUltimaImagen()">Última</button>
   </div>
-
+ </div>
   <script>
     let categoria = 'dama';
     let pagina = 1;
