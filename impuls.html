@@ -16,17 +16,47 @@
       margin-top: 20px;
     }
 
-    .menu {
-      margin: 20px;
-    }
+.menu {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 40px auto;
+  flex-wrap: wrap;
+  padding: 20px;
+  background: #e4d6c6; /* fondo tipo madera claro */
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
 
-    .menu button {
-      margin: 5px;
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
+.menu button {
+  font-family: 'Georgia', serif;
+  background: #a9746e;
+  color: white;
+  border: none;
+  padding: 30px 10px;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  border-radius: 5px;
+  box-shadow: 2px 4px 6px rgba(0,0,0,0.2);
+  transition: all 0.5s ease;
+  cursor: pointer;
+  height: 120px;
+  font-size: 16px;
+  position: relative;
+}
+.menu button:hover {
+  background: #c1857f;
+  transform: scale(1.05) rotate(180deg);
+}
+.menu button.selected {
+  background: #eaddcf;
+  color: #333;
+  writing-mode: horizontal-tb;
+  padding: 10px 20px;
+  transform: rotate(0deg) scale(1.1);
+  z-index: 1;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
     .viewer-wrapper {
       display: flex;
       justify-content: center;
@@ -211,14 +241,25 @@ const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_pag
 }
 
 
-    function cargarCategoria(cat) {
-      categoria = cat;
-      pagina = 1;
-      zoom = 1;
-      document.getElementById('viewer').scrollLeft = 0;
-      document.getElementById('viewer').scrollTop = 0;
-      actualizarImagenes();
-    }
+  function cargarCategoria(cat) {
+    categoria = cat;
+    pagina = 1;
+    zoom = 1;
+    document.getElementById('viewer').scrollLeft = 0;
+    document.getElementById('viewer').scrollTop = 0;
+    actualizarImagenes();
+
+    // Marcar visualmente el botón seleccionado
+    const botones = document.querySelectorAll('.menu button');
+    botones.forEach(b => b.classList.remove('selected'));
+    const botonActivo = [...botones].find(b => b.textContent.toLowerCase() === cat);
+    if (botonActivo) botonActivo.classList.add('selected');
+  }
+
+  // Al cargar, marcar la primera categoría por defecto
+  window.addEventListener('DOMContentLoaded', () => {
+    cargarCategoria('dama');
+  });
 
 function paginaSiguiente() {
   const maxPaginas = totalPaginas[categoria];
