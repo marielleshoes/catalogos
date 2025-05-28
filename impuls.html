@@ -99,6 +99,7 @@ header h1 {
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
     .viewer-wrapper {
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -218,8 +219,8 @@ header h1 {
   </div>
 
   <div class="viewer-wrapper">
+    <div id="loading" class="loading" style="display: none;">Cargando...</div>
     <div id="viewer" class="viewer">
-      <div id="loading" class="loading" style="display: none;">Cargando...</div>
       <div id="imageContainer" class="image-container">
         <img id="page1" src="" alt="Página izquierda">
         <img id="page2" src="" alt="Página derecha">
