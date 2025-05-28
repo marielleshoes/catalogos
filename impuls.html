@@ -32,27 +32,25 @@
       justify-content: center;
       align-items: center;
       max-height: 80vh;
-      overflow: hidden;
-    }
-
-    .viewer {
-      position: relative;
-      display: flex;
-      border: 2px solid #ccc;
-      background: white;
-      width: 95vw;
-      height: 80vh;
       overflow: auto;
-      margin: auto;
-      touch-action: pan-x pan-y;
     }
 
-    .image-container {
-      display: flex;
-      transform-origin: top left;
-      transition: transform 0.2s ease;
-    }
-
+.viewer {
+  position: relative;
+  display: inline-block; /* importante: permite que el tamaño se adapte al contenido */
+  border: 2px solid #ccc;
+  background: white;
+  max-width: 100vw;
+  max-height: 80vh;
+  overflow: auto;
+  margin: auto;
+  touch-action: pan-x pan-y;
+}
+.image-container {
+  display: inline-flex;
+  transform-origin: top left;
+  transition: transform 0.2s ease;
+}
     .image-container img {
       max-width: 100%;
       height: auto;
