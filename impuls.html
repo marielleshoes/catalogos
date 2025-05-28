@@ -22,8 +22,7 @@
       position: relative;
       z-index: 1;
     }
-
-    h1 {
+    header {
   background-color: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(8px);
   padding: 2rem 1.5rem;
@@ -34,9 +33,17 @@
   position: relative;
   z-index: 10;
   transition: background-color 0.3s ease;
-      margin: 0px;
-    }
+}
 
+header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-texto);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  animation: fadeDown 0.8s ease-out;
+}
 .menu {
   display: flex;
   justify-content: center;
@@ -144,8 +151,8 @@
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
+      width: auto;
+      height: auto;
       background-color: rgba(255, 255, 255, 0.8);
       display: flex;
       justify-content: center;
@@ -187,7 +194,9 @@
 </head>
 <body>
   <div class="fondo-blur">
-  <h1>Catálogo Impuls primera y ultima</h1>
+    <header>
+        <h1>Catálogo Impuls</h1>
+    </header>
 
   <div class="menu">
     <button onclick="cargarCategoria('dama')">Dama</button>
