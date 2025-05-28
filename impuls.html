@@ -263,6 +263,7 @@ let zoomInicial = 1; // valor mínimo permitido de zoom
     }
 
 function actualizarImagenes() {
+  console.log('Categoría seleccionada:', categoria);
 const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
   const img1 = document.getElementById('page1');
   const img2 = document.getElementById('page2');
@@ -472,9 +473,11 @@ document.getElementById('viewer').addEventListener('touchmove', function(e) {
     window.onload = actualizarImagenes;
     window.onresize = actualizarImagenes;
 
-    function capitalizar(texto) {
-      return texto.charAt(0).toUpperCase() + texto.slice(1).toLowerCase();
-    }
+function capitalizar(cadena) {
+  if (typeof cadena !== 'string') return '';
+  return cadena.charAt(0).toUpperCase() + cadena.slice(1);
+}
+
 
     async function descargarComoPDF() {
   const { jsPDF } = window.jspdf;
