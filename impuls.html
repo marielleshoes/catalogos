@@ -478,51 +478,6 @@ function capitalizar(cadena) {
   return cadena.charAt(0).toUpperCase() + cadena.slice(1);
 }
 
-
-    async function descargarComoPDF() {
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF('p', 'mm', 'a4');
-// Extraer marca y categoría desde la carpeta, por ejemplo: "impuls_dama"
-const partes = categoria.split('_');
-const marcaRaw = partes[0];      // "impuls"
-const categoriaRaw = partes[1];  // "dama"
-
-const marca = capitalizar(marcaRaw);
-const nombreCategoria = capitalizar(categoriaRaw);
-const nombreArchivo = `Marielle_${marca}_${nombreCategoria}.pdf`;
-
-
-  const maxPag = totalPaginas[categoria];
-  const isMobile = esMovil();
-
-  mostrarCargando(true);
-
-  for (let i = 1; i <= maxPag; i += (isMobile ? 1 : 2)) {
-    const padded1 = i.toString().padStart(4, '0');
-    const padded2 = (i + 1).toString().padStart(4, '0');
-    const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
-
-    const img1 = await cargarImagen(`${base}${padded1}.webp`);
-    if (!img1) continue;
-    pdf.addImage(img1, 'WEBP', 0, 0, 210, 297); // A4 = 210x297 mm
-
-    if (!isMobile && i + 1 <= maxPag) {
-      const img2 = await cargarImagen(`${base}${padded2}.webp`);
-      if (img2) {
-        pdf.addPage();
-        pdf.addImage(img2, 'WEBP', 0, 0, 210, 297);
-      }
-    }
-
-    if (i + 2 <= maxPag) {
-      pdf.addPage();
-    }
-  }
-
-  mostrarCargando(false);
-  pdf.save(nombreArchivo);
-}
-
 function cargarImagen(src) {
   return new Promise((resolve) => {
     const img = new Image();
@@ -539,7 +494,63 @@ function cargarImagen(src) {
     img.src = src;
   });
 }
+  async function descargarComoPDF() {
+    mostrarCargando(true);
 
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'px',
+      format: 'a4'
+    });
+
+    try {
+      const isMobile = esMovil();
+
+      for (let i = 1; i <= imagenes.length; i++) {
+        const basePath = 'https://raw.githubusercontent.com/huachimingo/catalogo/main/';
+        const page1 = `${basePath}${categoria}/p${i}_1.webp`;
+        const page2 = `${basePath}${categoria}/p${i}_2.webp`;
+
+        const addImageToPDF = async (src, addNewPage) => {
+          const img = new Image();
+          img.crossOrigin = "anonymous";
+          img.src = src;
+
+          await new Promise((resolve, reject) => {
+            img.onload = () => {
+              if (addNewPage) pdf.addPage();
+              const pageWidth = pdf.internal.pageSize.getWidth();
+              const pageHeight = pdf.internal.pageSize.getHeight();
+              const ratio = Math.min(pageWidth / img.width, pageHeight / img.height);
+              const width = img.width * ratio;
+              const height = img.height * ratio;
+              const x = (pageWidth - width) / 2;
+              const y = (pageHeight - height) / 2;
+              pdf.addImage(img, 'WEBP', x, y, width, height);
+              resolve();
+            };
+            img.onerror = reject;
+          });
+        };
+
+        if (i > 1) pdf.addPage();
+        await addImageToPDF(page1, false);
+
+        if (!isMobile) {
+          pdf.addPage();
+          await addImageToPDF(page2, false);
+        }
+      }
+
+      pdf.save(`catalogo_${categoria}_completo.pdf`);
+    } catch (error) {
+      alert('Error al generar el PDF.');
+      console.error('Error:', error);
+    } finally {
+      mostrarCargando(false);
+    }
+  }
   </script>
 
 </body>
