@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <title>Catálogo Impuls</title>
   <style>
     body {
@@ -236,7 +237,7 @@ header h1 {
 <button onclick="zoomOut()">🔍 Alejar</button>
 <button onclick="paginaSiguiente()">➡️ Siguiente</button>
 <button onclick="irAUltimaImagen()">⏭ Última</button>
-    <button onclick="descargarComoPDF()">📥 Descargar PDF</button>
+<button onclick="descargarPDF()">📄 Descargar PDF</button>
 
   </div>
  </div>
@@ -495,54 +496,62 @@ function cargarImagen(src) {
   });
 }
 
-      async function descargarComoPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+async function descargarPDF() {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({
+    orientation: 'portrait',
+    unit: 'px',
+    format: 'a4'
+  });
 
-    const maxPaginas = totalPaginas[categoria];
-    const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
+  const marca = 'Impuls'; // Aquí poner dinámico si cambias la marca
+  const categoriaNombre = categoria.charAt(0).toUpperCase() + categoria.slice(1);
 
-    for (let i = 1; i <= maxPaginas; i++) {
-      const padded = i.toString().padStart(4, '0');
-      const imageUrl = `${base}${padded}.webp`;
+  const total = totalPaginas[categoria];
+  const basePath = `catalogos/pdfs/impuls_${categoria}/MC_Impuls ${categoriaNombre}_page-`;
 
-      try {
-        const imgData = await cargarImagenComoBase64(imageUrl);
+  // Ajustes para tamaño imagen dentro del PDF (A4: 595 x 842 px)
+  const pdfWidth = 595;
+  const pdfHeight = 842;
+  const margin = 20;
+  const imgWidth = pdfWidth - margin * 2;
+  const imgHeight = imgWidth * 1.3; // Ajustar según proporción
 
-        const imgProps = doc.getImageProperties(imgData);
-        const pdfWidth = doc.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+  mostrarCargando(true);
 
-        if (i > 1) doc.addPage();
-        doc.addImage(imgData, 'webp', 0, 0, pdfWidth, pdfHeight);
-      } catch (error) {
-        console.error(`No se pudo cargar la imagen ${imageUrl}`, error);
-      }
-    }
+  for (let i = 1; i <= total; i++) {
+    const padded = i.toString().padStart(4, '0');
+    const imgSrc = `${basePath}${padded}.webp`;
 
-    doc.save(`catalogo_${categoria}.pdf`);
+    // Cargar la imagen como HTMLImageElement
+    const img = await loadImage(imgSrc);
+
+    // Si no es la primera página, agrega página nueva
+    if (i > 1) pdf.addPage();
+
+    // Dibujar imagen en el PDF centrada con márgenes
+    pdf.addImage(img, 'WEBP', margin, margin, imgWidth, imgHeight);
   }
 
-  function capitalizar(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
+  mostrarCargando(false);
 
-  function cargarImagenComoBase64(url) {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = 'Anonymous';
-      img.onload = function () {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-        resolve(canvas.toDataURL('image/webp'));
-      };
-      img.onerror = reject;
-      img.src = url;
-    });
-  }
+  // Generar nombre archivo
+  const nombreArchivo = `Marielle_${marca}_${categoriaNombre}.pdf`;
+  pdf.save(nombreArchivo);
+}
+
+// Función para cargar imagen y devolver HTMLImageElement (promesa)
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous'; // Para evitar errores CORS si aplica
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error('Error al cargar imagen: ' + src));
+    img.src = src;
+  });
+}
+
+
   </script>
 
 </body>
