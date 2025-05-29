@@ -497,48 +497,33 @@ function cargarImagen(src) {
 }
 
 async function descargarPDF() {
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF({
-    orientation: 'portrait',
-    unit: 'px',
-    format: 'a4'
-  });
-
-  const marca = 'Impuls'; // Aquí poner dinámico si cambias la marca
-  const categoriaNombre = categoria.charAt(0).toUpperCase() + categoria.slice(1);
-
-  const total = totalPaginas[categoria];
-  const basePath = `pdfs/impuls_${categoria}/MC_Impuls ${categoriaNombre}_page-`;
-
-  // Ajustes para tamaño imagen dentro del PDF (A4: 595 x 842 px)
-  const pdfWidth = 595;
-  const pdfHeight = 842;
-  const margin = 20;
-  const imgWidth = pdfWidth - margin * 2;
-  const imgHeight = imgWidth * 1.3; // Ajustar según proporción
-
   mostrarCargando(true);
 
-  for (let i = 1; i <= total; i++) {
-    const padded = i.toString().padStart(4, '0');
-    const imgSrc = `${basePath}${padded}.webp`;
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
 
-    // Cargar la imagen como HTMLImageElement
-    const img = await loadImage(imgSrc);
+  try {
+    // Supongamos que quieres agregar dos imágenes lado a lado
+    const basePath = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
+    const padded1 = pagina.toString().padStart(4, '0');
+    const padded2 = (pagina + 1).toString().padStart(4, '0');
 
-    // Si no es la primera página, agrega página nueva
-    if (i > 1) pdf.addPage();
+    // Agregar primera imagen
+    await agregarImagenWebpAPdf(`${basePath}${padded1}.webp`, pdf, 10, 10, 90, 130);
 
-    // Dibujar imagen en el PDF centrada con márgenes
-    pdf.addImage(img, 'WEBP', margin, margin, imgWidth, imgHeight);
+    // Si hay segunda imagen visible, agregar también
+    if (!esMovil() && pagina > 1 && pagina < totalPaginas[categoria]) {
+      await agregarImagenWebpAPdf(`${basePath}${padded2}.webp`, pdf, 110, 10, 90, 130);
+    }
+
+    pdf.save(`Catalogo_${categoria}_pagina${pagina}.pdf`);
+  } catch (error) {
+    alert('Error al generar PDF: ' + error.message);
+  } finally {
+    mostrarCargando(false);
   }
-
-  mostrarCargando(false);
-
-  // Generar nombre archivo
-  const nombreArchivo = `Marielle_${marca}_${categoriaNombre}.pdf`;
-  pdf.save(nombreArchivo);
 }
+
 
 // Función para cargar imagen y devolver HTMLImageElement (promesa)
 function loadImage(src) {
