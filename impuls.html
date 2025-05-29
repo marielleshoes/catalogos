@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <title>Catálogo Impuls</title>
   <style>
     body {
@@ -497,42 +497,45 @@ function cargarImagen(src) {
 }
 
 async function descargarPDF() {
-  mostrarCargando(true);
-
   const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF();
+  const pdf = new jsPDF('p', 'mm', 'a4');
 
-  try {
-    // Supongamos que quieres agregar dos imágenes lado a lado
-    const basePath = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
-    const padded1 = pagina.toString().padStart(4, '0');
-    const padded2 = (pagina + 1).toString().padStart(4, '0');
+  const maxPag = totalPaginas[categoria];
+  const basePath = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
 
-    // Agregar primera imagen
-    await agregarImagenWebpAPdf(`${basePath}${padded1}.webp`, pdf, 10, 10, 90, 130);
+  const marca = "Impuls";
+  const nombreArchivo = `Marielle_${marca}_${capitalizar(categoria)}.pdf`;
 
-    // Si hay segunda imagen visible, agregar también
-    if (!esMovil() && pagina > 1 && pagina < totalPaginas[categoria]) {
-      await agregarImagenWebpAPdf(`${basePath}${padded2}.webp`, pdf, 110, 10, 90, 130);
+  for (let i = 1; i <= maxPag; i++) {
+    const padded = i.toString().padStart(4, '0');
+    const imgUrl = `${basePath}${padded}.webp`;
+
+    try {
+      const imgData = await getImageAsDataURL(imgUrl);
+      if (i > 1) pdf.addPage();
+      pdf.addImage(imgData, 'WEBP', 0, 0, 210, 297); // A4: 210x297mm
+    } catch (err) {
+      console.error(`Error cargando la imagen ${imgUrl}`, err);
     }
-
-    pdf.save(`Catalogo_${categoria}_pagina${pagina}.pdf`);
-  } catch (error) {
-    alert('Error al generar PDF: ' + error.message);
-  } finally {
-    mostrarCargando(false);
   }
+
+  pdf.save(nombreArchivo);
 }
 
-
-// Función para cargar imagen y devolver HTMLImageElement (promesa)
-function loadImage(src) {
+function getImageAsDataURL(url) {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    img.crossOrigin = 'anonymous'; // Para evitar errores CORS si aplica
-    img.onload = () => resolve(img);
-    img.onerror = () => reject(new Error('Error al cargar imagen: ' + src));
-    img.src = src;
+    img.crossOrigin = 'Anonymous';
+    img.onload = function () {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      resolve(canvas.toDataURL('image/webp'));
+    };
+    img.onerror = reject;
+    img.src = url;
   });
 }
 
