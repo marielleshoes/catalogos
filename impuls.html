@@ -239,9 +239,6 @@ header h1 {
 
   </div>
  </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 
   <script>
     let categoria = 'dama';
@@ -498,55 +495,16 @@ function cargarImagen(src) {
   });
 }
 
+function descargarPDF() {
+  const categoriaCapitalizada = capitalizar(categoria);
+  const ruta = `pdfs/impuls_${categoria}/Marielle_Impuls%20${categoriaCapitalizada}.pdf`;
 
-async function descargarPDF() {
-  mostrarCargando(true);
-  try {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF('p', 'mm', 'a4');
-
-    const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
-    const total = totalPaginas[categoria];
-    console.log('Total páginas:', total);
-    // Por ejemplo, solo incluir las primeras 2 páginas para demo
-    for (let i = 1; i <= 2; i++) {
-      const padded = i.toString().padStart(4, '0');
-      const imageUrl = `${base}${padded}.webp`;
-
-      // Cargar imagen y convertir a base64
-      const imgData = await getBase64FromUrl(imageUrl);
-
-      // Añadir imagen al pdf
-      pdf.addImage(imgData, 'WEBP', 10, 10, 190, 270);
-
-      if (i < 2) pdf.addPage();
-    }
-
-    pdf.save(`catalogo_impuls_${categoria}.pdf`);
-  } catch (error) {
-    alert('Error al generar el PDF: ' + error.message);
-  } finally {
-    mostrarCargando(false);
-  }
+  // Crear un enlace temporal y simular el clic para descargar
+  const enlace = document.createElement('a');
+  enlace.href = ruta;
+  enlace.download = `Marielle_Impuls_${categoriaCapitalizada}.pdf`;
+  enlace.click();
 }
-
-function getBase64FromUrl(url) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.crossOrigin = 'anonymous'; // importante para evitar problemas CORS
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0);
-      resolve(canvas.toDataURL('image/webp'));
-    };
-    img.onerror = () => reject(new Error('Error al cargar imagen ' + url));
-    img.src = url;
-  });
-}
-
 
   </script>
 
