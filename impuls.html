@@ -499,54 +499,69 @@ function cargarImagen(src) {
 }
 
 
-<script>
 async function descargarPDF() {
-  const marca = 'Impuls'; // Cambia si es Cklass, Andrea, etc.
-  const nombrePDF = `Marielle_${marca}_${capitalizar(categoria)}`;
-  const total = totalPaginas[categoria];
-const baseURL = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
+  const { jsPDF } = window.jspdf;
 
-  const { PDFDocument } = PDFLib;
-  const pdfDoc = await PDFDocument.create();
+  const pdf = new jsPDF({
+    unit: 'px',
+    format: 'a4',
+    compress: true,
+  });
 
-  const loading = document.getElementById('loading');
-  loading.style.display = 'flex';
-  loading.textContent = 'Generando PDF...';
+  const basePath = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
 
-  for (let i = 1; i <= total; i++) {
-    const padded = i.toString().padStart(4, '0');
-    const imageUrl = `${baseURL}${padded}.webp`;
+  const maxPaginas = totalPaginas[categoria];
 
-    try {
-      const imgBytes = await fetch(imageUrl).then(res => res.arrayBuffer());
-      const img = await pdfDoc.embedJpg(imgBytes).catch(async () => {
-        return await pdfDoc.embedPng(imgBytes);
-      });
+  // Tamaño A4 en px a 72 dpi es aprox 595 x 842 px
+  const pageWidth = 595;
+  const pageHeight = 842;
 
-      const { width, height } = img.scale(1);
+  // Funcion auxiliar para cargar imagen y convertirla a JPEG para jsPDF
+  async function loadImageAsJPEG(src) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous'; // Para evitar problemas CORS si aplica
+      img.onload = () => {
+        // Dibujar en canvas y convertir a JPEG
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
 
-      const page = pdfDoc.addPage([width, height]);
-      page.drawImage(img, {
-        x: 0,
-        y: 0,
-        width,
-        height
-      });
-    } catch (error) {
-      console.warn(`Error al cargar la imagen ${imageUrl}:`, error);
-    }
+        // Convertir canvas a base64 JPEG para jsPDF
+        const jpegDataUrl = canvas.toDataURL('image/jpeg', 1.0);
+        resolve(jpegDataUrl);
+      };
+      img.onerror = () => reject(new Error(`Error cargando imagen ${src}`));
+      img.src = src;
+    });
   }
 
-  const pdfBytes = await pdfDoc.save();
-  const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = `${nombrePDF}.pdf`;
-  link.click();
+  mostrarCargando(true);
 
-  loading.style.display = 'none';
+  try {
+    for (let i = 1; i <= maxPaginas; i++) {
+      const padded = i.toString().padStart(4, '0');
+      const imgSrc = `${basePath}${padded}.webp`;
+
+      const jpegDataUrl = await loadImageAsJPEG(imgSrc);
+
+      // jsPDF addImage espera 'JPEG' como formato cuando es base64 jpeg
+      pdf.addImage(jpegDataUrl, 'JPEG', 0, 0, pageWidth, pageHeight);
+
+      if (i < maxPaginas) pdf.addPage();
+    }
+
+    pdf.save(`Catalogo_Impuls_${categoria}.pdf`);
+  } catch (error) {
+    alert('Error al generar el PDF: ' + error.message);
+    console.error(error);
+  } finally {
+    mostrarCargando(false);
+  }
 }
-</script>
+
 
 
   </script>
