@@ -499,26 +499,28 @@ function cargarImagen(src) {
 }
 
 
-    async function descargarPDF() {
+async function descargarPDF() {
   mostrarCargando(true);
   try {
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF('p', 'mm', 'a4');
-
+    
     const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
+    // Usa totalPaginas[categoria] para saber cuántas páginas incluir realmente
     const total = totalPaginas[categoria];
-    // Por ejemplo, solo incluir las primeras 2 páginas para demo
-    for (let i = 1; i <= 2; i++) {
+
+    for (let i = 1; i <= total; i++) {
       const padded = i.toString().padStart(4, '0');
       const imageUrl = `${base}${padded}.webp`;
 
-      // Cargar imagen y convertir a base64
+      // Carga imagen y conviértela a base64
       const imgData = await getBase64FromUrl(imageUrl);
 
-      // Añadir imagen al pdf
+      // Añade imagen al pdf
+      // Ajusta posición y tamaño según necesites
       pdf.addImage(imgData, 'WEBP', 10, 10, 190, 270);
 
-      if (i < 2) pdf.addPage();
+      if (i < total) pdf.addPage();
     }
 
     pdf.save(`catalogo_impuls_${categoria}.pdf`);
@@ -532,7 +534,7 @@ function cargarImagen(src) {
 function getBase64FromUrl(url) {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    img.crossOrigin = 'anonymous'; // importante para evitar problemas CORS
+    img.crossOrigin = 'anonymous'; // Necesario para evitar bloqueos CORS
     img.onload = () => {
       const canvas = document.createElement('canvas');
       canvas.width = img.width;
@@ -545,7 +547,6 @@ function getBase64FromUrl(url) {
     img.src = url;
   });
 }
-
 
   </script>
 
