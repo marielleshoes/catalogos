@@ -499,69 +499,52 @@ function cargarImagen(src) {
 }
 
 
-async function descargarPDF() {
-  const { jsPDF } = window.jspdf;
-
-  const pdf = new jsPDF({
-    unit: 'px',
-    format: 'a4',
-    compress: true,
-  });
-
-  const basePath = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
-
-  const maxPaginas = totalPaginas[categoria];
-
-  // Tamaño A4 en px a 72 dpi es aprox 595 x 842 px
-  const pageWidth = 595;
-  const pageHeight = 842;
-
-  // Funcion auxiliar para cargar imagen y convertirla a JPEG para jsPDF
-  async function loadImageAsJPEG(src) {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous'; // Para evitar problemas CORS si aplica
-      img.onload = () => {
-        // Dibujar en canvas y convertir a JPEG
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-
-        // Convertir canvas a base64 JPEG para jsPDF
-        const jpegDataUrl = canvas.toDataURL('image/jpeg', 1.0);
-        resolve(jpegDataUrl);
-      };
-      img.onerror = () => reject(new Error(`Error cargando imagen ${src}`));
-      img.src = src;
-    });
-  }
-
+    async function descargarPDF() {
   mostrarCargando(true);
-
   try {
-    for (let i = 1; i <= maxPaginas; i++) {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'mm', 'a4');
+
+    const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
+    const total = totalPaginas[categoria];
+    // Por ejemplo, solo incluir las primeras 2 páginas para demo
+    for (let i = 1; i <= 2; i++) {
       const padded = i.toString().padStart(4, '0');
-      const imgSrc = `${basePath}${padded}.webp`;
+      const imageUrl = `${base}${padded}.webp`;
 
-      const jpegDataUrl = await loadImageAsJPEG(imgSrc);
+      // Cargar imagen y convertir a base64
+      const imgData = await getBase64FromUrl(imageUrl);
 
-      // jsPDF addImage espera 'JPEG' como formato cuando es base64 jpeg
-      pdf.addImage(jpegDataUrl, 'JPEG', 0, 0, pageWidth, pageHeight);
+      // Añadir imagen al pdf
+      pdf.addImage(imgData, 'WEBP', 10, 10, 190, 270);
 
-      if (i < maxPaginas) pdf.addPage();
+      if (i < 2) pdf.addPage();
     }
 
-    pdf.save(`Catalogo_Impuls_${categoria}.pdf`);
+    pdf.save(`catalogo_impuls_${categoria}.pdf`);
   } catch (error) {
     alert('Error al generar el PDF: ' + error.message);
-    console.error(error);
   } finally {
     mostrarCargando(false);
   }
 }
 
+function getBase64FromUrl(url) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous'; // importante para evitar problemas CORS
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      resolve(canvas.toDataURL('image/webp'));
+    };
+    img.onerror = () => reject(new Error('Error al cargar imagen ' + url));
+    img.src = url;
+  });
+}
 
 
   </script>
