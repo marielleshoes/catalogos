@@ -503,7 +503,7 @@ function cargarImagen(src) {
   const marca = 'Impuls'; // Cambia si es Cklass, Andrea, etc.
   const nombrePDF = `Marielle_${marca}_${capitalizar(categoria)}`;
   const total = totalPaginas[categoria];
-  const baseURL = `https://tuusuario.github.io/tuRepositorio/pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
+const baseURL = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
 
   const { PDFDocument } = PDFLib;
   const pdfDoc = await PDFDocument.create();
