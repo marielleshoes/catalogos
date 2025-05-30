@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
   <title>Catálogo Impuls</title>
   <style>
     body {
@@ -238,10 +236,11 @@ header h1 {
 <button onclick="zoomOut()">🔍 Alejar</button>
 <button onclick="paginaSiguiente()">➡️ Siguiente</button>
 <button onclick="irAUltimaImagen()">⏭ Última</button>
-<button onclick="descargarPDF()">📄 Descargar PDFg</button>
 
   </div>
  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
     let categoria = 'dama';
     let pagina = 1;
@@ -497,55 +496,29 @@ function cargarImagen(src) {
   });
 }
 
- async function descargarPDF() {
+  async function descargarPDF() {
+    const contenedor = document.getElementById('imageContainer');
     const { jsPDF } = window.jspdf;
 
-    const total = totalPaginas[categoria];
-    const pdf = new jsPDF({
-      orientation: 'portrait',
-      unit: 'mm',
-      format: 'a4'
-    });
+    try {
+      const canvas = await html2canvas(contenedor, {
+        scale: 2, // Mejor resolución
+        useCORS: true
+      });
 
-    const anchoPagina = 210; // mm
-    const altoPagina = 297;  // mm
+      const imgData = canvas.toDataURL('image/jpeg');
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'px',
+        format: [canvas.width, canvas.height]
+      });
 
-    for (let i = 1; i <= total; i++) {
-      const padded = i.toString().padStart(4, '0');
-      const url = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-${padded}.webp`;
-
-      try {
-        const img = await cargarImagen(url);
-        const canvas = document.createElement("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
-        const imgData = canvas.toDataURL("image/webp");
-
-        if (i > 1) pdf.addPage();
-        pdf.addImage(imgData, 'WEBP', 0, 0, anchoPagina, altoPagina);
-      } catch (err) {
-        console.error(`No se pudo cargar la imagen ${url}`, err);
-      }
+      pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width, canvas.height);
+      pdf.save(`catalogo_${categoria}_pag${pagina}.pdf`);
+    } catch (error) {
+      console.error("Error al generar PDF:", error);
+      alert("Hubo un error al generar el PDF.");
     }
-
-    const nombrePDF = `Marielle_(Impuls)_(${capitalizar(categoria)})`;
-    pdf.save(`${nombrePDF}.pdf`);
-  }
-
-  function capitalizar(texto) {
-    return texto.charAt(0).toUpperCase() + texto.slice(1);
-  }
-
-  function cargarImagen(src) {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = "anonymous"; // importante para imágenes online
-      img.onload = () => resolve(img);
-      img.onerror = reject;
-      img.src = src;
-    });
   }
 
   </script>
