@@ -500,8 +500,12 @@ function cargarImagen(src) {
 
 
 async function descargarPDF(categoria, desde, hasta) {
+    console.log('categoria en descargarPDF:', categoria);
+
   const capitalizar = (s) => s.charAt(0).toUpperCase() + s.slice(1);
   const baseURL = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
+    const nombreCategoria = capitalizar(categoria);
+  console.log('nombreCategoria:', nombreCategoria);
 
   const { PDFDocument } = PDFLib;
   const pdfDoc = await PDFDocument.create();
