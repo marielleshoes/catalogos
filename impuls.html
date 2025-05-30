@@ -241,6 +241,8 @@ header h1 {
  </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+
   <script>
     let categoria = 'dama';
     let pagina = 1;
@@ -496,60 +498,52 @@ function cargarImagen(src) {
   });
 }
 
-async function descargarPDF() {
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
 
-  const anchoPagina = 210; // A4 width en mm
-  const altoPagina = 297;  // A4 height en mm
-  const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
+    async function descargarPDF() {
+  const marca = 'Impuls'; // Cambia si es Cklass, Andrea, etc.
+  const nombrePDF = `Marielle_${marca}_${capitalizar(categoria)}`;
   const total = totalPaginas[categoria];
+  const baseURL = `https://tuusuario.github.io/tuRepositorio/pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
+
+  const { PDFDocument } = PDFLib;
+  const pdfDoc = await PDFDocument.create();
+
+  const loading = document.getElementById('loading');
+  loading.style.display = 'flex';
+  loading.textContent = 'Generando PDF...';
 
   for (let i = 1; i <= total; i++) {
     const padded = i.toString().padStart(4, '0');
-    const url = `${base}${padded}.webp`;
-    const img = await cargarImagenComoDataURL(url);
+    const imageUrl = `${baseURL}${padded}.webp`;
 
-    // Calcular proporción para escalar la imagen sin márgenes
-    const imgInfo = await obtenerTamanoImagen(img);
-    const proporcion = Math.min(anchoPagina / imgInfo.ancho, altoPagina / imgInfo.alto);
-    const imgAncho = imgInfo.ancho * proporcion;
-    const imgAlto = imgInfo.alto * proporcion;
-    const x = (anchoPagina - imgAncho) / 2;
-    const y = (altoPagina - imgAlto) / 2;
+    try {
+      const imgBytes = await fetch(imageUrl).then(res => res.arrayBuffer());
+      const img = await pdfDoc.embedJpg(imgBytes).catch(async () => {
+        return await pdfDoc.embedPng(imgBytes);
+      });
 
-    pdf.addImage(img, 'WEBP', x, y, imgAncho, imgAlto);
+      const { width, height } = img.scale(1);
 
-    if (i < total) {
-      pdf.addPage();
+      const page = pdfDoc.addPage([width, height]);
+      page.drawImage(img, {
+        x: 0,
+        y: 0,
+        width,
+        height
+      });
+    } catch (error) {
+      console.warn(`Error al cargar la imagen ${imageUrl}:`, error);
     }
   }
 
-  pdf.save(`catalogo_${categoria}.pdf`);
-}
+  const pdfBytes = await pdfDoc.save();
+  const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `${nombrePDF}.pdf`;
+  link.click();
 
-function cargarImagenComoDataURL(url) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      canvas.getContext('2d').drawImage(img, 0, 0);
-      resolve(canvas.toDataURL('image/webp'));
-    };
-    img.onerror = reject;
-    img.src = url;
-  });
-}
-
-function obtenerTamanoImagen(dataURL) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.onload = () => resolve({ ancho: img.width, alto: img.height });
-    img.src = dataURL;
-  });
+  loading.style.display = 'none';
 }
 
 
