@@ -507,8 +507,9 @@ async function descargarPDF() {
 
     const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
     const total = totalPaginas[categoria];
+    console.log('Total páginas:', total);
     // Por ejemplo, solo incluir las primeras 2 páginas para demo
-    for (let i = 1; i <= total; i++) {
+    for (let i = 1; i <= 2; i++) {
       const padded = i.toString().padStart(4, '0');
       const imageUrl = `${base}${padded}.webp`;
 
@@ -518,7 +519,7 @@ async function descargarPDF() {
       // Añadir imagen al pdf
       pdf.addImage(imgData, 'WEBP', 10, 10, 190, 270);
 
-      if (i < total) pdf.addPage();
+      if (i < 2) pdf.addPage();
     }
 
     pdf.save(`catalogo_impuls_${categoria}.pdf`);
