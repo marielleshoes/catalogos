@@ -504,20 +504,18 @@ async function descargarPDF() {
   try {
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF('p', 'mm', 'a4');
-    
-    const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
-    // Usa totalPaginas[categoria] para saber cuántas páginas incluir realmente
-    const total = totalPaginas[categoria];
 
+    const base = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-`;
+    const total = totalPaginas[categoria];
+    // Por ejemplo, solo incluir las primeras 2 páginas para demo
     for (let i = 1; i <= total; i++) {
       const padded = i.toString().padStart(4, '0');
       const imageUrl = `${base}${padded}.webp`;
 
-      // Carga imagen y conviértela a base64
+      // Cargar imagen y convertir a base64
       const imgData = await getBase64FromUrl(imageUrl);
 
-      // Añade imagen al pdf
-      // Ajusta posición y tamaño según necesites
+      // Añadir imagen al pdf
       pdf.addImage(imgData, 'WEBP', 10, 10, 190, 270);
 
       if (i < total) pdf.addPage();
@@ -534,7 +532,7 @@ async function descargarPDF() {
 function getBase64FromUrl(url) {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    img.crossOrigin = 'anonymous'; // Necesario para evitar bloqueos CORS
+    img.crossOrigin = 'anonymous'; // importante para evitar problemas CORS
     img.onload = () => {
       const canvas = document.createElement('canvas');
       canvas.width = img.width;
@@ -547,6 +545,7 @@ function getBase64FromUrl(url) {
     img.src = url;
   });
 }
+
 
   </script>
 
