@@ -497,52 +497,56 @@ function cargarImagen(src) {
   });
 }
 
+ async function descargarPDF() {
+    const { jsPDF } = window.jspdf;
 
-    async function descargarPDF() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' });
+    const total = totalPaginas[categoria];
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4'
+    });
 
-  const total = totalPaginas[categoria];
-  const anchoPagina = 595;  // A4 width in px
-  const altoPagina = 842;   // A4 height in px
+    const anchoPagina = 210; // mm
+    const altoPagina = 297;  // mm
 
-  for (let i = 1; i <= total; i++) {
-    const padded = i.toString().padStart(4, '0');
-    const url = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-${padded}.webp`;
+    for (let i = 1; i <= total; i++) {
+      const padded = i.toString().padStart(4, '0');
+      const url = `pdfs/impuls_${categoria}/MC_Impuls%20${capitalizar(categoria)}_page-${padded}.webp`;
 
-    try {
-      const imgData = await cargarImagenComoBase64(url);
-      if (i > 1) doc.addPage();
-      doc.addImage(imgData, 'WEBP', 0, 0, anchoPagina, altoPagina);
-    } catch (err) {
-      console.error('Error cargando imagen:', url);
+      try {
+        const img = await cargarImagen(url);
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        const imgData = canvas.toDataURL("image/webp");
+
+        if (i > 1) pdf.addPage();
+        pdf.addImage(imgData, 'WEBP', 0, 0, anchoPagina, altoPagina);
+      } catch (err) {
+        console.error(`No se pudo cargar la imagen ${url}`, err);
+      }
     }
+
+    const nombrePDF = `Marielle_(Impuls)_(${capitalizar(categoria)})`;
+    pdf.save(`${nombrePDF}.pdf`);
   }
 
-  const nombrePDF = `Marielle_Impuls_${capitalizar(categoria)}.pdf`;
-  doc.save(nombrePDF);
-}
+  function capitalizar(texto) {
+    return texto.charAt(0).toUpperCase() + texto.slice(1);
+  }
 
-function capitalizar(texto) {
-  return texto.charAt(0).toUpperCase() + texto.slice(1);
-}
-
-function cargarImagenComoBase64(url) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0);
-      resolve(canvas.toDataURL('image/webp'));
-    };
-    img.onerror = reject;
-    img.src = url;
-  });
-}
+  function cargarImagen(src) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = "anonymous"; // importante para imágenes online
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = src;
+    });
+  }
 
   </script>
 
