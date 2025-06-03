@@ -1,0 +1,43 @@
+{
+  "impuls": {
+    "titulo": "Catálogo Impuls",
+    "h1": "Catálogo Impuls",
+    "categorias": {
+      "dama": {
+        "totalPaginas": 384,
+        "pdf": "pdfs/impuls_dama/Marielle_Impuls%20Dama.pdf",
+        "baseImagen": "pdfs/impuls_dama/MC_Impuls%20Dama_page-"
+      },
+      "caballero": {
+        "totalPaginas": 15,
+        "pdf": "pdfs/impuls_caballero/Marielle_Impuls%20Caballero.pdf",
+        "baseImagen": "pdfs/impuls_caballero/MC_Impuls%20Caballero_page-"
+      },
+      "niño": {
+        "totalPaginas": 10,
+        "pdf": "pdfs/impuls_niño/Marielle_Impuls%20Niño.pdf",
+        "baseImagen": "pdfs/impuls_niño/MC_Impuls%20Niño_page-"
+      },
+      "niña": {
+        "totalPaginas": 12,
+        "pdf": "pdfs/impuls_niña/Marielle_Impuls%20Niña.pdf",
+        "baseImagen": "pdfs/impuls_niña/MC_Impuls%20Niña_page-"
+      }
+    },
+    "menu": ["dama", "caballero", "niño", "niña"],
+    "categoriaInicial": "dama"
+  },
+  "andrea": {
+    "titulo": "Catálogo Andrea",
+    "h1": "Catálogo Andrea",
+    "categorias": {
+      "primavera": {
+        "totalPaginas": 100,
+        "pdf": "pdfs/andrea_primavera/Andrea%20Primavera.pdf",
+        "baseImagen": "pdfs/andrea_primavera/MC_Andrea%20Primavera_page-"
+      }
+    },
+    "menu": ["primavera"],
+    "categoriaInicial": "primavera"
+  }
+}
