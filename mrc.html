@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title id="titulo">Catálogo</title>
+  <style>
+    /* Tus estilos existentes */
+  </style>
+</head>
+<body>
+  <header>
+    <h1 id="titulo-h1">Catálogo</h1>
+  </header>
+
+  <div class="menu" id="menu-categorias"></div>
+
+  <div class="controls">
+    <button onclick="descargarPDF()">📄 Descargar PDF</button>
+  </div>
+
+  <div id="imagenes"></div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const marcaSeleccionada = params.get('mc');
+    let dataMarca = null;
+    let categoria = '';
+    let pagina = 1;
+    let totalPaginas = 1;
+    let baseRuta = '';
+    let rutaPDF = '';
+
+    function capitalizar(texto) {
+      return texto.charAt(0).toUpperCase() + texto.slice(1);
+    }
+
+    function cargarCategoria(cat) {
+      categoria = cat;
+      pagina = 1;
+      const datosCat = dataMarca.categorias[cat];
+
+      if (!datosCat) return;
+
+      totalPaginas = datosCat.totalPaginas;
+      baseRuta = datosCat.baseImagen;
+      rutaPDF = datosCat.pdf;
+
+      actualizarImagenes();
+    }
+
+    function actualizarImagenes() {
+      const contenedor = document.getElementById('imagenes');
+      contenedor.innerHTML = '';
+
+      for (let i = 1; i <= totalPaginas; i++) {
+        const img = document.createElement('img');
+        img.src = `${baseRuta}${i}.webp`;
+        img.alt = `Página ${i}`;
+        contenedor.appendChild(img);
+      }
+    }
+
+    function descargarPDF() {
+      const enlace = document.createElement('a');
+      enlace.href = rutaPDF;
+      enlace.download = rutaPDF.split('/').pop();
+      enlace.click();
+    }
+
+    fetch('marcas.json')
+      .then(res => res.json())
+      .then(marcas => {
+        dataMarca = marcas[marcaSeleccionada];
+        if (!dataMarca) {
+          document.body.innerHTML = "<h2>Marca no encontrada</h2>";
+          return;
+        }
+
+        document.title = dataMarca.titulo;
+        document.getElementById('titulo-h1').textContent = dataMarca.h1;
+
+        const menu = document.getElementById('menu-categorias');
+        dataMarca.menu.forEach(cat => {
+          const btn = document.createElement('button');
+          btn.textContent = capitalizar(cat);
+          btn.onclick = () => cargarCategoria(cat);
+          menu.appendChild(btn);
+        });
+
+        cargarCategoria(dataMarca.categoriaInicial);
+      });
+  </script>
+</body>
+</html>
