@@ -28,16 +28,20 @@
     "categoriaInicial": "dama"
   },
   "andrea": {
-    "titulo": "Catálogo Andrea",
-    "h1": "Catálogo Andrea",
-    "categorias": {
-      "primavera": {
-        "totalPaginas": 100,
-        "pdf": "pdfs/andrea_primavera/Andrea Primavera.pdf",
-        "baseImagen": "pdfs/andrea_primavera/MC_Andrea%20Primavera_page-"
-      }
+  "titulo": "Catálogo Andrea",
+  "h1": "Catálogo Andrea",
+  "categorias": {
+    "caballero": {
+      "totalPaginas": 100,
+      "viewerUrl": "https://viewer.ipaper.io/andrea/1/5-calzado-caballero/?page=1"
     },
-    "menu": ["primavera"],
-    "categoriaInicial": "primavera"
-  }
+    "dama": {
+      "totalPaginas": 100,
+      "viewerUrl": "https://viewer.ipaper.io/andrea/1/263-calzado-dama/?page=1"
+    }
+  },
+  "menu": ["caballero", "dama"],
+  "categoriaInicial": "caballero"
+}
+
 }
