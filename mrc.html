@@ -15,26 +15,7 @@
       </header>
   
       <div class="menu" id="menuCategorias"></div>
-      <div class="controls">
-        <button onclick="descargarPDF()">⬇️ Descargar PDF</button>
-      </div>
-      <div class="viewer-wrapper">
-        <div id="loading" class="loading" style="display: none;">Cargando...</div>
-        <div id="viewer" class="viewer">
-          <div id="imageContainer" class="image-container">
-            <img id="page1" src="" alt="Página izquierda">
-            <img id="page2" src="" alt="Página derecha">
-          </div>
-        </div>
-      </div>
-      <div class="controls">
-        <button onclick="irAPrimeraImagen()">⏮ Primera</button>
-        <button onclick="paginaAnterior()">⬅️ Anterior</button>
-        <button onclick="zoomIn()">🔎 Acercar</button>
-        <button onclick="zoomOut()">🔍 Alejar</button>
-        <button onclick="paginaSiguiente()">➡️ Siguiente</button>
-        <button onclick="irAUltimaImagen()">⏭ Última</button>
-      </div>
+      <div id="viewerContainer"></div>
     </div>
     
     <a class="whatsapp-btn" href="https://wa.me/5211234567890" target="_blank" aria-label="Chatea por WhatsApp">
@@ -43,7 +24,7 @@
     
     <script>
       let datosMarca = {};
-      let marca = 'impuls'; // puede venir de query param o ruta en el futuro
+      let marca = getQueryParam('mc') || 'impuls'; // puede venir de query param o ruta en el futuro
       let categoria = '';
       let pagina = 1;
       let zoom = 1;
@@ -56,7 +37,12 @@
       function mostrarCargando(mostrar) {
         document.getElementById('loading').style.display = mostrar ? 'flex' : 'none';
       }
-  
+
+      function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+      }
+      
       function capitalizar(texto) {
         return texto.charAt(0).toUpperCase() + texto.slice(1);
       }
@@ -237,6 +223,48 @@
   
       window.onload = cargarDatosMarca;
       window.onresize = actualizarImagenes;
+      window.onload = () => {
+          const marca = getQueryParam('mc') || 'impuls';
+          if (marca === 'andrea') {
+            // Insertar iframe con el viewer externo
+            const viewerContainer = document.getElementById('viewerContainer');
+            viewerContainer.innerHTML = `
+              <iframe 
+                src="https://viewer.ipaper.io/andrea/1/5-calzado-caballero/?page=2" 
+                width="100%" 
+                height="700" 
+                frameborder="0" 
+                allowfullscreen 
+                style="border:none; display:block; margin: 0 auto;">
+              </iframe>
+            `;
+          } else {
+            // Para otras marcas, puedes mostrar el viewer habitual o el que tengas por defecto
+            document.getElementById('viewerContainer').innerHTML = `
+              <div class="controls">
+                <button onclick="descargarPDF()">⬇️ Descargar PDF</button>
+              </div>
+              <div class="viewer-wrapper">
+                <div id="loading" class="loading" style="display: none;">Cargando...</div>
+                <div id="viewer" class="viewer">
+                  <div id="imageContainer" class="image-container">
+                    <img id="page1" src="" alt="Página izquierda">
+                    <img id="page2" src="" alt="Página derecha">
+                  </div>
+                </div>
+              </div>
+              <div class="controls">
+                <button onclick="irAPrimeraImagen()">⏮ Primera</button>
+                <button onclick="paginaAnterior()">⬅️ Anterior</button>
+                <button onclick="zoomIn()">🔎 Acercar</button>
+                <button onclick="zoomOut()">🔍 Alejar</button>
+                <button onclick="paginaSiguiente()">➡️ Siguiente</button>
+                <button onclick="irAUltimaImagen()">⏭ Última</button>
+              </div>
+            `;
+          }
+          cargarDatosMarca();
+        }
     </script>
   </body>
 </html>
