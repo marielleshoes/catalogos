@@ -1,261 +1,235 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Marielle - Catálogos</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
-  <style>
-    :root {
-      --color-fondo: #FDFDFB;
-      --color-tarjeta: #F6EDE4;
-      --color-borde: #DABEB2;
-      --color-acento: #AB9689;
-      --color-texto: #3B2D24;
-      --color-header: #EBE1DA;
-      --color-whatsapp: #25D366;
-    }
-
-    * {
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background: url('pdfs/img/f1.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: var(--color-texto);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    .fondo-blur {
-      backdrop-filter: blur(6px);
-      min-height: 100vh;
-      width: 100%;
-      position: relative;
-      z-index: 1;
-    }
-
-header {
-  background-color: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(8px);
-  padding: 2rem 1.5rem;
-  text-align: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  border-radius: 0 0 30px 30px;
-  position: relative;
-  z-index: 10;
-  transition: background-color 0.3s ease;
-}
-
-header h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--color-texto);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
-  animation: fadeDown 0.8s ease-out;
-}
-
-header p.subtitulo {
-  font-size: 1rem;
-  color: #7b6456;
-  font-weight: 300;
-  letter-spacing: 1px;
-  animation: fadeDown 1s ease-out;
-  opacity: 0.8;
-}
-
-@keyframes fadeDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-
-    .marcas {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1.5rem;
-      padding: 2rem;
-      max-width: 1200px;
-      margin: auto;
-    }
-
-.marca {
-  background-color: #f5eee6;
-  border-radius: 20px;
-  text-align: center;
-  padding: 0;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;  /* Centrado vertical */
-  flex-direction: column;
-  min-height: 100px;
-}
-
-.marca img {
-  width: 100%;
-  height: auto;
-  transition: filter 0.4s ease;
-  object-fit: cover;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  filter: grayscale(100%) brightness(0.7);
-}
-    .marca:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-      background-color: #e6d4c6;
-    }
-
-    .marca h2 {
-      font-size: 1.3rem;
-      color: var(--color-texto);
-      font-weight: 600;
-        color: #4a3b2d;
-      transition: color 0.4s ease;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marielle - Catálogos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+    <style>
+      :root {
+        --color-fondo: #FDFDFB;
+        --color-tarjeta: #F6EDE4;
+        --color-borde: #DABEB2;
+        --color-acento: #AB9689;
+        --color-texto: #3B2D24;
+        --color-header: #EBE1DA;
+        --color-whatsapp: #25D366;
       }
-    
-    .marca:hover img {
-      filter: grayscale(0%) brightness(1);
-    }
-    
-    .marca:hover h2 {
-      color: #3B2D24;
-    }
-    
-    
-    .whatsapp-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #25D366;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      font-size: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      z-index: 999999; /* MÁS alto aún */
-    }
-    .whatsapp-btn:hover {
-      background-color: #1ebe5d;
-    }
-
-    @media (max-width: 600px) {
+      * {
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+      }
       body {
-        background-attachment: scroll;
-        background-position: center center;
+        background: url('pdfs/img/f1.jpg') no-repeat center center fixed;
         background-size: cover;
-        overflow-x: auto;
+        color: var(--color-texto);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+      .fondo-blur {
+        backdrop-filter: blur(6px);
+        min-height: 100vh;
+        width: 100%;
+        position: relative;
+        z-index: 1;
+      }
+      header {
+        background-color: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(8px);
+        padding: 2rem 1.5rem;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        border-radius: 0 0 30px 30px;
+        position: relative;
+        z-index: 10;
+        transition: background-color 0.3s ease;
+      }
+      header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--color-texto);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+        animation: fadeDown 0.8s ease-out;
+      }
+      header p.subtitulo {
+        font-size: 1rem;
+        color: #7b6456;
+        font-weight: 300;
+        letter-spacing: 1px;
+        animation: fadeDown 1s ease-out;
+        opacity: 0.8;
+      }
+      @keyframes fadeDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
       .marcas {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1.5rem;
+        padding: 2rem;
+        max-width: 1200px;
+        margin: auto;
+      }
+      .marca {
+        background-color: #f5eee6;
+        border-radius: 20px;
+        text-align: center;
+        padding: 0;
+        transition: background-color 0.3s ease;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+        cursor: pointer;
+        overflow: hidden;
         display: flex;
+        justify-content: center;  /* Centrado vertical */
         flex-direction: column;
-        gap: 1.8rem;
-        padding: 1.5rem;
+        min-height: 100px;
       }
-    
-      .marca:active {
-        transform: scale(0.96);
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      .marca img {
+        width: 100%;
+        height: auto;
+        transition: filter 0.4s ease;
+        object-fit: cover;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        filter: grayscale(100%) brightness(0.7);
       }
-    }
-  </style>
-</head>
-<body>
-  <div class="fondo-blur">
-    <header>
-      <h1>Catálogos Marielle</h1>
-    </header>
-
-    <main class="marcas">
-      <div class="marca" onclick="location.href='mrc.html?mc=impuls'">
-        <img src="pdfs/img/impuls.webp" alt="Impuls"/>
-      </div>
-      <div class="marca" onclick="location.href='mrc.html?mc=cklass'">
-        <img src="pdfs/img/cklass.webp" alt="Cklass"/>
-      </div>
-      <div class="marca" onclick="location.href='mrc.html?mc=shoespakar'">
-        <img src="pdfs/img/pakar.webp" alt="Pakar"/>
-      </div>
-      <div class="marca" onclick="location.href='mrc.html?mc=andrea'">
-        <img src="pdfs/img/andrea.webp" alt="Andrea"/>
-      </div>
-      <div class="marca" onclick="location.href='mrc.html?mc=ilusion'">
-        <img src="pdfs/img/ilusion.webp" alt="Ilusion"/>
-      </div>
-      <div class="marca" onclick="location.href='mrc.html?mc=vianey'">
-        <img src="pdfs/img/vianney.webp" alt="Vianney"/>
-      </div>
-      <div class="marca" onclick="location.href='mrc.html?mc=tupperware'">
-        <img src="pdfs/img/tupperware.webp" alt="Tupperware"/>
-      </div>
-    </main>
-  </div>
-
-<a class="whatsapp-btn" href="https://wa.me/5211234567890" target="_blank" aria-label="Chatea por WhatsApp">
-  <i class="fab fa-whatsapp"></i>
-</a>
-
-<script>
-  if (window.innerWidth <= 768) {
-    document.addEventListener("DOMContentLoaded", () => {
-      const body = document.body;
-
-      let backgroundPos = { x: 50, y: 50 }; // posición inicial en porcentaje
-      let startTouch = { x: 0, y: 0 };
-      let startBackground = { x: 50, y: 50 };
-
-      body.style.backgroundPosition = `${backgroundPos.x}% ${backgroundPos.y}%`;
-
-      body.addEventListener("touchstart", (e) => {
-        if (e.touches.length === 1) {
-          startTouch.x = e.touches[0].clientX;
-          startTouch.y = e.touches[0].clientY;
-          startBackground.x = backgroundPos.x;
-          startBackground.y = backgroundPos.y;
+      .marca:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+        background-color: #e6d4c6;
+      }
+      .marca h2 {
+        font-size: 1.3rem;
+        color: var(--color-texto);
+        font-weight: 600;
+          color: #4a3b2d;
+        transition: color 0.4s ease;
         }
-      });
-
-      body.addEventListener("touchmove", (e) => {
-        if (e.touches.length === 1) {
-          const moveX = e.touches[0].clientX - startTouch.x;
-          const moveY = e.touches[0].clientY - startTouch.y;
-
-          // Ajusta la sensibilidad (cuanto menor, más se mueve)
-          const sensitivity = 0.2;
-
-          backgroundPos.x = Math.max(0, Math.min(100, startBackground.x + moveX * sensitivity));
-          backgroundPos.y = Math.max(0, Math.min(100, startBackground.y + moveY * sensitivity));
-
+      .marca:hover img {
+        filter: grayscale(0%) brightness(1);
+      }
+      .marca:hover h2 {
+        color: #3B2D24;
+      }   
+      .whatsapp-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #25D366;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        font-size: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        z-index: 999999; /* MÁS alto aún */
+      }
+      .whatsapp-btn:hover {
+        background-color: #1ebe5d;
+      }
+      @media (max-width: 600px) {
+        body {
+          background-attachment: scroll;
+          background-position: center center;
+          background-size: cover;
+          overflow-x: auto;
+        }
+        .marcas {
+          display: flex;
+          flex-direction: column;
+          gap: 1.8rem;
+          padding: 1.5rem;
+        }
+        .marca:active {
+          transform: scale(0.96);
+          box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="fondo-blur">
+      <header>
+        <h1>Catálogos Marielle</h1>
+      </header>
+  
+      <main class="marcas">
+        <div class="marca" onclick="location.href='mrc.html?mc=impuls'">
+          <img src="pdfs/img/impuls.webp" alt="Impuls"/>
+        </div>
+        <div class="marca" onclick="location.href='mrc.html?mc=cklass'">
+          <img src="pdfs/img/cklass.webp" alt="Cklass"/>
+        </div>
+        <div class="marca" onclick="location.href='mrc.html?mc=shoespakar'">
+          <img src="pdfs/img/pakar.webp" alt="Pakar"/>
+        </div>
+        <div class="marca" onclick="location.href='mrc.html?mc=andrea'">
+          <img src="pdfs/img/andrea.webp" alt="Andrea"/>
+        </div>
+        <div class="marca" onclick="location.href='mrc.html?mc=ilusion'">
+          <img src="pdfs/img/ilusion.webp" alt="Ilusion"/>
+        </div>
+        <div class="marca" onclick="location.href='mrc.html?mc=vianey'">
+          <img src="pdfs/img/vianney.webp" alt="Vianney"/>
+        </div>
+        <div class="marca" onclick="location.href='mrc.html?mc=tupperware'">
+          <img src="pdfs/img/tupperware.webp" alt="Tupperware"/>
+        </div>
+      </main>
+    </div>
+  
+    <a class="whatsapp-btn" href="https://wa.me/5211234567890" target="_blank" aria-label="Chatea por WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+  
+    <script>
+      if (window.innerWidth <= 768) {
+        document.addEventListener("DOMContentLoaded", () => {
+          const body = document.body;
+          let backgroundPos = { x: 50, y: 50 }; // Posición inicial en porcentaje
+          let startTouch = { x: 0, y: 0 };
+          let startBackground = { x: 50, y: 50 };
           body.style.backgroundPosition = `${backgroundPos.x}% ${backgroundPos.y}%`;
-        }
-      });
-    });
-  }
-</script>
-
-</body>
+          body.addEventListener("touchstart", (e) => {
+            if (e.touches.length === 1) {
+              startTouch.x = e.touches[0].clientX;
+              startTouch.y = e.touches[0].clientY;
+              startBackground.x = backgroundPos.x;
+              startBackground.y = backgroundPos.y;
+            }
+          });
+          body.addEventListener("touchmove", (e) => {
+            if (e.touches.length === 1) {
+              const moveX = e.touches[0].clientX - startTouch.x;
+              const moveY = e.touches[0].clientY - startTouch.y;
+              // Ajusta la sensibilidad (cuanto menor, más se mueve)
+              const sensitivity = 0.2;
+              backgroundPos.x = Math.max(0, Math.min(100, startBackground.x + moveX * sensitivity));
+              backgroundPos.y = Math.max(0, Math.min(100, startBackground.y + moveY * sensitivity));
+              body.style.backgroundPosition = `${backgroundPos.x}% ${backgroundPos.y}%`;
+            }
+          });
+        });
+      }
+    </script>
+  </body>
 </html>
