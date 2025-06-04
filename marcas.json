@@ -54,6 +54,21 @@
   },
   "menu": ["dama", "caballero", "kids", "confort", "vestir"],
   "categoriaInicial": "dama"
-}
-
+  },
+    "shoespakar": {
+    "titulo": "Catálogo Shoes pakar",
+    "h1": "Catálogo Shoes pakar",
+    "categorias": {
+      "mujer": {
+        "totalPaginas": 100,
+        "pdf": "pdfs/shoespakar/Marielle_Shoespakar Mujer.pdf"
+      },
+      "hombre": {
+        "totalPaginas": 100,
+        "pdf": "pdfs/shoespakar/Marielle_Shoespakar Hombre.pdf"
+      }
+    },
+    "menu": ["mujer", "hombre"],
+    "categoriaInicial": "mujer"
+  }
 }
