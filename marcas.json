@@ -31,17 +31,29 @@
   "titulo": "Catálogo Andrea",
   "h1": "Catálogo Andrea",
   "categorias": {
-    "caballero": {
-      "totalPaginas": 100,
+    "dama": {
+      "totalPaginas": 200,
       "viewerUrl": "https://viewer.ipaper.io/andrea/1/5-calzado-caballero/?page=1"
     },
-    "dama": {
-      "totalPaginas": 100,
+    "cabellero": {
+      "totalPaginas": 200,
       "viewerUrl": "https://viewer.ipaper.io/andrea/1/263-calzado-dama/?page=1"
-    }
+    },
+    "kids": {
+      "totalPaginas": 200,
+      "viewerUrl": "https://viewer.ipaper.io/andrea/1/242-infantil/?page=1"
+    },
+    "confort": {
+      "totalPaginas": 200,
+      "viewerUrl": "https://viewer.ipaper.io/andrea/1/89-calzado-confort/?page=1"
+    },
+    "vestir": {
+      "totalPaginas": 200,
+      "viewerUrl": "https://viewer.ipaper.io/andrea/1/241-vestir-exterior/?page=1"
+    },
   },
-  "menu": ["caballero", "dama"],
-  "categoriaInicial": "caballero"
+  "menu": ["dama", "caballero","kids","confort","vestir"],
+  "categoriaInicial": "dama"
 }
 
 }
