@@ -66,9 +66,41 @@
       "hombre": {
         "totalPaginas": 100,
         "pdf": "pdfs/shoespakar/Marielle_Shoespakar Hombre.pdf"
-      }
+      },
+      "sandalia": {
+        "totalPaginas": 100,
+        "pdf": "pdfs/shoespakar/Marielle_Shoespakar Sandalia.pdf"
+      },
+      "casual": {
+        "totalPaginas": 100,
+        "pdf": "pdfs/shoespakar/Marielle_Shoespakar Casual.pdf"
+      },
+      "ropa": {
+        "totalPaginas": 100,
+        "pdf": "pdfs/shoespakar/Marielle_Shoespakar Ropa.pdf"
+      },
+      "niño": {
+        "totalPaginas": 100,
+        "pdf": "pdfs/shoespakar/Marielle_Shoespakar Niño.pdf"
+      },
+      "niña": {
+        "totalPaginas": 100,
+        "pdf": "pdfs/shoespakar/Marielle_Shoespakar Niña.pdf"
+      },
+      "junior": {
+        "totalPaginas": 100,
+        "pdf": "pdfs/shoespakar/Marielle_Shoespakar Junior.pdf"
+      },
+      "coqueta": {
+        "totalPaginas": 100,
+        "pdf": "pdfs/shoespakar/Marielle_Shoespakar Coqueta.pdf"
+      },
+      "audaz": {
+        "totalPaginas": 100,
+        "pdf": "pdfs/shoespakar/Marielle_Shoespakar Audaz.pdf"
+      },
     },
-    "menu": ["mujer", "hombre"],
+    "menu": ["mujer", "hombre", "sandalia", "casual", "ropa", "niño", "niña", "junior", "coqueta", "audaz"],
     "categoriaInicial": "mujer"
   }
 }
