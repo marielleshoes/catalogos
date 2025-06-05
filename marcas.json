@@ -98,7 +98,7 @@
       "audaz": {
         "totalPaginas": 100,
         "pdf": "pdfs/shoespakar/Marielle_Shoespakar Audaz.pdf"
-      },
+      }
     },
     "menu": ["mujer", "hombre", "sandalia", "casual", "ropa", "niño", "niña", "junior", "coqueta", "audaz"],
     "categoriaInicial": "mujer"
