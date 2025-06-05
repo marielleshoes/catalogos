@@ -103,6 +103,18 @@
     "menu": ["mujer", "hombre", "sandalia", "casual", "ropa", "niño", "niña", "junior", "coqueta", "audaz"],
     "categoriaInicial": "mujer"
   },
+    "tupperware": {
+    "titulo": "Catálogo Tupperware",
+    "h1": "Catálogo Tupperware",
+    "categorias": {
+      "19Mayo-15junio": {
+        "totalPaginas": 200,
+        "viewerUrl": "https://tupperware.ipapercms.dk/Tupperware/Mexico/catalogo_tupperware/tuppertips/vigente/?page=1"
+      }
+    },
+    "menu": ["19Mayo-15junio"],
+    "categoriaInicial": "19Mayo-15junio"
+  },
     "fuller": {
     "titulo": "Catálogo Fuller",
     "h1": "Catálogo Fuller",
