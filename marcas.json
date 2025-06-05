@@ -108,8 +108,8 @@
     "h1": "Catálogo Fuller",
     "categorias": {
       "campaña05": {
-        "totalPaginas": 120,
-        "pdf": "pdfs/fuller/Marielle_Fuller C05.pdf"
+        "totalPaginas": 200,
+        "viewerUrl": "https://viewer.ipaper.io/house-of-fuller/2025/folleto/c05/"
       }
     },
     "menu": ["campaña05"],
