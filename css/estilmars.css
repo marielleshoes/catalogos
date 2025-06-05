@@ -182,9 +182,9 @@ header h1 {
    pointer-events: none;
 }
 .loading-img {
-   width: 80px;
-   height: 80px;
-   margin-bottom: 10px;
+   width: 120px;
+   height: 120px;
+   margin-bottom: 5px;
 }
 .loading-text {
    font-size: 18px;
