@@ -106,7 +106,7 @@ header h1 {
    transition: background-color 0.3s;
 }      
 .btn-volver:hover {
-   background-color: #45a049;
+   background-color: #eaddcf;
 }
 .viewer-wrapper {
    position: relative;
