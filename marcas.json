@@ -9,17 +9,17 @@
         "baseImagen": "pdfs/impuls_dama/MC_Impuls%20Dama_page-"
       },
       "caballero": {
-        "totalPaginas": 15,
+        "totalPaginas": 216,
         "pdf": "pdfs/impuls_caballero/Marielle_Impuls Caballero.pdf",
         "baseImagen": "pdfs/impuls_caballero/MC_Impuls%20Caballero_page-"
       },
       "niño": {
-        "totalPaginas": 10,
+        "totalPaginas": 119,
         "pdf": "pdfs/impuls_niño/Marielle_Impuls Niño.pdf",
         "baseImagen": "pdfs/impuls_niño/MC_Impuls%20Niño_page-"
       },
       "niña": {
-        "totalPaginas": 12,
+        "totalPaginas": 89,
         "pdf": "pdfs/impuls_niña/Marielle_Impuls Niña.pdf",
         "baseImagen": "pdfs/impuls_niña/MC_Impuls%20Niña_page-"
       }
