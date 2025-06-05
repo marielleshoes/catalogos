@@ -55,6 +55,18 @@
   "menu": ["dama", "caballero", "kids", "confort", "vestir"],
   "categoriaInicial": "dama"
   },
+    "ilusion": {
+    "titulo": "Catálogo Ilusión",
+    "h1": "Catálogo Ilusión",
+    "categorias": {
+      "campaña4": {
+        "totalPaginas": 200,
+        "viewerUrl": "https://viewer.ipaper.io/diltex-brands/catalogosilusion/ModaMX3F3L_VRN2025C4_Site/?page=1"
+      }
+    },
+    "menu": ["campaña4"],
+    "categoriaInicial": "campaña4"
+  },
     "shoespakar": {
     "titulo": "Catálogo Shoes pakar",
     "h1": "Catálogo Shoes pakar",
