@@ -102,5 +102,17 @@
     },
     "menu": ["mujer", "hombre", "sandalia", "casual", "ropa", "niño", "niña", "junior", "coqueta", "audaz"],
     "categoriaInicial": "mujer"
+  },
+    "fuller": {
+    "titulo": "Catálogo Fuller",
+    "h1": "Catálogo Fuller",
+    "categorias": {
+      "campaña05": {
+        "totalPaginas": 100,
+        "pdf": "pdfs/fuller/Marielle_Fuller C05.pdf"
+      }
+    },
+    "menu": ["campaña05"],
+    "categoriaInicial": "campaña05"
   }
 }
