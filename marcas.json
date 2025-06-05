@@ -107,10 +107,10 @@
     "titulo": "Catálogo Vianney",
     "h1": "Catálogo Vianney",
     "categorias": {
-      "bebé": {
+      "bebe": {
         "totalPaginas": 108,
         "pdf": "pdfs/vianney_bebé/Marielle_Vianney Bebé.pdf",
-        "baseImagen": "pdfs/vianney_bebé/MC_Vianney%20Bebé_page-"
+        "baseImagen": "pdfs/vianney_bebé/MC_Vianney%20Bebe_page-"
       },
       "hogar": {
         "totalPaginas": 270,
@@ -118,8 +118,8 @@
         "baseImagen": "pdfs/vianney_hogar/MC_Vianney%20Hogar_page-"
       }
     },
-    "menu": ["bebé", "hogar"],
-    "categoriaInicial": "bebé"
+    "menu": ["bebe", "hogar"],
+    "categoriaInicial": "bebe"
   },
     "tupperware": {
     "titulo": "Catálogo Tupperware",
