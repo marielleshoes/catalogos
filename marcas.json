@@ -103,6 +103,24 @@
     "menu": ["mujer", "hombre", "sandalia", "casual", "ropa", "niño", "niña", "junior", "coqueta", "audaz"],
     "categoriaInicial": "mujer"
   },
+    "vianney": {
+    "titulo": "Catálogo Vianney",
+    "h1": "Catálogo Vianney",
+    "categorias": {
+      "bebé": {
+        "totalPaginas": 108,
+        "pdf": "pdfs/vianney_bebé/Marielle_Vianney Bebé.pdf",
+        "baseImagen": "pdfs/vianney_bebé/MC_Vianney%20Bebé_page-"
+      },
+      "hogar": {
+        "totalPaginas": 270,
+        "pdf": "pdfs/vianney_hogar/Marielle_Vianney Hogar.pdf",
+        "baseImagen": "pdfs/vianney_hogar/MC_Vianney%20Hogar_page-"
+      }
+    },
+    "menu": ["bebé", "hogar"],
+    "categoriaInicial": "bebé"
+  },
     "tupperware": {
     "titulo": "Catálogo Tupperware",
     "h1": "Catálogo Tupperware",
