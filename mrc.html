@@ -114,7 +114,7 @@
         botones.forEach(b => b.classList.remove('selected'));
         const activo = [...botones].find(b => b.textContent.toLowerCase() === cat);
         if (activo) activo.classList.add('selected');   
-        if (marca === 'andrea' || marca === 'shoespakar' || marca === 'fuller' || marca === 'tupperware' || marca === 'ilusion') {
+        if (marca === 'andrea' || marca === 'shoespakar' || marca === 'fuller' || marca === 'tupperware' || marca === 'ilusion' || marca === 'cklass') {
           const catData = datosMarca.categorias[cat];
           const url = catData.viewerUrl || catData.pdf;
           viewerContainer.innerHTML = `
