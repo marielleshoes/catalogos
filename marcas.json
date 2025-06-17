@@ -156,5 +156,33 @@
     },
     "menu": ["campaña05"],
     "categoriaInicial": "campaña05"
+  },
+  "cklass": {
+  "titulo": "Catálogo Cklass",
+  "h1": "Catálogo Cklass",
+  "categorias": {
+    "dama": {
+      "totalPaginas": 200,
+      "viewerUrl": "https://e.issuu.com/embed.html?backgroundColor=%23000000&backgroundColorFullscreen=%23000000&d=dama_calzado_345f884fe3dd2e&hideIssuuLogo=true&logoImageUrl=https%3A%2F%2Fres.cloudinary.com%2Fdmyky5m3p%2Fimage%2Fupload%2Ft_LOGO90X90%2Fv1738346321%2Ffavicon_cklass_300x_bogwf1.avif&u=cklassoficial"
+    },
+    "caballero": {
+      "totalPaginas": 200,
+      "viewerUrl": "https://e.issuu.com/embed.html?backgroundColor=%23000000&backgroundColorFullscreen=%23000000&d=caballero_calzado&hideIssuuLogo=true&logoImageUrl=https%3A%2F%2Fres.cloudinary.com%2Fdmyky5m3p%2Fimage%2Fupload%2Ft_LOGO90X90%2Fv1738346321%2Ffavicon_cklass_300x_bogwf1.avif&u=cklassoficial"
+    },
+    "kids": {
+      "totalPaginas": 200,
+      "viewerUrl": "https://viewer.ipaper.io/andrea/1/242-infantil/?page=1"
+    },
+    "confort": {
+      "totalPaginas": 200,
+      "viewerUrl": "https://viewer.ipaper.io/andrea/1/89-calzado-confort/?page=1"
+    },
+    "vestir": {
+      "totalPaginas": 200,
+      "viewerUrl": "https://viewer.ipaper.io/andrea/1/241-vestir-exterior/?page=1"
+    }
+  },
+  "menu": ["dama", "caballero", "kids", "confort", "vestir"],
+  "categoriaInicial": "dama"
   }
 }
