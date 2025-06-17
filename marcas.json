@@ -152,9 +152,13 @@
       "campaña05": {
         "totalPaginas": 200,
         "viewerUrl": "https://viewer.ipaper.io/house-of-fuller/2025/folleto/c05/"
+      },
+      "campaña06": {
+        "totalPaginas": 200,
+        "viewerUrl": "https://viewer.ipaper.io/house-of-fuller/2025/folleto/c06/"
       }
     },
-    "menu": ["campaña05"],
+    "menu": ["campaña05", "campaña06"],
     "categoriaInicial": "campaña05"
   },
   "cklass": {
