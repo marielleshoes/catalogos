@@ -149,12 +149,16 @@
     "titulo": "Catálogo Fuller",
     "h1": "Catálogo Fuller",
     "categorias": {
-      "campaña06": {
+      "campaña07": {
         "totalPaginas": 200,
-        "viewerUrl": "https://viewer.ipaper.io/house-of-fuller/2025/folleto/c06/"
+        "viewerUrl": "https://viewer.ipaper.io/house-of-fuller/2025/folleto/c07/"
+      },
+      "campaña08": {
+        "totalPaginas": 200,
+        "viewerUrl": "https://viewer.ipaper.io/house-of-fuller/2025/folleto/c08/"
       }
     },
-    "menu": ["campaña06"],
+    "menu": ["campaña07","campaña08"],
     "categoriaInicial": "campaña06"
   },
   "cklass": {
