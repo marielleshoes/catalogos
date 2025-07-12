@@ -200,13 +200,9 @@
     "boys":{
       "totalPaginas": 200,
       "viewerUrl": "https://e.issuu.com/embed.html?backgroundColor=%23000000&backgroundColorFullscreen=%23000000&d=nin_o&hideIssuuLogo=true&logoImageUrl=https%3A%2F%2Fres.cloudinary.com%2Fdmyky5m3p%2Fimage%2Fupload%2Ft_LOGO90X90%2Fv1738346321%2Ffavicon_cklass_300x_bogwf1.avif&themeSecondaryColor=%23000000&u=cklassoficial"
-    },
-    "rebajas":{
-      "totalPaginas": 200,
-      "viewerUrl": "https://e.issuu.com/embed.html?d=cklass-rebajas_sobre_rebajas-calzado&hideIssuuLogo=true&u=cklassoficial"
     }
   },
-  "menu": ["dama", "caballero", "confort", "handbags", "fashionline", "secrets", "six-duo", "girls", "boys", "rebajas"],
+  "menu": ["dama", "caballero", "confort", "handbags", "fashionline", "secrets", "six-duo", "girls", "boys"],
   "categoriaInicial": "dama"
   }
 }
