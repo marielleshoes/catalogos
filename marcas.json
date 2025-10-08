@@ -31,31 +31,30 @@
     "titulo": "Catálogo Ilusión",
     "h1": "Catálogo Ilusión",
     "categorias": {
-      "campaña4": {
+      "7": {
         "totalPaginas": 422,
         "viewerUrl": "https://catalogo-digital.ilusion.com/ModaMX7A4T_INV2025C7/?_gl=1%2Aoad87s%2A_gcl_aw%2AR0NMLjE3NTk4OTI3ODEuQ2owS0NRanc5SkxIQmhDLUFSSXNBSzRQaGNwaEVVMGlnaWZvQjhMb18yQ2xoQUJHczlTbmNsekVNcUw2RTBWWmptbi1aMm9EajBuajdUUWFBdUFTRUFMd193Y0I.%2A_gcl_au%2AMTY3NDc2NzAxNi4xNzU5ODkyNzgw&page=1"
       }
     },
-    "menu": ["campaña4"],
-    "categoriaInicial": "campaña4"
+    "menu": ["7"],
+    "categoriaInicial": "campaña7"
   },
     "vianney": {
     "titulo": "Catálogo Vianney",
     "h1": "Catálogo Vianney",
     "categorias": {
-      "bebé": {
-        "totalPaginas": 422,
-        "viewerUrl": "https://e.issuu.com/embed.html?d=beb_vianney_25-26_mx&u=vianney56"
-      
-      },
-      "hogar": {
-        "totalPaginas": 422,
-        "viewerUrl": "https://e.issuu.com/embed.html?d=vianney_mx_2025&u=vianney56"
-      },
-      "invierno": {
-        "totalPaginas": 422,
-        "viewerUrl": "https://e.issuu.com/embed.html?d=vianney_invierno_25-26_mx&u=vianney56"
-      }
+       "bebé": {
+          "totalPaginas": 422,
+          "viewerUrl": "https://e.issuu.com/embed.html?backgroundColor=%23000000&d=beb_vianney_25-26_mx&hideIssuuLogo=true&u=vianney56"
+        },
+        "hogar": {
+          "totalPaginas": 422,
+          "viewerUrl": "https://e.issuu.com/embed.html?backgroundColor=%23000000&d=vianney_mx_2025&hideIssuuLogo=true&u=vianney56"
+        },
+        "invierno": {
+          "totalPaginas": 422,
+          "viewerUrl": "https://e.issuu.com/embed.html?backgroundColor=%23000000&d=vianney_invierno_25-26_mx&hideIssuuLogo=true&u=vianney56"
+        }
     },
     "menu": ["bebé", "hogar", "invierno"],
     "categoriaInicial": "bebé"
@@ -76,17 +75,17 @@
     "titulo": "Catálogo Fuller",
     "h1": "Catálogo Fuller",
     "categorias": {
-      "campaña07": {
+      "13": {
         "totalPaginas": 200,
         "viewerUrl": "https://viewer.ipaper.io/house-of-fuller/2025/folleto/c13/"
       },
-      "campaña08": {
+      "14": {
         "totalPaginas": 200,
         "viewerUrl": "https://viewer.ipaper.io/house-of-fuller/2025/folleto/c14/"
       }
     },
-    "menu": ["campaña07","campaña08"],
-    "categoriaInicial": "campaña07"
+    "menu": ["13","14"],
+    "categoriaInicial": "13"
   },
   "cklass": {
   "titulo": "Catálogo Cklass",
