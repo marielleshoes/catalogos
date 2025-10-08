@@ -1,32 +1,4 @@
 {
-  "impuls": {
-    "titulo": "Catálogo Impuls",
-    "h1": "Catálogo Impuls",
-    "categorias": {
-      "dama": {
-        "totalPaginas": 384,
-        "pdf": "pdfs/impuls_dama/Marielle_Impuls Dama.pdf",
-        "baseImagen": "pdfs/impuls_dama/MC_Impuls%20Dama_page-"
-      },
-      "caballero": {
-        "totalPaginas": 216,
-        "pdf": "pdfs/impuls_caballero/Marielle_Impuls Caballero.pdf",
-        "baseImagen": "pdfs/impuls_caballero/MC_Impuls%20Caballero_page-"
-      },
-      "niño": {
-        "totalPaginas": 119,
-        "pdf": "pdfs/impuls_niño/Marielle_Impuls Niño.pdf",
-        "baseImagen": "pdfs/impuls_niño/MC_Impuls%20Niño_page-"
-      },
-      "niña": {
-        "totalPaginas": 89,
-        "pdf": "pdfs/impuls_niña/Marielle_Impuls Niña.pdf",
-        "baseImagen": "pdfs/impuls_niña/MC_Impuls%20Niña_page-"
-      }
-    },
-    "menu": ["dama", "caballero", "niño", "niña"],
-    "categoriaInicial": "dama"
-  },
   "andrea": {
   "titulo": "Catálogo Andrea",
   "h1": "Catálogo Andrea",
@@ -61,76 +33,31 @@
     "categorias": {
       "campaña4": {
         "totalPaginas": 422,
-        "viewerUrl": "https://viewer.ipaper.io/diltex-brands/catalogosilusion/ModaMX3F3L_VRN2025C4_Site/?page=1"
+        "viewerUrl": "https://catalogo-digital.ilusion.com/ModaMX7A4T_INV2025C7/?_gl=1%2Aoad87s%2A_gcl_aw%2AR0NMLjE3NTk4OTI3ODEuQ2owS0NRanc5SkxIQmhDLUFSSXNBSzRQaGNwaEVVMGlnaWZvQjhMb18yQ2xoQUJHczlTbmNsekVNcUw2RTBWWmptbi1aMm9EajBuajdUUWFBdUFTRUFMd193Y0I.%2A_gcl_au%2AMTY3NDc2NzAxNi4xNzU5ODkyNzgw&page=1"
       }
     },
     "menu": ["campaña4"],
     "categoriaInicial": "campaña4"
-  },
-    "shoespakar": {
-    "titulo": "Catálogo Shoes pakar",
-    "h1": "Catálogo Shoes pakar",
-    "categorias": {
-      "mujer": {
-        "totalPaginas": 100,
-        "pdf": "pdfs/shoespakar/Marielle_Shoespakar Mujer.pdf"
-      },
-      "hombre": {
-        "totalPaginas": 100,
-        "pdf": "pdfs/shoespakar/Marielle_Shoespakar Hombre.pdf"
-      },
-      "sandalia": {
-        "totalPaginas": 100,
-        "pdf": "pdfs/shoespakar/Marielle_Shoespakar Sandalia.pdf"
-      },
-      "casual": {
-        "totalPaginas": 100,
-        "pdf": "pdfs/shoespakar/Marielle_Shoespakar Casual.pdf"
-      },
-      "ropa": {
-        "totalPaginas": 100,
-        "pdf": "pdfs/shoespakar/Marielle_Shoespakar Ropa.pdf"
-      },
-      "niño": {
-        "totalPaginas": 100,
-        "pdf": "pdfs/shoespakar/Marielle_Shoespakar Niño.pdf"
-      },
-      "niña": {
-        "totalPaginas": 100,
-        "pdf": "pdfs/shoespakar/Marielle_Shoespakar Niña.pdf"
-      },
-      "junior": {
-        "totalPaginas": 100,
-        "pdf": "pdfs/shoespakar/Marielle_Shoespakar Junior.pdf"
-      },
-      "coqueta": {
-        "totalPaginas": 100,
-        "pdf": "pdfs/shoespakar/Marielle_Shoespakar Coqueta.pdf"
-      },
-      "audaz": {
-        "totalPaginas": 100,
-        "pdf": "pdfs/shoespakar/Marielle_Shoespakar Audaz.pdf"
-      }
-    },
-    "menu": ["mujer", "hombre", "sandalia", "casual", "ropa", "niño", "niña", "junior", "coqueta", "audaz"],
-    "categoriaInicial": "mujer"
   },
     "vianney": {
     "titulo": "Catálogo Vianney",
     "h1": "Catálogo Vianney",
     "categorias": {
       "bebé": {
-        "totalPaginas": 108,
-        "pdf": "pdfs/vianney_bebé/Marielle_Vianney Bebé.pdf",
-        "baseImagen": "pdfs/vianney_bebé/MC_Vianney%20Bebé_page-"
+        "totalPaginas": 422,
+        "viewerUrl": "https://e.issuu.com/embed.html?d=beb_vianney_25-26_mx&u=vianney56"
+      
       },
       "hogar": {
-        "totalPaginas": 270,
-        "pdf": "https://drive.google.com/uc?export=download&id=1ETydEDsN8S9aO0hbKMOChwq73sBp2Nx0",
-        "baseImagen": "pdfs/vianney_hogar/MC_Vianney%20Hogar_page-"
+        "totalPaginas": 422,
+        "viewerUrl": "https://e.issuu.com/embed.html?d=vianney_mx_2025&u=vianney56"
+      },
+      "invierno": {
+        "totalPaginas": 422,
+        "viewerUrl": "https://e.issuu.com/embed.html?d=vianney_invierno_25-26_mx&u=vianney56"
       }
     },
-    "menu": ["bebé", "hogar"],
+    "menu": ["bebé", "hogar", "invierno"],
     "categoriaInicial": "bebé"
   },
     "tupperware": {
@@ -151,11 +78,11 @@
     "categorias": {
       "campaña07": {
         "totalPaginas": 200,
-        "viewerUrl": "https://viewer.ipaper.io/house-of-fuller/2025/folleto/c07/"
+        "viewerUrl": "https://viewer.ipaper.io/house-of-fuller/2025/folleto/c13/"
       },
       "campaña08": {
         "totalPaginas": 200,
-        "viewerUrl": "https://viewer.ipaper.io/house-of-fuller/2025/folleto/c08/"
+        "viewerUrl": "https://viewer.ipaper.io/house-of-fuller/2025/folleto/c14/"
       }
     },
     "menu": ["campaña07","campaña08"],
